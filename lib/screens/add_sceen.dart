@@ -8,6 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
+
 
 import 'login.dart';
 
@@ -28,37 +31,17 @@ class _AddScreen extends State<AddScreen> {
 
 final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
   final descriptionEditingController = new TextEditingController();
-  final DestinationEditingController = new TextEditingController();
-  final EtatEditingController = new TextEditingController();
-  final GroupeEditingController = new TextEditingController();
-  final NameEditingController = new TextEditingController();
+  final AvantEditingController = new TextEditingController();
+  final ApresEditingController = new TextEditingController();
 
-  Future sendEmail() async {
-    final url = Uri.parse("https://api.emailjs.com/api/v1.0/email/send");
-    const serviceId="service_nyzpiyp";
-    const templateId ="template_dssi9xm";
-    const userId="";
+  Date() {
 
-   final response = await http.post(url,
-   headers: {'content-Type':'application/json'},
-     body: json.encode({
-    "service_id":serviceId ,
-    "template_id": templateId,
-    "user_id":userId,
-      "template_params":{
-      "name":"",
-        "subject":"Reclamation et demande ",
-        "message":"testing message here ",
-        "user_email":FirebaseAuth.instance.currentUser!.email,
-      }
-     })
+    //String datetime = DateTime.now().toString();
 
-
-  );
+    String datetime = DateFormat("dd-MM-yyyy").format(DateTime.now());
+    print(datetime);
+    return datetime;
   }
-
-  final _firestore = FirebaseFirestore.instance;
-
 
   @override
   Widget build(BuildContext context) {
@@ -88,127 +71,77 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
           onPressed: ()=>descriptionEditingController.clear(),
         ),
         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Description demande ",
+        hintText: "Description Suggestion ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
 
 
 
-    final DestinationField = TextFormField(
+    final SituationAvantField = TextFormField(
       autofocus: false,
-      controller: DestinationEditingController,
-      keyboardType: TextInputType.text,
+      controller: AvantEditingController,
+      minLines: 2,
+      maxLines: 5,
+      keyboardType: TextInputType.multiline,
       validator: (value) {
         RegExp regex = new RegExp(r'^.{8,}$');
         if (value!.isEmpty) {
           return ("Titre  cannot be Empty");
         }
-        if (!regex.hasMatch(value)) {
-          return ("entrer un titre de votre Demande )");
-        }
         return null;
       },
       onSaved: (value) {
-        DestinationEditingController.text = value!;
+        AvantEditingController.text = value!;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.map),
+        prefixIcon: const Icon(Icons.safety_check_sharp),
+        suffixIcon: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: ()=>descriptionEditingController.clear(),
+        ),
         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "titre Demande  ",
+        hintText: "Situation Avant ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
 
-    final EtatField = TextFormField(
+    final SituationApresField = TextFormField(
       autofocus: false,
-      controller: EtatEditingController,
-      keyboardType: TextInputType.text,
+      controller: ApresEditingController,
+      minLines: 2,
+      maxLines: 5,
+      keyboardType: TextInputType.multiline,
       validator: (value) {
         RegExp regex = new RegExp(r'^.{8,}$');
         if (value!.isEmpty) {
-          return ("Etat  cannot be Empty");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Enter Valid name(Min. 8 Character)");
+          return ("Situation Cannot be empty ");
         }
         return null;
       },
       onSaved: (value) {
-        EtatEditingController.text = value!;
+        ApresEditingController.text = value!;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.access_time_filled),
+        prefixIcon: const Icon(Icons.safety_check_rounded),
+        suffixIcon: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: ()=>descriptionEditingController.clear(),
+        ),
         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Etat  demande ",
+        hintText: "Situation Apres ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
 
 
-
-
-    final GroupeField = TextFormField(
-      autofocus: false,
-      controller: GroupeEditingController,
-      keyboardType: TextInputType.text,
-      validator: (value) {
-        RegExp regex = new RegExp(r'^.{8,}$');
-        if (value!.isEmpty) {
-          return ("Groupe cannot be empty ");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Enter Valid name(Min. 8 Character)");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        GroupeEditingController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.g_mobiledata_outlined),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Groupe  User  ",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-
-
-
-    final NameField = TextFormField(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      autofocus: false,
-      controller: NameEditingController,
-      keyboardType: TextInputType.text,
-      validator: (value) {
-        RegExp regex = new RegExp(r'^.{8,}$');
-        if (value!.isEmpty) {
-          return ("First Name cannot be Empty");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Enter Valid name(Min. 8 Character)");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        NameEditingController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.abc),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Name Demande   ",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
 
     final addButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent.shade100,
+      color: Colors.blue[300],
       child: MaterialButton(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
@@ -221,11 +154,11 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
             Fluttertoast.showToast(msg: 'Demand aded succefuly');  //Navigator.pushNamed(context, GetDemande.screenRoute);
           }
 
-          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => GetDemande()));
+         // Navigator.of(context).push(MaterialPageRoute(builder: (context) => GetDemande()));
 
         },
         child: const Text(
-          "Add Demande",
+          "Nouvelle Suggestion",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20 , color: Colors.white, fontWeight: FontWeight.bold ),
@@ -236,12 +169,13 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
     return Scaffold(
 
       appBar: AppBar(
-        backgroundColor: Colors.red[300],
+        //backgroundColor: Colors.red[300],
+        backgroundColor: Colors.blue[300],
         title: Row(
           children: const [
             //Image.asset('images/image.jpg', height: 25),
             SizedBox(width: 20),
-            Text('Ajoute une Nouvelle demande ')
+            Text('Ajoute une Nouvelle Suggestion ')
           ],
         ),
         actions: [
@@ -275,16 +209,13 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
                           fit: BoxFit.contain,
                         )),
 
-                    SizedBox(height: 25),
-                    NameField,
-                    SizedBox(height: 20),
-                    GroupeField,
-                    SizedBox(height: 20),
-                    EtatField,
-                    SizedBox(height: 20),
-                    DestinationField,
+
                     SizedBox(height: 20),
                     DescriptionField,
+                    SizedBox(height: 20),
+                    SituationAvantField,
+                    SizedBox(height: 20),
+                    SituationApresField,
                     SizedBox(height: 20),
                     // Button d'ahjout
                     addButton,
@@ -303,25 +234,24 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
 
 
 
-   CreateDemande() async {
+     CreateDemande() async {
 
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    final user = FirebaseAuth.instance.currentUser!;
-
-
-        Map<String,dynamic> data = {"name":NameEditingController.text,"description":descriptionEditingController.text,"titre":DestinationEditingController.text,"groupe":GroupeEditingController.text,"Etat":EtatEditingController.text,"user":user.uid};
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      final user = FirebaseAuth.instance.currentUser!;
 
 
-        //await firebaseFirestore.collection("basket_items").add(data);
+          Map<String,dynamic> data = {"Description":descriptionEditingController.text,"SituationAvant":AvantEditingController.text,"SituationApres":ApresEditingController.text,"user":user.uid,"DateProp": Date(),"Approuved":"False", "Remarque":""};
+
+          await firebaseFirestore.collection("basket_items").add(data);
 
 
-    /*descriptionEditingController = new TextEditingController();
-  final DestinationEditingController = new TextEditingController();
-  final EtatEditingController = new TextEditingController();
-  final GroupeEditingController = new TextEditingController();
-  final NameEditingController*/
+      /*descriptionEditingController = new TextEditingController();
+    final DestinationEditingController = new TextEditingController();
+    final EtatEditingController = new TextEditingController();
+    final GroupeEditingController = new TextEditingController();
+    final NameEditingController*/
 
-  }
+    }
 
 
 

@@ -7,39 +7,45 @@ String itemToJson(Item data) => json.encode(data.toJson());
 class Item {
   Item({
     required this.id,
-    required this.name,
-    required this.groupe,
-    required this.description,
-    required this.titre,
+    required this.Description,
+    required this.SituationAvant,
+    required this.SituationApres,
     required this.user,
-    required this.Etat,
+    required this.DateProp,
+    required this.Approuved,
+    required this.Remarque,
+
   });
 
   String id;
-  String name;
-  String groupe;
-  String description;
-  String titre;
+  String Description;
+  String SituationAvant;
+  String SituationApres;
   String user;
-  String Etat;
+  String DateProp;
+  String Approuved;
+  String Remarque;
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
       id: json["id"],
-      name: json["name"],
-      groupe: json["quantity"],
-      description : json["description"],
-      titre: json["titre"],
+      Description: json["Description"],
+      SituationAvant: json["SituationAvant"],
+      SituationApres : json["SituationApres"],
       user: json["user"],
-      Etat: json["Etat"]
+      DateProp: json["DateProp"],
+      Approuved: json["Approuved"],
+      Remarque: json["Remarque"]
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "name": name,
-    "quantity": groupe,
-    "description":description,
-    "titre":titre,
+    "Description": Description,
+    "SituationAvant": SituationAvant,
+    "SituationApres":SituationApres,
     "user":user,
-    "Etat":Etat
+     "DateProp":DateProp,
+    "Approuved":Approuved,
+    "Remarque":Remarque,
+
   };
 }

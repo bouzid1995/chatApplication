@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
 
-        title: 'Message chat',
+        title: 'Pac_mspe',
 
 
         initialRoute: _auth.currentUser != null ? ChatScreen.screenRoute :SignInScreen.screenRoute,

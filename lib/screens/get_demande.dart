@@ -1,4 +1,5 @@
 
+import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,22 +22,19 @@ class GetDemande extends StatefulWidget {
 
 class _GetDemandeState extends State<GetDemande> {
   List<Item> demandeItem= [];
-
+  final _auth = FirebaseAuth.instance;
 
 
   @override
   void initState(){
-
-    print('testtttt');
     fechRecrcords();
-    print('testtttt');
     super.initState();
   }
 
 
   fechRecrcords() async {
     var records =  await FirebaseFirestore.instance.collection('basket_items').get();
-    //where("user",isEqualTo:FirebaseAuth.instance.currentUser!.uid ).
+    //where("Approuved",isEqualTo:"true").get();
     mapRecords(records);
   }
 
@@ -44,7 +42,7 @@ class _GetDemandeState extends State<GetDemande> {
     var _list =  records.docs.map
       ((item) => Item(
         id: item.id,
-      name: item['name'], groupe: item['groupe'], description:item['description'], titre: item['titre'], user: item['user'], Etat: item['Etat'] ,
+      Description: item['Description'], DateProp:item['DateProp'], user: item['user'], Approuved: item['Approuved'], SituationAvant: item['SituationAvant'], SituationApres: item['SituationApres'], Remarque: item['Remarque'] ,
     )).toList();
 
     setState(() {
@@ -58,19 +56,20 @@ class _GetDemandeState extends State<GetDemande> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.red[300],
+          backgroundColor: Colors.blue[300],
+
           title: Row(
             children: const [
               //Image.asset('images/image.jpg', height: 25),
-              SizedBox(width: 20),
-              Text('Liste des demandes  ')
+              SizedBox(width:45),
+              Text('List des Suggestion')
             ],
           ),
           actions: [
             IconButton(
                 onPressed: () {
-                //  _auth.signOut();
-                //  Navigator.pushNamed(context, SignInScreen.screenRoute);
+                  _auth.signOut();
+                  Navigator.pushNamed(context, SignInScreen.screenRoute);
                   //_auth.signOut();
                   // Navigator.pop(context);
                 },
@@ -81,11 +80,12 @@ class _GetDemandeState extends State<GetDemande> {
           itemCount:demandeItem.length ,
           itemBuilder: (context,index){
             return ListTile(
-              title: Text(demandeItem[index].titre),
-              subtitle: Text(demandeItem[index].description),
+              title: Text(demandeItem[index].Description),
+              subtitle: Text(demandeItem[index].user),
+                trailing: Text(demandeItem[index].DateProp),
             leading: CircleAvatar(
             backgroundColor: Colors.blue,
-            child: Text(demandeItem[index].titre[0] =='' ? '' : demandeItem[index].name[0].toString()  ,
+            child: Text(demandeItem[index].Description[0] =='' ? '' : demandeItem[index].Description[0].toString()  ,
             style: const TextStyle(
             color: Colors.white,
             fontSize: 20.0,

@@ -116,7 +116,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
               SizedBox(height: 10),
-              MyButton(
+             /*MyButton(
                 color: Colors.blue[800]!,
                 title: 'register',
                 onPressed: () async {
@@ -137,7 +137,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     print(e);
                   }
                 },
-              )
+              )*/
             ],
           ),
         ),

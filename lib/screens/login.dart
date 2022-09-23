@@ -85,7 +85,7 @@ class _LoginState extends State<Login> {
     final emailField = TextFormField(
       autofocus: false,
       controller: emailEditingController,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: TextInputType.text,
       validator: (value) {
         if (value!.isEmpty) {
           return ("Please Enter Your Email");
@@ -98,7 +98,7 @@ class _LoginState extends State<Login> {
         return null;
       },
       onSaved: (value) {
-        firstNameEditingController.text = value!;
+        emailEditingController.text = value!;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
@@ -123,7 +123,7 @@ class _LoginState extends State<Login> {
         }
       },
       onSaved: (value) {
-        firstNameEditingController.text = value!;
+        passwordEditingController.text = value!;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
@@ -160,12 +160,13 @@ class _LoginState extends State<Login> {
     final signUpButton = Material(
       elevation: 5,
        borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent,
+      color: Colors.blue[300],
       child: MaterialButton(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
           signUp(emailEditingController.text,passwordEditingController.text);
+
 
         },
         child: const Text(
@@ -240,7 +241,7 @@ class _LoginState extends State<Login> {
                           child: const Text(
                             "Login",
                             style: TextStyle(
-                                color: Colors.redAccent,
+                                color: Colors.blue,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15),
                           ),

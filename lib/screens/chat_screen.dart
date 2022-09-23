@@ -42,7 +42,6 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       if (user != null) {
         signedInUser = user;
-        //print(signedInUser.email +'  '+ signedInUser.emailVerified);
         signedInUser?.email;
       }
     } catch (e) {
@@ -69,7 +68,8 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red[300],
+        //backgroundColor: Colors.red[300],
+          backgroundColor: Colors.blue[300],
         title: Row(
           children: const [
             //Image.asset('images/image.jpg', height: 25),

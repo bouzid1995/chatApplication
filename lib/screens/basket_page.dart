@@ -25,9 +25,7 @@ class _BasketPageState extends State<BasketPage> {
   @override
   void initState(){
 
-    print('testtttt');
     fechRecrcords();
-    print('testtttt');
     super.initState();
   }
 
@@ -41,12 +39,13 @@ class _BasketPageState extends State<BasketPage> {
     var _list =  records.docs.map
       ((item) => Item(
         id: item.id,
-        name:item['name'],
-       description: '',
-       titre: '',
+        Description:item['Description'],
+        SituationApres: item['SituationApres'],
+        SituationAvant: item['SituationAvant'],
         user: '',
-        groupe: '',
-        Etat: '',
+        DateProp: item['DateProp'],
+        Approuved: item['Approuved'],
+        Remarque: item['Remarque'],
         )).toList();
 
     setState(() {
@@ -54,7 +53,6 @@ class _BasketPageState extends State<BasketPage> {
     });
 
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +62,8 @@ class _BasketPageState extends State<BasketPage> {
           itemCount:basketItem.length ,
           itemBuilder: (context,index){
             return ListTile(
-              title: Text(basketItem[index].name),
-              subtitle: Text(basketItem[index].titre),
+              title: Text(basketItem[index].Description),
+              subtitle: Text(basketItem[index].Approuved),
             );
           }
 

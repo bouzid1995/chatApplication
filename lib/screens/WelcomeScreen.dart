@@ -39,7 +39,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
 //final navigationkey = GlobalKey<CurvedNavigationBarState>();
   int index = 0;
-  final _auth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance.currentUser;
+
+  void inputData() {
+    final User? user = FirebaseAuth.instance.currentUser;
+    final uid = user?.uid;
+    // here you write the codes to input the data into firestore
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +67,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         height: 50,
         animationCurve: Curves.easeInOut,
         animationDuration: const Duration(milliseconds: 300),
-        color: Colors.redAccent,
+         color: Colors.blue,
+        // backgroundColor: Colors.blue[300]
       ),
       body: Container(
           // color: Colors.redAccent,

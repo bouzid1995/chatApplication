@@ -143,14 +143,14 @@ class _SignInScreenState extends State<SignInScreen> {
 
 
               MyButton(
-                color: Colors.redAccent[200]!,
+                color: Colors.blue[300]!,
                 title: 'Sign in',
                 onPressed: () async {
                   setState(() {
                     showSpinner = false;
                   });
                   final user = _auth.signInWithEmailAndPassword(
-                      email: email, password: password);
+                      email: email.toString()+'@live.fr', password: password);
                   try {
                     if (user != null) {
                      Navigator.pushNamed(context, WelcomeScreen.screenRoute);
@@ -168,9 +168,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 },
               ),
 
-              const SizedBox(height: 10),
+             // const SizedBox(height: 10),
 
-              Row(
+             /* Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text("don't have an account? "),
@@ -185,13 +185,13 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: const Text(
                       "Register",
                       style: TextStyle(
-                          color: Colors.redAccent,
+                          color: Colors.blue,
                           fontWeight: FontWeight.bold,
                           fontSize: 15),
                     ),
                   )
                 ],
-              )
+              )*/
 
             ],
           ),
