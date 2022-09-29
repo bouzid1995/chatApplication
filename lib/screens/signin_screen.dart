@@ -150,7 +150,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     showSpinner = false;
                   });
                   final user = _auth.signInWithEmailAndPassword(
-                      email: email.toString()+'@live.fr', password: password);
+                      email: email, password: password);
                   try {
                     if (user != null) {
                      Navigator.pushNamed(context, WelcomeScreen.screenRoute);

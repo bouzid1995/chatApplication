@@ -9,7 +9,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
 
 
 import 'login.dart';
@@ -154,7 +153,7 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
             Fluttertoast.showToast(msg: 'Demand aded succefuly');  //Navigator.pushNamed(context, GetDemande.screenRoute);
           }
 
-         // Navigator.of(context).push(MaterialPageRoute(builder: (context) => GetDemande()));
+         Navigator.of(context).push(MaterialPageRoute(builder: (context) => GetDemande()));
 
         },
         child: const Text(
@@ -178,6 +177,7 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
             Text('Ajoute une Nouvelle Suggestion ')
           ],
         ),
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
               onPressed: () {

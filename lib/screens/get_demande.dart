@@ -6,7 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../model/basket.dart';
-import '../model/welcome.dart';
+import '../model/UsersModels.dart';
+import 'Details.dart';
 
 
 class GetDemande extends StatefulWidget {
@@ -22,19 +23,21 @@ class GetDemande extends StatefulWidget {
 
 class _GetDemandeState extends State<GetDemande> {
   List<Item> demandeItem= [];
+  List<UsersModels> UserItem=[];
   final _auth = FirebaseAuth.instance;
 
 
   @override
   void initState(){
     fechRecrcords();
+    //fechUsers();
     super.initState();
   }
 
-
+     //
   fechRecrcords() async {
     var records =  await FirebaseFirestore.instance.collection('basket_items').get();
-    //where("Approuved",isEqualTo:"true").get();
+   //.where("Approuved",isEqualTo:"true").get();
     mapRecords(records);
   }
 
@@ -52,11 +55,34 @@ class _GetDemandeState extends State<GetDemande> {
   }
 
 
+ /* fechUsers() async {
+    var user =  await FirebaseFirestore.instance.collection('users').
+    where("Approuved",isEqualTo:"true").get();
+
+    mapRecords(user);
+  }
+
+
+  mapUsers(QuerySnapshot<Map<String,dynamic>> user){
+    var Mylist =  user.docs.map
+      ((items) => UsersModels (
+    email: items['email'], firstName:items['firstName'], secondName:items['secondName'], uid: items['uid'],
+    )).toList();
+
+    setState(() {
+      UserItem = Mylist;
+      print('tsting return her');
+      print(UserItem);
+    });
+
+  }*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue[300],
+          automaticallyImplyLeading: false,
 
           title: Row(
             children: const [
@@ -81,8 +107,17 @@ class _GetDemandeState extends State<GetDemande> {
           itemBuilder: (context,index){
             return ListTile(
               title: Text(demandeItem[index].Description),
-              subtitle: Text(demandeItem[index].user),
+             subtitle: Text(demandeItem[index].Approuved),
                 trailing: Text(demandeItem[index].DateProp),
+                onTap: () {
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                      builder: (context) => DetailDemande(Iduser:demandeItem[index].user,Description:demandeItem[index].Description,Date:demandeItem[index].DateProp,SituationAvant:demandeItem[index].SituationAvant,SituationApres:demandeItem[index].SituationApres,Remarque:demandeItem[index].Remarque,Approuved:demandeItem[index].Approuved),
+                  ),
+                  );
+                },
             leading: CircleAvatar(
             backgroundColor: Colors.blue,
             child: Text(demandeItem[index].Description[0] =='' ? '' : demandeItem[index].Description[0].toString()  ,

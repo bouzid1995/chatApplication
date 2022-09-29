@@ -20,11 +20,11 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final items = const [
     Icon(
-      Icons.list,
+      Icons.add,
       size: 30,
     ),
     Icon(
-      Icons.add,
+      Icons.list,
       size: 30,
     ),
     Icon(
@@ -83,10 +83,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     Widget widget;
     switch (index) {
       case 0:
-        widget = const GetDemande();
+        widget = const AddScreen();
         break;
       case 1:
-        widget = const AddScreen();
+        widget = const GetDemande();
         break;
       default:
         widget = const ChatScreen();
