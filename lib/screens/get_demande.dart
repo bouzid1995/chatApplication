@@ -36,8 +36,9 @@ class _GetDemandeState extends State<GetDemande> {
 
      //
   fechRecrcords() async {
-    var records =  await FirebaseFirestore.instance.collection('basket_items').get();
-   //.where("Approuved",isEqualTo:"true").get();
+    //.get();
+    var records =  await FirebaseFirestore.instance.collection('basket_items')
+   .where("Approuved",isEqualTo:"false").get();
     mapRecords(records);
   }
 
@@ -114,7 +115,7 @@ class _GetDemandeState extends State<GetDemande> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                      builder: (context) => DetailDemande(Iduser:demandeItem[index].user,Description:demandeItem[index].Description,Date:demandeItem[index].DateProp,SituationAvant:demandeItem[index].SituationAvant,SituationApres:demandeItem[index].SituationApres,Remarque:demandeItem[index].Remarque,Approuved:demandeItem[index].Approuved),
+                      builder: (context) => DetailDemande(IdDoc:demandeItem[index].id,Iduser:demandeItem[index].user,Description:demandeItem[index].Description,Date:demandeItem[index].DateProp,SituationAvant:demandeItem[index].SituationAvant,SituationApres:demandeItem[index].SituationApres,Remarque:demandeItem[index].Remarque,Approuved:demandeItem[index].Approuved),
                   ),
                   );
                 },

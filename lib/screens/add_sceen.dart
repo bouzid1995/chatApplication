@@ -205,7 +205,7 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
                     SizedBox(
                         height: 180,
                         child: Image.asset(
-                          "images/image.jpg",
+                          "images/MSPE_Logo.png",
                           fit: BoxFit.contain,
                         )),
 

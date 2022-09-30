@@ -1,12 +1,16 @@
+import 'package:chatapplication/screens/WelcomeScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../model/UsersModels.dart';
+import '../model/basket.dart';
+import 'get_demande.dart';
 
 class DetailDemande extends StatefulWidget {
   DetailDemande(
       {super.key,
+      required this.IdDoc,
       required this.Iduser,
       required this.Description,
       required this.Date,
@@ -22,6 +26,7 @@ class DetailDemande extends StatefulWidget {
   final String SituationApres;
   final String Remarque;
   final String Approuved;
+  final String IdDoc;
 
   @override
   State<DetailDemande> createState() => _DetailDemandeState();
@@ -33,12 +38,7 @@ class _DetailDemandeState extends State<DetailDemande> {
  // List<dynamic> dataList1 = [];
 
   List<dynamic> dataList1 = [{"uid":"","secondName":"","email":"","firstName":""}];
-
-
-
-
-
-
+  final RemarqueEditingController = new TextEditingController();
 
   //List<Object> _historyList = [];
 
@@ -48,45 +48,6 @@ class _DetailDemandeState extends State<DetailDemande> {
     super.initState();
 
   }
-
-
-
-  final RemarqueField = TextFormField(
-    autofocus: false,
-    //controller: ApresEditingController,
-    minLines: 2,
-    maxLines: 4,
-    keyboardType: TextInputType.multiline,
-    validator: (value) {
-      RegExp regex = new RegExp(r'^.{8,}$');
-      if (value!.isEmpty) {
-        return ("Remarque Cannot be empty ");
-      }
-      return null;
-    },
-    onSaved: (value) {
-     // ApresEditingController.text = value!;
-    },
-    textInputAction: TextInputAction.next,
-    decoration: InputDecoration(
-      prefixIcon: const Icon(Icons.safety_check_rounded),
-      suffixIcon: IconButton(
-        icon: Icon(Icons.close),
-        onPressed: ()=>'',
-      ),
-      contentPadding: EdgeInsets.fromLTRB(50, 15, 20, 40),
-      hintText: "Remarque Suggestion ",
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-    ),
-  );
-
-
-
-
-
-
-
-
 
   Future getData(String username) async {
     List dataList = [];
@@ -123,11 +84,50 @@ class _DetailDemandeState extends State<DetailDemande> {
     //await _products.Update({"name":remarque});
   }
 
+  UpdateDemande(String Doc,String MyRemarque ) async {
+
+  var collection = FirebaseFirestore.instance.collection('basket_items');
+  collection
+      .doc(Doc)
+      .update({'Approuved' : 'true','Remarque':MyRemarque }) // <-- Nested value
+      .then((_) => print('Success'))
+      .catchError((error) => print('Failed: $error'));
+
+  }
 
   @override
   Widget build(BuildContext context) {
 
+    final RemarqueField = TextFormField(
+      autofocus: false,
+      controller: RemarqueEditingController,
+      minLines: 2,
+      maxLines: 4,
+      keyboardType: TextInputType.multiline,
+      validator: (value) {
+        RegExp regex = new RegExp(r'^.{8,}$');
+        if (value!.isEmpty) {
+          return ("Remarque Cannot be empty ");
+        }
+        return null;
+      },
+      onSaved: (value) {
+        RemarqueEditingController.text = value!;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.safety_check_rounded),
+        suffixIcon: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: ()=>'',
+        ),
+        contentPadding: EdgeInsets.fromLTRB(50, 15, 20, 40),
+        hintText: "Remarque Suggestion ",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
 
+    GlobalKey<FormState> _key = GlobalKey();
     final addButton = Material(
       //elevation: 3,
       borderRadius: BorderRadius.circular(20),
@@ -153,7 +153,7 @@ class _DetailDemandeState extends State<DetailDemande> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Detail Suggestion '),
+          title:  Text(this.widget.IdDoc),
           centerTitle: true,
         ),
         body: Column(
@@ -384,7 +384,14 @@ class _DetailDemandeState extends State<DetailDemande> {
             Expanded(child: Padding(
               padding: EdgeInsets.all(20),
              child: ElevatedButton(
-              onPressed: () => {},
+               onPressed: () async {
+                 UpdateDemande(widget.IdDoc,RemarqueEditingController.text);
+                // Navigator.of(context).push(MaterialPageRoute(builder: (context) => GetDemande()));
+                await Navigator.pushNamed(context, WelcomeScreen.screenRoute);
+                 // Navigator.of(context).pop()await sleepAsync(1000);
+                 //await Navigator.pop(context);
+
+               },
     child: Text('Raised Button'),
     ),
     ),

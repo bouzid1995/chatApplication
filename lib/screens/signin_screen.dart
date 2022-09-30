@@ -47,7 +47,7 @@ class _SignInScreenState extends State<SignInScreen> {
             children: [
               Container(
                 height: 200,
-                child: Image.asset('images/image.jpg'),
+                child: Image.asset('images/MSPE_Logo.png'),
               ),
 
             TextFormField(

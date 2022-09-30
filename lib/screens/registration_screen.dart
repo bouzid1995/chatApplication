@@ -37,7 +37,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             children: [
               Container(
                 height: 180,
-                child: Image.asset('images/image.jpg'),
+                child: Image.asset('images/MSPE_Logo.png'),
               ),
               SizedBox(height: 50),
               TextField(
