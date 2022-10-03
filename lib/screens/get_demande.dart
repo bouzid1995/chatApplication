@@ -25,22 +25,24 @@ class _GetDemandeState extends State<GetDemande> {
   List<Item> demandeItem= [];
   List<UsersModels> UserItem=[];
   final _auth = FirebaseAuth.instance;
+  List<dynamic> RoleList = [{"uid":"","secondName":"","email":"","firstName":"","Role":""}];
 
 
   @override
   void initState(){
-    fechRecrcords();
+    //fechRecrcords();
     //fechUsers();
+    getsuggestionperuser(_auth.currentUser?.uid.toString());
     super.initState();
   }
 
      //
-  fechRecrcords() async {
-    //.get();
-    var records =  await FirebaseFirestore.instance.collection('basket_items')
-   .where("Approuved",isEqualTo:"false").get();
+  /*fechRecrcords() async {
+    //
+    var records =  await FirebaseFirestore.instance.collection('basket_items').get();
+   //.where("Approuved",isEqualTo:"false").get();
     mapRecords(records);
-  }
+  }*/
 
   mapRecords(QuerySnapshot<Map<String,dynamic>> records){
     var _list =  records.docs.map
@@ -54,6 +56,62 @@ class _GetDemandeState extends State<GetDemande> {
     });
 
   }
+
+
+  Future getsuggestionperuser(dynamic username) async {
+    List dataList = [];
+    var records =  await FirebaseFirestore.instance.collection('basket_items').orderBy('DateProp', descending: true).get();
+
+    try {
+      await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: username).get().then((QuerySnapshot querySnapshot) => {
+        querySnapshot.docs.forEach((doc) {
+          dataList.add(doc.data());
+        }),
+      });
+
+      setState(() {
+        this.RoleList = dataList;
+      });
+
+      if(this.RoleList[0]['Role']=='Admin' ){
+       // print('user connected is Admin');
+
+         records =  await FirebaseFirestore.instance.collection('basket_items').orderBy('DateProp', descending: true).get();
+      }
+
+      else
+      {
+        //print('User connected is user');
+         records =  await FirebaseFirestore.instance.collection('basket_items').where("Approuved",isEqualTo:"true").get();
+
+      }
+     return mapRecords(records);
+
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
  /* fechUsers() async {

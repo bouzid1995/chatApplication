@@ -38,14 +38,18 @@ class _DetailDemandeState extends State<DetailDemande> {
  // List<dynamic> dataList1 = [];
 
   List<dynamic> dataList1 = [{"uid":"","secondName":"","email":"","firstName":""}];
+  List<dynamic> RoleList = [{"uid":"","secondName":"","email":"","firstName":"","Role":""}];
   final RemarqueEditingController = new TextEditingController();
-
+  bool  myvisibility = false;
+  final idConnected = FirebaseAuth.instance.currentUser?.uid.toString();
   //List<Object> _historyList = [];
 
   @override
   void initState() {
     getData(this.widget.Iduser);
     super.initState();
+    getMy(idConnected,widget.Approuved.toString());
+   // Role(FirebaseAuth.instance.currentUser?.uid,this.widget.Approuved,RoleList);
 
   }
 
@@ -57,14 +61,7 @@ class _DetailDemandeState extends State<DetailDemande> {
           dataList.add(doc.data());
         }),
       });
-      print('testing this step');
-      print(dataList[0]['firstName']);
-      print(dataList[0]['email']);
-      print(dataList[0]['secondName']);
-      print(dataList[0]['Groupe']);
-      print(dataList[0]['Fonction']);
-      print(dataList[0]['uid']);
-      print(dataList);
+
       setState(() {
         this.dataList1 = dataList;
       });
@@ -79,10 +76,49 @@ class _DetailDemandeState extends State<DetailDemande> {
 
 
 
-  updatedemande(String remarque) async{
-    final CollectionReference _products = FirebaseFirestore.instance.collection('user');
-    //await _products.Update({"name":remarque});
+
+  Future getMy(dynamic username,dynamic Approuved) async {
+    List dataList = [];
+    try {
+      await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: username).get().then((QuerySnapshot querySnapshot) => {
+        querySnapshot.docs.forEach((doc) {
+          dataList.add(doc.data());
+        }),
+      });
+
+      setState(() {
+        this.RoleList = dataList;
+      });
+
+      (RoleList[0]['Role']=='Admin' && Approuved == 'false') ?  myvisibility = true : myvisibility = false  ;
+
+      if(RoleList[0]['Role']=='user'){
+        myvisibility = false ;
+      }
+          print('approuved '+ Approuved);
+     // print('Admin is connected ');
+
+       print ('myvisibility '+ myvisibility.toString());
+      print('Role connected user '+RoleList[0]['Role']);
+
+    if(RoleList[0]['Role']=='user')
+      {
+        myvisibility = false;
+      }
+      return RoleList;
+
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
+
+
+
+
+
+
+
 
   UpdateDemande(String Doc,String MyRemarque ) async {
 
@@ -94,6 +130,11 @@ class _DetailDemandeState extends State<DetailDemande> {
       .catchError((error) => print('Failed: $error'));
 
   }
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -375,26 +416,32 @@ class _DetailDemandeState extends State<DetailDemande> {
               ),
             ),
 
-            Expanded(child: Padding(
-              padding: EdgeInsets.all(20), //apply padding to all four sides
-              child: RemarqueField,
+            Expanded(child: Visibility(
+              visible: myvisibility,
+              child: Padding(
+                padding: EdgeInsets.all(20), //apply padding to all four sides
+                child: RemarqueField,
+              ),
             )),
 
             //const SizedBox(height: 5),
-            Expanded(child: Padding(
-              padding: EdgeInsets.all(20),
-             child: ElevatedButton(
-               onPressed: () async {
-                 UpdateDemande(widget.IdDoc,RemarqueEditingController.text);
-                // Navigator.of(context).push(MaterialPageRoute(builder: (context) => GetDemande()));
-                await Navigator.pushNamed(context, WelcomeScreen.screenRoute);
-                 // Navigator.of(context).pop()await sleepAsync(1000);
-                 //await Navigator.pop(context);
+            Expanded(child: Visibility(
+              visible: myvisibility,
+              child: Padding(
+                padding: EdgeInsets.all(20),
+               child: ElevatedButton(
+                 onPressed: () async {
+                   UpdateDemande(widget.IdDoc,RemarqueEditingController.text);
+                  // Navigator.of(context).push(MaterialPageRoute(builder: (context) => GetDemande()));
+                  await Navigator.pushNamed(context, WelcomeScreen.screenRoute);
+                   // Navigator.of(context).pop()await sleepAsync(1000);
+                   //await Navigator.pop(context);
 
-               },
+                 },
     child: Text('Raised Button'),
     ),
     ),
+            ),
             )
            // addButton
 

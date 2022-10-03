@@ -78,15 +78,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           child: getSelectedWidget(index: index)),
     );
   }
+  //testing@test.fr
 
   Widget getSelectedWidget({required int index}) {
     Widget widget;
     switch (index) {
       case 0:
-        widget = const AddScreen();
+        widget = const AddScreen() ;
         break;
       case 1:
-        widget = const GetDemande();
+        widget = const GetDemande() ;
         break;
       default:
         widget = const ChatScreen();
