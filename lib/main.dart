@@ -1,7 +1,9 @@
 
 import 'package:chatapplication/screens/WelcomeScreen.dart';
+import 'package:chatapplication/screens/add_sceen.dart';
 import 'package:chatapplication/screens/chat_screen.dart';
 import 'package:chatapplication/screens/get_demande.dart';
+import 'package:chatapplication/screens/groupescreen.dart';
 import 'package:chatapplication/screens/login.dart';
 import 'package:chatapplication/screens/registration_screen.dart';
 import 'package:chatapplication/screens/signin_screen.dart';
@@ -42,16 +44,17 @@ class MyApp extends StatelessWidget {
 
         title: 'Pac_mspe',
 
-
-        initialRoute: _auth.currentUser != null ? ChatScreen.screenRoute :SignInScreen.screenRoute,
+       //'/': (context) => const FirstScreen(),
+        initialRoute: _auth.currentUser != null ? AddScreen.screenRoute :SignInScreen.screenRoute ,
 
         routes: {
-          WelcomeScreen.screenRoute:(context)=>WelcomeScreen(),
-          SignInScreen.screenRoute:(context)=>SignInScreen(),
+          WelcomeScreen.screenRoute:(context)=>const WelcomeScreen(),
+          SignInScreen.screenRoute:(context)=> const SignInScreen(),
+          '/Group':(context)=>const GroupeScreen(),
          // RegistrationScreen.screenRoute:(context)=>RegistrationScreen(),
-          ChatScreen.screenRoute:(context)=>ChatScreen(),
+          ChatScreen.screenRoute:(context)=> const ChatScreen(),
           Login.screenRoute:(context)=>Login(),
-          GetDemande.screenRoute:(context)=>GetDemande(),
+          GetDemande.screenRoute:(context)=>const GetDemande(),
 
         }
     );

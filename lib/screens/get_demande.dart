@@ -34,6 +34,7 @@ class _GetDemandeState extends State<GetDemande> {
     //fechUsers();
     getsuggestionperuser(_auth.currentUser?.uid.toString());
     super.initState();
+
   }
 
      //
@@ -50,11 +51,11 @@ class _GetDemandeState extends State<GetDemande> {
         id: item.id,
       Description: item['Description'], DateProp:item['DateProp'], user: item['user'], Approuved: item['Approuved'], SituationAvant: item['SituationAvant'], SituationApres: item['SituationApres'], Remarque: item['Remarque'] ,
     )).toList();
-
-    setState(() {
-      demandeItem = _list;
-    });
-
+    if (this.mounted) {
+      setState(() {
+        demandeItem = _list;
+      });
+    }
   }
 
 
@@ -68,10 +69,11 @@ class _GetDemandeState extends State<GetDemande> {
           dataList.add(doc.data());
         }),
       });
-
-      setState(() {
-        this.RoleList = dataList;
-      });
+      if (this.mounted) {
+        setState(() {
+          this.RoleList = dataList;
+        });
+      }
 
       if(this.RoleList[0]['Role']=='Admin' ){
        // print('user connected is Admin');
@@ -92,22 +94,6 @@ class _GetDemandeState extends State<GetDemande> {
       return null;
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

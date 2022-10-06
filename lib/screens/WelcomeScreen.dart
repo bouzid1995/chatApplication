@@ -1,6 +1,7 @@
 import 'package:chatapplication/screens/add_sceen.dart';
 import 'package:chatapplication/screens/chat_screen.dart';
 import 'package:chatapplication/screens/get_demande.dart';
+import 'package:chatapplication/screens/groupescreen.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -89,8 +90,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       case 1:
         widget = const GetDemande() ;
         break;
+      case 2:
+        widget = const ChatScreen() ;
+        break;
       default:
-        widget = const ChatScreen();
+        widget = const GroupeScreen();
         break;
     }
     return widget;
