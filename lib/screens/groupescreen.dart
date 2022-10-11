@@ -1,13 +1,11 @@
+import 'dart:html';
+
+import 'package:chatapplication/screens/updategroup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
-
-import '../model/basket.dart';
-import '../model/group.dart';
 
 class GroupeScreen extends StatefulWidget {
   static const String screenRoute = 'groupe_screen';
@@ -23,10 +21,9 @@ class _GroupeScreenState extends State<GroupeScreen> {
     {"uid": "", "secondName": "", "email": "", "firstName": "", "Role": ""}
   ];
   var data;
-  List _symptoms = [];
-
+  List users = [];
   List symptoms = [];
-  List? _myActivities;
+
   late String _myActivitiesResult = '';
   final formKey = new GlobalKey<FormState>();
   final Stream<QuerySnapshot> symptomsStream =
@@ -34,70 +31,32 @@ class _GroupeScreenState extends State<GroupeScreen> {
 
   @override
   void initState() {
-    //fechRecrcords();
-    //fechUsers();
-    getListUser();
     super.initState();
-    //print(symptomsStream);
-    // asyncTasks();
+    getUserNom();
   }
 
-  /*getDataFromFirestore(var collection, var data) async {
-
-    await FirebaseFirestore.instance
-        .collection(collection)
-        .get()
-        .then((value) {
-      // here we set the data to the data
-      data = value.docs;
-    });
-
-
-  }
-
-  asyncTasks() async {
-
-    await getDataFromFirestore("users", data);
-
-    // here we fill up the list symptoms
-    for(var item in data) {
-      symptoms.add(item["firstName"]);
-    }
-
-    setState(() {});
-  }*/
-
-  Future getListUser() async {
-    List dataList = [];
+  getUserNom() async {
+    List ListUserNom = [];
     try {
       await FirebaseFirestore.instance
           .collection('users')
+          .where("uid", isEqualTo: FirebaseAuth.instance.currentUser?.uid)
           .get()
           .then((QuerySnapshot querySnapshot) => {
                 querySnapshot.docs.forEach((doc) {
-                  dataList.add(doc.data());
+                  ListUserNom.add(doc.data());
                 }),
               });
-
       setState(() {
-        this.UserList = dataList;
+        this.UserList = ListUserNom;
       });
-      // print('user is here');
-      // print(UserList);
+
+      print('UserList Nom ');
+      print(UserList[0]['firstName']);
       return UserList;
     } catch (e) {
       print(e.toString());
       return null;
-    }
-  }
-
-  _saveForm() {
-    var form = formKey.currentState!;
-    if (form.validate()) {
-      form.save();
-      setState(() {
-        _myActivitiesResult = _myActivities.toString();
-      });
     }
   }
 
@@ -114,7 +73,27 @@ class _GroupeScreenState extends State<GroupeScreen> {
   final NameEditingController = TextEditingController(text: '');
 
 //https://bugsfixing.com/solved-how-to-retrieve-data-from-firestore-to-display-in-multi-select-form-field/
+  CreateGroupe() async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
 
+    Map<String, dynamic> data = {
+      "Description": DescriptionEditingController.text,
+      "Name": NameEditingController.text,
+      "UserID": users,
+      "AdminUid": FirebaseAuth.instance.currentUser?.uid
+    };
+
+    await firebaseFirestore.collection("group").add(data);
+  }
+
+
+  deletGroupe(String ID) async {
+    var collection = FirebaseFirestore.instance.collection('group');
+    await collection.doc(ID).delete();
+  }
+
+  //group
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,20 +101,109 @@ class _GroupeScreenState extends State<GroupeScreen> {
           title: Text('Liste Groupe '),
           centerTitle: true,
         ),
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('group')
+              .where("UserID", arrayContains: UserList[0]['firstName'])
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting ||
+                !snapshot.hasData ||
+                snapshot.data?.size == '' ||
+                snapshot.hasError) {
+              return Center(child: CircularProgressIndicator());
+            }
 
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const <Widget>[
-              Text(
-                'List of Group soon :) ',
-              ),
-            ],
-          ),
+            {
+              return ListView(
+                children: snapshot.data!.docs.map((doc) {
+                  // const Icon(Icons.group) Text(doc.id)
+                  return Card(
+                      child: ListTile(
+                    leading: const Icon(Icons.group),
+                    title: Text(doc.get('Name').toString()),
+                    subtitle: Text(doc.get('Description').toString()),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            Icons.edit,
+                            size: 20.0,
+                            color: Colors.brown[900],
+                          ),
+                          onPressed: () {
+                            print('ici Id ' + doc.id);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => UpdateGroupe(
+                                      Idgroupe: doc.id,
+                                      Name: doc.get('Name').toString(),
+                                      Description:
+                                          doc.get('Description').toString(),
+                                    )));
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            size: 20.0,
+                            color: Colors.brown[900],
+                          ),
+                          onPressed: () {
+                           // print('ici Id ' + doc.id);
+                            //deletGroupe(doc.id);
+                            //Navigator.of(context).push(MaterialPageRoute(builder: (context) =>GroupeScreen()));
+                            // Navigator.of(context).push(MaterialPageRoute(builder: (context) => UpdateGroupe(Idgroupe:doc.id,Name:doc.get('Name').toString(),Description:doc.get('Description').toString(),)));
+                           showDialog(
+                           context: context,
+                           builder: (BuildContext context) {
+                              return AlertDialog(
+                              title: const Text("Suppression Groupe "),
+                              content: const Text("Voulez vous supprimez cette groupe ?"),
+                              actions: <Widget>[
+                                TextButton(
+                                  child:  const Text("Continue"),
+                                  onPressed: () {
+                                    deletGroupe(doc.id);
+                                    if (formKey != false) {
+                                      Fluttertoast.showToast(
+                                          msg: 'Groupe Supprimé  avec succceé ',
+                                          backgroundColor:Colors.red,
+                                          timeInSecForIosWeb: 6,
+                                      );
+
+
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                ),
+                                 TextButton(
+                                  child: const Text("Cancel"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                            },
+                            );
+
+
+                          },
+                        ),
+                      ],
+                    ),
+                  ));
+                }).toList(),
+              );
+            }
+          },
         ),
+
+        // button d'ajout
         floatingActionButton: FloatingActionButton(
             tooltip: 'ajouter group',
-            child: new Icon(Icons.group_add),
+            child: const Icon(Icons.group_add),
             onPressed: () {
               showDialog(
                 context: context,
@@ -146,7 +214,8 @@ class _GroupeScreenState extends State<GroupeScreen> {
                     content: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Form(
-                        child: Column(children: <Widget>[
+                        child: SingleChildScrollView(
+                            child: Column(children: <Widget>[
                           TextFormField(
                             controller: NameEditingController,
                             onSaved: (value) {
@@ -157,8 +226,9 @@ class _GroupeScreenState extends State<GroupeScreen> {
                               icon: Icon(Icons.account_box),
                             ),
                           ),
-                          const SizedBox(height: 50.0,),
-
+                          const SizedBox(
+                            height: 50.0,
+                          ),
                           TextFormField(
                             controller: DescriptionEditingController,
                             onSaved: (value) {
@@ -169,70 +239,145 @@ class _GroupeScreenState extends State<GroupeScreen> {
                               icon: Icon(Icons.description),
                             ),
                           ),
-
-                          const SizedBox(height: 50.0,),
+                          const SizedBox(
+                            height: 50.0,
+                          ),
                           StreamBuilder(
                               stream: symptomsStream,
-                              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-                                if(snapshot.hasError){
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (snapshot.hasError) {
                                   print('Something went wrong');
                                 }
-                                if(snapshot.connectionState == ConnectionState.waiting){
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
                                   return const Center(
                                     child: CircularProgressIndicator(),
                                   );
                                 }
 
-                                final List symptomsList = [];
+                                final List usersList = [];
+                                final List listed = [];
                                 //fill up the list symptoms
-                                snapshot.data!.docs.map((DocumentSnapshot document){
-                                  Map a = document.data() as Map<String, dynamic>;
-                                  symptomsList.add(a['firstName']);
+                                snapshot.data!.docs
+                                    .map((DocumentSnapshot document) {
+                                  Map a =
+                                      document.data() as Map<String, dynamic>;
+                                  usersList.add(a['firstName']);
                                   a['id'] = document.id;
+                                  listed.add(a['id']);
                                 }).toList();
+                                print('id est suivant ');
+                                print(listed);
 
                                 return MultiSelectFormField(
                                   autovalidate: AutovalidateMode.disabled,
                                   chipBackGroundColor: Colors.blue[900],
-                                  chipLabelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                                  dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                                  chipLabelStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                  dialogTextStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                   checkBoxActiveColor: Colors.blue[900],
                                   checkBoxCheckColor: Colors.white,
-                                  dialogShapeBorder: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                                  dialogShapeBorder:
+                                      const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(12.0))),
                                   title: const Text(
-                                    "Symptoms",
-                                    style: TextStyle(fontSize:20),
+                                    "Membres ",
+                                    style: TextStyle(fontSize: 14),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.length == 0) {
-                                      return 'Please select one or more symptoms';
+                                      return 'Selectionner un ou plus Membre ';
                                     }
                                     return null;
                                   },
                                   dataSource: [
-                                    for (String i in symptomsList) {'value' : i}
+                                    for (String i in usersList) {'value': i},
                                   ],
                                   textField: 'value',
                                   valueField: 'value',
-                                  okButtonLabel: 'OK',
-                                  cancelButtonLabel: 'CANCEL',
-                                  hintWidget: Text('Please choose one or more symptoms'),
-                                  initialValue: _symptoms,
+                                  okButtonLabel: 'Valider',
+                                  cancelButtonLabel: 'Annuler',
+                                  hintWidget:
+                                      Text('Selectionner un ou plus Membre'),
+                                  initialValue: users,
                                   onSaved: (value) {
                                     if (value == null) return;
                                     setState(() {
-                                      _symptoms = value;
-                                    }
-                                    );
+                                      users = value;
+                                    });
                                   },
                                 );
-                              }
+                              }),
+                          const SizedBox(
+                            height: 30,
                           ),
-                        ]),
+                          Container(
+                            child: Material(
+                              elevation: 5,
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.blue[300],
+                              child: MaterialButton(
+                                padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                                //minWidth: MediaQuery.of(context).size.width,
+                                onPressed: () {
+                                  CreateGroupe();
+                                  if (formKey != false) {
+                                    Fluttertoast.showToast(
+                                        msg: 'Groupe ajouté avec succceé ',
+                                        timeInSecForIosWeb: 6
+                                    );
+                                    users.clear();
+                                    NameEditingController.clear();
+                                    DescriptionEditingController.clear();
+                                    Navigator.pop(context);
+
+                                  }  //Navigator.of(context).pop();
+                                },
+                                child: const Text(
+                                  "Ajouter groupe",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Material(
+                            elevation: 5,
+                            borderRadius: BorderRadius.circular(30),
+                            color: Colors.blue[300],
+                            child: MaterialButton(
+                              padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                              //minWidth: MediaQuery.of(context).size.width,
+                              onPressed: () {
+                                Navigator.pop(context);
+                                users.clear();
+                                NameEditingController.clear();
+                                DescriptionEditingController.clear();
+                              },
+                              child: const Text(
+                                "Annuler",
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ])),
                       ),
                     ),
-                   /* actions: [
+                    /* actions: [
                       cancelButton,
                       continueButton,
                     ],*/

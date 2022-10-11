@@ -45,14 +45,14 @@ class MyApp extends StatelessWidget {
         title: 'Pac_mspe',
 
        //'/': (context) => const FirstScreen(),
-        initialRoute: _auth.currentUser != null ? AddScreen.screenRoute :SignInScreen.screenRoute ,
+        initialRoute: _auth.currentUser != null ? WelcomeScreen.screenRoute :SignInScreen.screenRoute ,
 
         routes: {
           WelcomeScreen.screenRoute:(context)=>const WelcomeScreen(),
           SignInScreen.screenRoute:(context)=> const SignInScreen(),
-          '/Group':(context)=>const GroupeScreen(),
          // RegistrationScreen.screenRoute:(context)=>RegistrationScreen(),
           ChatScreen.screenRoute:(context)=> const ChatScreen(),
+          GroupeScreen.screenRoute:(context)=>const GroupeScreen(),
           Login.screenRoute:(context)=>Login(),
           GetDemande.screenRoute:(context)=>const GetDemande(),
 
@@ -61,4 +61,6 @@ class MyApp extends StatelessWidget {
 
   }
 }
+
+
 

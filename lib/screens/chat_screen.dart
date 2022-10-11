@@ -94,7 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             //Image.asset("images/fontimage.jpg"),
-            MessageStreamBuilder(),
+            const MessageStreamBuilder(),
 
             Container(
               decoration: const BoxDecoration(
