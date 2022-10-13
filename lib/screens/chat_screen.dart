@@ -3,18 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 
 final _firestore = FirebaseFirestore.instance;
 
 late User signedInUser;
 
+
 class ChatScreen extends StatefulWidget {
   static const String screenRoute = 'chat_screen';
 
+  var Idgroupe,Name;
 
 
-  const ChatScreen({Key? key}) : super(key: key);
+
+ // const ChatScreen({Key? key , Idgroupe}) : super(key: key);
+
+  ChatScreen ({super.key, required this.Idgroupe,required this.Name });
+
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -33,6 +41,8 @@ class _ChatScreenState extends State<ChatScreen> {
     // TODO: implement initState
     super.initState();
     getCurrentUser();
+   // getMessage();
+    messsageStreams();
   }
 
   void getCurrentUser() {
@@ -49,21 +59,29 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void getMessage() async {
-    final messages = await _firestore.collection('messages').get();
+  /*void getMessage() async {
+    //.where('UidGroupe',isEqualTo: widget.Idgroupe.toString())
+    final messages = await _firestore.collection('Message').where('UidGroupe',isEqualTo: widget.Idgroupe.toString()).get();
     for (var message in messages.docs) {
+
       print(message.data());
     }
-  }
-
+  }*/
+//.where('UidGroupe',isEqualTo:'RtbPamSsHdZtJL2s83ELLk6cC1y1')
   void messsageStreams() async {
-    await for (var snapshot in _firestore.collection('messages').snapshots()) {
-      for (var message in snapshot.docs) {
-        print(message.data());
-      }
+    //.where('UidGroupe',isEqualTo:'Rk6xbMstHh64wwm1GBBH')
+    await for (var snapshot in _firestore.collection('Message').where('UidGroupe',isEqualTo:widget.Idgroupe ).snapshots()) {
+       for (var messages in snapshot.docs) {
+
+         print('****************dataaaaa***************');
+                        print(messages.data());
+         print('****************dataaaaa***************');
+
+       }
     }
   }
 
+  //name.test@live.com
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,10 +89,10 @@ class _ChatScreenState extends State<ChatScreen> {
         //backgroundColor: Colors.red[300],
           backgroundColor: Colors.blue[300],
         title: Row(
-          children: const [
+          children:  [
             //Image.asset('images/image.jpg', height: 25),
-            SizedBox(width: 20),
-         Text('Team Work ')
+            const SizedBox(width: 20),
+         Text(widget.Name)
           ],
         ),
         actions: [
@@ -94,13 +112,13 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             //Image.asset("images/fontimage.jpg"),
-            const MessageStreamBuilder(),
+             MessageStreamBuilder(Idgroupe: widget.Idgroupe),
 
             Container(
               decoration: const BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: Colors.orange,
+                    color: Colors.blueAccent,
                     width: 2,
                   ),
                 ),
@@ -126,23 +144,44 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                   ),
-                  TextButton(
+                  TextButton.icon(
+                    icon: const Icon(Icons.send),
                     onPressed: () {
                       messageTextController.clear();
-                      _firestore.collection('messages').add({
-                        'text': messageText,
-                        'sender': signedInUser.email,
-                        'time': FieldValue.serverTimestamp(),
-                      });
+                      if(messageText == null ){
+                        return
+                          MotionToast.error(
+                            title: const Text(
+                              'Error ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            description: const Text('Please enter your Message'),
+                            animationType: AnimationType.fromLeft,
+                            position: MotionToastPosition.bottom,
+                            barrierColor: Colors.black.withOpacity(0.3),
+                            width: 300,
+                            height: 80,
+                            dismissable: false,
+                          ).show(context);
+
+                      }
+
+                      else {
+
+                        _firestore.collection('Message').add({
+                          'text': messageText,
+                          'sender': signedInUser.email,
+                          //'time': FieldValue.serverTimestamp(),
+                           'time' : DateTime.now(),
+                          'UidGroupe':widget.Idgroupe,
+                        });
+                        messageText =null;
+                      }
+
                     },
-                    child: Text(
-                      'send',
-                      style: TextStyle(
-                        color: Colors.blue[800],
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
+                    label: const Text(' ') ,
                   )
                 ],
               ),
@@ -155,32 +194,37 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class MessageStreamBuilder extends StatelessWidget {
-  const MessageStreamBuilder({Key? key}) : super(key: key);
+  var Idgroupe;
+
+  MessageStreamBuilder({super.key,required this.Idgroupe,
+  });
+
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('messages').orderBy('time').snapshots(),
+      stream: _firestore.collection('Message')
+           .where('UidGroupe',isEqualTo: this.Idgroupe ).orderBy('time', descending: true)
+        .snapshots().handleError((error) => print(error.toString())),
       builder: (context, snapshot) {
         List<MessageLine> messageWidgets = [];
         if (!snapshot.hasData) {
-         // print(FieldValue.serverTimestamp());
-          return const Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.blue,
-            ),
-          );
+         return const  Center(
+             child: CircularProgressIndicator(
+               backgroundColor: Colors.blue,
+             ),
+         );
+
         }
 
-        final messages = snapshot.data!.docs.reversed;
-        for (var message in messages) {
+          final messages = snapshot.data!.docs;
+          for (var message in messages) {
           final messageText = message.get('text');
           final messageSender = message.get('sender');
           final timeMessage = message.get('time');
           final currentUser = signedInUser.email;
-          if (currentUser == messageSender) {
-            //
-          }
+         // final UidGroupe = this.Idgroupe;
+
 
 
           // testing get date form
@@ -202,23 +246,27 @@ class MessageStreamBuilder extends StatelessWidget {
               sender: messageSender,
               text: messageText,
               isMe: currentUser == messageSender,
-            );
 
+            );
 
           messageWidgets.add(messgaeWidget);
         }
+
         return Expanded(
           child: ListView(
             reverse: true,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             children: messageWidgets,
           ),
+
         );
       },
     );
   }
 }
 
+
+//partie cors chat
 class MessageLine extends StatelessWidget {
 
 
@@ -241,7 +289,7 @@ class MessageLine extends StatelessWidget {
         children: [
           Text(
             '$sender',
-            style: const TextStyle(fontSize: 10, color:Colors.redAccent),
+            style: const TextStyle(fontSize: 10, color:Colors.blue),
           ),
           Material(
               elevation: 5,

@@ -91,7 +91,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         widget = const GetDemande() ;
         break;
       case 2:
-        widget = const ChatScreen() ;
+        widget =  const GroupeScreen() ;
         break;
       default:
         widget = const GroupeScreen();

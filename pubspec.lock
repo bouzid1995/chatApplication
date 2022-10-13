@@ -261,6 +261,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0-nullsafety-1"
+  motion_toast:
+    dependency: "direct main"
+    description:
+      name: motion_toast
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.4.3"
   multi_select_flutter:
     dependency: "direct main"
     description:

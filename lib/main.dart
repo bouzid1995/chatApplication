@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           WelcomeScreen.screenRoute:(context)=>const WelcomeScreen(),
           SignInScreen.screenRoute:(context)=> const SignInScreen(),
          // RegistrationScreen.screenRoute:(context)=>RegistrationScreen(),
-          ChatScreen.screenRoute:(context)=> const ChatScreen(),
+          //ChatScreen.screenRoute:(context)=> const ChatScreen(),
           GroupeScreen.screenRoute:(context)=>const GroupeScreen(),
           Login.screenRoute:(context)=>Login(),
           GetDemande.screenRoute:(context)=>const GetDemande(),

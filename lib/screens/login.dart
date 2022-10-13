@@ -322,7 +322,6 @@ class _LoginState extends State<Login> {
         (context),
         MaterialPageRoute(builder: (context) => ChatScreen(firstName:this.firstNameEditingController.text,secondName:secondNameEditingController.text)),
             (route) => false);*/
-    Navigator.of(context).push(MaterialPageRoute(builder:(context) =>ChatScreen()
-    ));
+    //Navigator.of(context).push(MaterialPageRoute(builder:(context) =>ChatScreen()  ));
   }
 }
