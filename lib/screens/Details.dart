@@ -1,6 +1,4 @@
 
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +104,7 @@ class _DetailDemandeState extends State<DetailDemande> {
         this.RoleList = dataList;
       });
 
-      (RoleList[0]['Role'] == 'Admin' && Approuved == 'false')
+      (RoleList[0]['Role'] == 'Admin' && Approuved == 'False')
           ? myvisibility = true
           : myvisibility = false;
 
@@ -187,7 +185,7 @@ class _DetailDemandeState extends State<DetailDemande> {
         title: Text('Detail Suggestion '),
         centerTitle: true,
       ),
-      body: Column(
+      body:  Column(
         children: [
           Container(
               decoration: const BoxDecoration(
@@ -245,7 +243,7 @@ class _DetailDemandeState extends State<DetailDemande> {
                                     Text(
                                       dataList1[0]['firstName'] == ''
                                           ? ''
-                                          : '${dataList1[0]['firstName']}  ${dataList1[0]['secondName']}',
+                                          : '${dataList1[0]['firstName']} ',
                                       style: const TextStyle(
                                         fontSize: 14.0,
                                         color: Colors.black,

@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
 
         title: 'Pac_mspe',
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
 
         routes: {
           WelcomeScreen.screenRoute:(context)=>const WelcomeScreen(),
-          SignInScreen.screenRoute:(context)=> const SignInScreen(),
+          SignInScreen.screenRoute:(context)=>   SignInScreen(),
          // RegistrationScreen.screenRoute:(context)=>RegistrationScreen(),
           //ChatScreen.screenRoute:(context)=> const ChatScreen(),
           GroupeScreen.screenRoute:(context)=>const GroupeScreen(),

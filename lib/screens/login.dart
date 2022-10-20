@@ -1,5 +1,6 @@
 import 'package:chatapplication/screens/chat_screen.dart';
 import 'package:chatapplication/screens/registration_screen.dart';
+import 'package:chatapplication/screens/searchuser.dart';
 import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import '../model/user_model.dart';
+import 'WelcomeScreen.dart';
 
 
 
@@ -25,12 +27,20 @@ class _LoginState extends State<Login> {
   // string for displaying the error Message
   String? errorMessage;
 
-  final _formKey = GlobalKey<FormState>;
+
+  final _formKey  = GlobalKey<FormState>();
+
   final firstNameEditingController = new TextEditingController();
   final secondNameEditingController = new TextEditingController();
   final emailEditingController = new TextEditingController();
   final passwordEditingController = new TextEditingController();
   final confirmpasswordEditingController = new TextEditingController();
+  final numtelEditingController = new TextEditingController();
+  final groupEditingController = new TextEditingController();
+  final fonctionEditingController = new TextEditingController();
+
+  String? role_id ='Admin';
+final  Roles = ['Admin','user'];
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +49,12 @@ class _LoginState extends State<Login> {
       controller: firstNameEditingController,
       keyboardType: TextInputType.text,
       validator: (value) {
-        RegExp regex = new RegExp(r'^.{3,}$');
+        RegExp regex = new RegExp(r'^.{5,}$');
         if (value!.isEmpty) {
-          return ("First Name cannot be Empty");
+          return ("Votre Nom et Prenom n'est pas Valide ");
         }
         if (!regex.hasMatch(value)) {
-          return ("Enter Valid name(Min. 3 Character)");
+          return (" Nom Prenom doit etre plus que 5 caractere )");
         }
         return null;
       },
@@ -55,32 +65,12 @@ class _LoginState extends State<Login> {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.account_circle),
         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "FirstName",
+        hintText: "Nom et Prenom",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
 
-    final secondNameField = TextFormField(
-      autofocus: false,
-      controller: secondNameEditingController,
-      keyboardType: TextInputType.text,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return ("Second Name cannot be Empty");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        secondNameEditingController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        prefixIcon:  const Icon(Icons.account_circle),
-        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "SecondName",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
+
 
     final emailField = TextFormField(
       autofocus: false,
@@ -88,12 +78,12 @@ class _LoginState extends State<Login> {
       keyboardType: TextInputType.text,
       validator: (value) {
         if (value!.isEmpty) {
-          return ("Please Enter Your Email");
+          return ("Please Entrer votre Email");
         }
         // reg expression for email validation
         if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
             .hasMatch(value)) {
-          return ("Please Enter a valid email");
+          return ("Please Entrer un email valide");
         }
         return null;
       },
@@ -109,6 +99,84 @@ class _LoginState extends State<Login> {
       ),
     );
 
+
+    final NumtelField = TextFormField(
+      controller: numtelEditingController,
+      keyboardType: TextInputType.phone,
+      obscureText: false,
+      validator: (value) {
+        RegExp regex = new RegExp(r'^.{8,}$');
+        if (value!.isEmpty) {
+          return ("Numero Tel ne peut pas être vide");
+        }
+        if (!regex.hasMatch(value)) {
+          return ("Entrer Valide Numero Tel(Min. 8 Character)");
+        }
+      },
+      onSaved: (value) {
+        numtelEditingController.text = value!;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.phone_android),
+        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: "Num tel",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+
+    final groupeField = TextFormField(
+      autofocus: false,
+      controller: groupEditingController,
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        RegExp regex =  RegExp(r'^.{3,}$');
+        if (value!.isEmpty) {
+          return ("Groupe ne peut pas être vide");
+        }
+        if (!regex.hasMatch(value)) {
+          return ("Entrer Valide Groupe(Min. 3 Charactere)");
+        }
+        return null;
+      },
+      onSaved: (value) {
+        groupEditingController.text = value!;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.account_circle),
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: "Groupe",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+
+    final fonctionField = TextFormField(
+      autofocus: false,
+      controller: fonctionEditingController,
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        RegExp regex =  RegExp(r'^.{3,}$');
+        if (value!.isEmpty) {
+          return ("Fonction ne peut pas être vide");
+        }
+        if (!regex.hasMatch(value)) {
+          return ("Entrer Valide Fonction (Min. 3 Charactere)");
+        }
+        return null;
+      },
+      onSaved: (value) {
+        fonctionEditingController.text = value!;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.functions),
+        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: "Fonction",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+
     final passwordField = TextFormField(
       autofocus: false,
       controller: passwordEditingController,
@@ -116,10 +184,10 @@ class _LoginState extends State<Login> {
       validator: (value) {
         RegExp regex = new RegExp(r'^.{6,}$');
         if (value!.isEmpty) {
-          return ("Password is required for login");
+          return ("Mot de Passe est obligatoire pour inscription ");
         }
         if (!regex.hasMatch(value)) {
-          return ("Enter Valid Password(Min. 6 Character)");
+          return ("Entrer Valide Mot de Passe(Min. 6 Charactere)");
         }
       },
       onSaved: (value) {
@@ -129,7 +197,7 @@ class _LoginState extends State<Login> {
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.vpn_key),
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Password",
+        hintText: "Mot de Passe ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
@@ -139,21 +207,24 @@ class _LoginState extends State<Login> {
       controller: confirmpasswordEditingController,
         obscureText: true,
       validator: (value) {
-        if (confirmpasswordEditingController.text !=
-            passwordEditingController.text) {
-          return "Password don't match";
+        if (confirmpasswordEditingController.text != passwordEditingController.text) {
+          return "Mot de passe n'est pas conforme";
         }
+        else if(confirmpasswordEditingController.text.isEmpty)
+          {
+            return "Mot de passe vide ";
+          }
         return null;
       },
       onSaved: (value) {
         confirmpasswordEditingController.text = value!;
       },
       textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         prefixIcon: Icon(Icons.vpn_key),
         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Confirm Password",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          border:OutlineInputBorder(),
       ),
     );
 
@@ -164,58 +235,137 @@ class _LoginState extends State<Login> {
       child: MaterialButton(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
-        onPressed: () {
-          signUp(emailEditingController.text,passwordEditingController.text);
+        onPressed: () async {
+          if (_formKey.currentState!.validate())
+            {
+             //print('Votre form est valide');
+
+              signUp(emailEditingController.text,passwordEditingController.text);
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                       SearchUser()));
+            // await  Navigator.pushNamed(context, sear.screenRoute);
+            }
 
 
         },
         child: const Text(
-          "SingUp",
+          "Ajouter",
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 20 , color: Colors.white, fontWeight: FontWeight.bold ),
         ),
+
+
       ),
     );
 
 
 
+    final Roledropdown = DropdownButtonFormField(
+
+        value: role_id,
+        hint: const Text('selectionner un Role'),
+        items: Roles.map((e) {
+          return DropdownMenuItem(child: Text(e),value:e,);
+        }
+        ).toList(),
+        onChanged: (val){
+          setState(() {
+            role_id = val as String;
+          });
+  },
+        icon: const Icon(
+          Icons.arrow_drop_down_circle,
+          color: Colors.blueAccent,
+        ),
+      decoration: const InputDecoration(
+        labelText: 'Role ',
+        prefixIcon: Icon(
+        Icons.verified_user,
+        ),
+        border:OutlineInputBorder(),
+      ),
+        );
+
+
+
+
     return Scaffold(
       backgroundColor: Colors.white,
-    /*  appBar:AppBar(
-      backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: Colors.red,),
-         onPressed: () {
-           Navigator.pop(context);
-         },
+
+      drawer: Drawer(
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Drawer Header'),
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.home,
+              ),
+              title: const Text('Page 1'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.train,
+              ),
+              title: const Text('Page 2'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
-      ),*/
-      body:Center(
+      ),
+
+      appBar:AppBar(
+        backgroundColor: Colors.blue[300],
+        //automaticallyImplyLeading: false,
+        title: Row(
+          children:  const [ SizedBox(width: 20),
+              Text('Ajouter un Nouvel utilisateur  ')
+            ],
+        ),
+      ),
+      body: Center(
         child: SingleChildScrollView(
           child: Container(
             color: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.all(36.0),
+              padding: const EdgeInsets.all(8.0),
               child: Form(
-                //key: _formKey,
+                key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(
-                        height: 180,
-                        child: Image.asset(
-                          "images/image.jpg",
-                          fit: BoxFit.contain,
-                        )),
-                    SizedBox(height: 45),
+
+                    //SizedBox(height: 20),
+                   // Center(child: Text('Nouvelle utilisateur'),) ,
+                    SizedBox(height: 20),
                     firstNameField,
                     SizedBox(height: 20),
-                    secondNameField,
+                    NumtelField,
                     SizedBox(height: 20),
                     emailField,
+                    SizedBox(height: 20),
+                    groupeField,
+                    SizedBox(height: 20),
+                    fonctionField,
+                    SizedBox(height: 20),
+                    Roledropdown,
                     SizedBox(height: 20),
                     passwordField,
                     SizedBox(height: 20),
@@ -224,7 +374,7 @@ class _LoginState extends State<Login> {
                     signUpButton,
                     SizedBox(height: 15),
 
-                    Row(
+                   /* Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text("have an account? "),
@@ -247,7 +397,7 @@ class _LoginState extends State<Login> {
                           ),
                         )
                       ],
-                    )
+                    )*/
                   ],
                 ),
               ),
@@ -310,8 +460,18 @@ class _LoginState extends State<Login> {
     userModel.email = user!.email;
     userModel.uid = user.uid;
     userModel.firstName = firstNameEditingController.text;
-    userModel.secondName = secondNameEditingController.text;
+    //userModel.secondName = secondNameEditingController.text;
+    userModel.Fonction = fonctionEditingController.text;
+    userModel.Group = groupEditingController.text;
+    userModel.NumTel = numtelEditingController.text;
+    userModel.Role = role_id;
 
+
+    if(firstNameEditingController.text == true){
+
+      print('test is her');
+
+    }
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)

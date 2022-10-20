@@ -4,9 +4,13 @@ class UserModel{
   String? email;
   String? firstName;
   String? secondName;
+  String? Role;
+  String? Group;
+  String? Fonction;
+  String? NumTel;
 
 
-  UserModel({this.uid,this.email,this.firstName,this.secondName});
+  UserModel({this.uid,this.email,this.firstName,this.secondName,this.Role,this.Group,this.Fonction,this.NumTel});
 
 
   factory UserModel.fromMap(map)
@@ -16,7 +20,12 @@ class UserModel{
       uid: map['uid'],
       email: map['email'],
       firstName: map['firstName'],
-      secondName: map['secondName']
+      secondName: map['secondName'],
+      Role: map['Role'],
+      Group: map['Group'],
+      Fonction: map['Fonction'],
+      NumTel: map['NumTel'],
+
     );
   }
 
@@ -27,6 +36,10 @@ class UserModel{
       'email':email,
       'firstName': firstName,
       'secondName':secondName,
+      'Role':Role,
+      'Group':Group,
+      'Fonction':Fonction,
+      'NumTel':NumTel,
 
     };
   }

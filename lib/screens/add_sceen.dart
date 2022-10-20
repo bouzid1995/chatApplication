@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:chatapplication/screens/WelcomeScreen.dart';
 import 'package:chatapplication/screens/get_demande.dart';
 import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,14 +30,13 @@ class AddScreen extends StatefulWidget {
     //Description , Destination , Etat , Groupe , Image , Name , uid
 class _AddScreen extends State<AddScreen> {
 
-final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final descriptionEditingController = new TextEditingController();
   final AvantEditingController = new TextEditingController();
   final ApresEditingController = new TextEditingController();
 
   Date() {
 
-    //String datetime = DateTime.now().toString();
 
     String datetime = DateFormat("dd-MM-yyyy").format(DateTime.now());
     print(datetime);
@@ -49,14 +49,16 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
     final DescriptionField = TextFormField(
       autofocus: false,
       controller: descriptionEditingController,
+      minLines: 2,
+      maxLines: 5,
       keyboardType: TextInputType.text,
       validator: (value) {
-       RegExp regex = new RegExp(r'^.{8,}$');
+       RegExp regex = new RegExp(r'^.{10,}$');
         if (value!.isEmpty) {
-          return ("Description cannot be Empty");
+          return ("Description ne peut pas être vide");
         }
         if (!regex.hasMatch(value)) {
-          return ("Enter Valid name(Min. 8 Character)");
+          return ("Enter Valid Description (Min. 10 Character)");
         }
         return null;
       },
@@ -85,9 +87,12 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
       maxLines: 5,
       keyboardType: TextInputType.multiline,
       validator: (value) {
-        RegExp regex = new RegExp(r'^.{8,}$');
+        RegExp regex = new RegExp(r'^.{10,}$');
         if (value!.isEmpty) {
-          return ("Titre  cannot be Empty");
+          return ("Situation Avant ne peut pas être vide");
+        }
+        if (!regex.hasMatch(value)) {
+          return ("Enter Valid Situation Avant (Min. 10 Character)");
         }
         return null;
       },
@@ -114,9 +119,12 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
       maxLines: 5,
       keyboardType: TextInputType.multiline,
       validator: (value) {
-        RegExp regex = new RegExp(r'^.{8,}$');
+        RegExp regex = new RegExp(r'^.{10,}$');
         if (value!.isEmpty) {
-          return ("Situation Cannot be empty ");
+          return ("Situation ne peut pas être vide ");
+        }
+        if (!regex.hasMatch(value)) {
+          return ("Enter Valid Situation Apres (Min. 10 Character)");
         }
         return null;
       },
@@ -146,20 +154,19 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
-          _FormKey.currentState?.validate();
-          CreateDemande();
 
+          if (_formKey.currentState!.validate()) {
+            CreateDemande();
 
-          if (_FormKey != false){
-            Fluttertoast.showToast(msg: 'Demand aded succefuly');  //Navigator.pushNamed(context, GetDemande.screenRoute);
-          }
-
-         Navigator.of(context).push(MaterialPageRoute(builder: (context) => GetDemande()));
+            Fluttertoast.showToast(msg: 'Suggestion ajouteé avec  succees ');
+          //Navigator.pushNamed(context, GetDemande.screenRoute);
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => WelcomeScreen()));
         // Navigator.of(context).push(MaterialPageRoute(builder: (context) => GroupeScreen()));
 
+    }
         },
         child: const Text(
-          "Nouvelle Suggestion",
+          "Ajouter",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20 , color: Colors.white, fontWeight: FontWeight.bold ),
@@ -184,8 +191,8 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
           IconButton(
               onPressed: () {
               //_auth.signOut();
-                Navigator.pushNamed(context, SignInScreen.screenRoute);
-                //_auth.signOut();
+                Navigator.pushNamed(context, GetDemande.screenRoute);
+                FirebaseAuth.instance.signOut();
                 // Navigator.pop(context);
               },
               icon: const Icon(Icons.close))
@@ -194,16 +201,17 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
 
       body: Center(
         child: SingleChildScrollView(
-          child: Container(
+           child: Container(
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(36.0),
               child: Form(
-                key: _FormKey,
+                key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+
                     SizedBox(
                         height: 180,
                         child: Image.asset(
@@ -212,13 +220,13 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
                         )),
 
 
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     DescriptionField,
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     SituationAvantField,
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     SituationApresField,
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     // Button d'ahjout
                     addButton,
                     //SizedBox(height: 15)
@@ -242,7 +250,7 @@ final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
       final user = FirebaseAuth.instance.currentUser!;
 
 
-          Map<String,dynamic> data = {"Description":descriptionEditingController.text,"SituationAvant":AvantEditingController.text,"SituationApres":ApresEditingController.text,"user":user.uid,"DateProp": Date(),"Approuved":"False", "Remarque":""};
+          Map<String,dynamic> data = {"Description":descriptionEditingController.text,"SituationAvant":AvantEditingController.text,"SituationApres":ApresEditingController.text,"user":user.uid,"DateProp": Date(),"Approuved":"false", "Remarque":""};
 
           await firebaseFirestore.collection("basket_items").add(data);
 

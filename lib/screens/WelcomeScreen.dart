@@ -2,6 +2,7 @@ import 'package:chatapplication/screens/add_sceen.dart';
 import 'package:chatapplication/screens/chat_screen.dart';
 import 'package:chatapplication/screens/get_demande.dart';
 import 'package:chatapplication/screens/groupescreen.dart';
+import 'package:chatapplication/screens/searchuser.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +22,11 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final items = const [
     Icon(
-      Icons.add,
+      Icons.list_alt,
       size: 30,
     ),
     Icon(
-      Icons.list,
+      Icons.add,
       size: 30,
     ),
     Icon(
@@ -56,6 +57,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       // backgroundColor: Colors.redAccent,
 
     ),*/
+
+
+
+
+
       bottomNavigationBar: CurvedNavigationBar(
         items: items,
         index: index,
@@ -85,16 +91,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     Widget widget;
     switch (index) {
       case 0:
-        widget = const AddScreen() ;
+        widget = const GetDemande()  ;
         break;
       case 1:
-        widget = const GetDemande() ;
+        widget =  Login() ;
         break;
       case 2:
         widget =  const GroupeScreen() ;
         break;
       default:
-        widget = const GroupeScreen();
+        widget = const SearchUser();
         break;
     }
     return widget;

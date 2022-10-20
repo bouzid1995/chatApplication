@@ -1,202 +1,197 @@
-
-
-import 'package:chatapplication/screens/login.dart';
+import 'package:chatapplication/screens/WelcomeScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../widgets/my_button.dart';
-import 'WelcomeScreen.dart';
-import 'chat_screen.dart';
+
 
 class SignInScreen extends StatefulWidget {
+  //SignInScreen({required Key key}) : super(key: key);
   static const String screenRoute = 'signin_screen';
-
-  const SignInScreen({Key? key}) : super(key: key);
 
   @override
   _SignInScreenState createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final _auth = FirebaseAuth.instance;
-  late String email;
+  final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
+  late TextEditingController emailInputController;
+  late TextEditingController pwdInputController;
   late String password;
-  bool showSpinner = false;
+  late String email;
+
+
+  @override
+  initState() {
+    emailInputController = new TextEditingController();
+    pwdInputController = new TextEditingController();
+    super.initState();
+  }
+
+  Future<String> signIn(String email, String password) async {
+    try{
+      UserCredential result = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      User? user = result.user;
+
+      return user!.uid;
+
+    }on FirebaseAuthException  catch(error){
+      return Future.error(error);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-     /* appBar:AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back,color: Colors.red,),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),*/
-      body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                height: 200,
-                child: Image.asset('images/MSPE_Logo.png'),
-              ),
-
-            TextFormField(
-              autofocus: false, keyboardType: TextInputType.emailAddress,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return ("Please Enter Your Email");
-                }
-                // reg expression for email validation
-                if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                    .hasMatch(value)) {
-                  return ("Please Enter a valid email");
-                }
-                return null;
-              },
-              onChanged: (value) {
-                email = value;
-              },
-              textInputAction: TextInputAction.next,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.mail),
-                contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                hintText: "Email",
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-            ),
-
-              const SizedBox(height: 15),
-              /*TextField(
-                obscureText: true,
-                textAlign: TextAlign.center,
-                onChanged: (value) {
-                  password = value;
-                },
-                decoration: const InputDecoration(
-                  hintText: 'Enter your password',
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 20,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.orange,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.blue,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                ),
-              ),*/
-
-            TextFormField(
-              autofocus: false,
-              obscureText: true,
-              validator: (value) {
-                RegExp regex = RegExp(r'^.{6,}$');
-                if (value!.isEmpty) {
-                  return ("Password is required for login");
-                }
-                if (!regex.hasMatch(value)) {
-                  return ("Enter Valid Password(Min. 6 Character)");
-                }
-              },
-              onChanged: (value) {
-                    password = value;
-              },
-              textInputAction: TextInputAction.next,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.vpn_key),
-                contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                hintText: "Password",
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-            ),
-
-
-              const SizedBox(height: 10),
-
-
-              MyButton(
-                color: Colors.blue[300]!,
-                title: 'Sign in',
-                onPressed: () async {
-                  setState(() {
-                    showSpinner = false;
-                  });
-                  final user = _auth.signInWithEmailAndPassword(
-                      email: email, password: password);
-                  try {
-                    if (user != null) {
-                     Navigator.pushNamed(context, WelcomeScreen.screenRoute);
-                     /* Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) =>Demande_Screen()));*/
-                    }
-                  } catch (e) {
-                    setState(() {
-                      showSpinner = true;
-                    });
-                    print('user not existed ');
-                    print(e);
-                // Navigator.pushNamed(context, WelcomeScreen.screenRoute);
-                  }
-                },
-              ),
-
-             // const SizedBox(height: 10),
-
-             /* Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("don't have an account? "),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                               Login()));
-                    },
-                    child: const Text(
-                      "Register",
-                      style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15),
-                    ),
-                  )
-                ],
-              )*/
-
-            ],
-          ),
-        ),
+        body: Container(
+            padding: const EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+    child: Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 15),
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      const SizedBox(
+        height: 150,
       ),
-    );
+    SizedBox(
+    height: 150,
+    child: Image.asset('images/MSPE_Logo.png'),
+    ),
+                const SizedBox(
+                  height: 50,
+                ),
+                Form(
+                  key: _loginFormKey,
+                  child: Column(
+                    children: <Widget>[
+                    TextFormField(
+
+                    autofocus: false, keyboardType: TextInputType.emailAddress,
+                    //controller: emailInputController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return (" Enter votre Email");
+                      }
+                      // reg expression for email validation
+                      if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z.-]+.[a-z]")
+                          .hasMatch(value)) {
+                        return (" Enterer un email Valide ");
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.mail),
+                      contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      hintText: "Email",
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+
+                      SizedBox(height: 20),
+
+                      TextFormField(
+                        autofocus: false,
+                        obscureText: true,
+                        controller: pwdInputController,
+                        validator: (value) {
+                          RegExp regex = RegExp(r'^.{6,}$');
+                          if (value!.isEmpty) {
+                            return ("Mot de passe obligatoire pour login ");
+                          }
+                          if (!regex.hasMatch(value)) {
+                            return ("Entrer mot de passe valide (Min. 6 Character)");
+                          }
+                        },
+                        onChanged: (value) {
+                          password= value;
+                        },
+                       // textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.vpn_key),
+                          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          hintText: "Mot de passe ",
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height:40
+                      ),
+
+                      MyButton (
+                        color: Colors.blue[300]!,
+                        title: 'Connexion',
+                        //child: Theme.of(context).primaryColor,
+                        //textColor: Colors.white,
+//name.test@live.com
+                        onPressed: () async {
+                          if (_loginFormKey.currentState!.validate()) {
+
+                          /* FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                email: email,
+                                password: password)
+                                .then((currentUser) =>  FirebaseFirestore.instance
+                                .collection("users")
+                                .doc( FirebaseAuth.instance.currentUser?.uid)
+                                .get()
+                                .then((DocumentSnapshot result) =>
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => WelcomeScreen())))
+                                .catchError((err){
+                                 print(err);
+
+                                        }));*/
+
+                            await signIn(email,password).then((onSuccess){
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => WelcomeScreen()));
+                            }).catchError((err) {
+                              print(err);
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("Error"),
+                                      content: Text(err.message),
+                                      actions: [
+                                        TextButton(
+                                          child: Text("Ok"),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        )
+                                      ],
+                                    );
+                                  });
+                            });
+
+
+
+
+                          }
+
+                        },
+
+
+                      ),
+
+                    ],
+                  ),
+                )])
+            ))));
   }
 }
