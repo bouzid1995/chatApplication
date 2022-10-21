@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SearchUser extends StatefulWidget {
   const SearchUser({Key? key}) : super(key: key);
@@ -12,6 +14,14 @@ class SearchUser extends StatefulWidget {
 class _SearchUserState extends State<SearchUser> {
 
   String name = "";
+
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      throw 'Vous pouvez pas appelez $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +116,9 @@ class _SearchUserState extends State<SearchUser> {
                                 color: Colors.white,
                                 fontSize: 20.0,
                               ))),
-                      trailing:Icon(Icons.phone),
+                      trailing:IconButton(
+                        onPressed: () { _makePhoneCall(data['NumTel']); },
+                          icon:Icon(Icons.phone) ),
 
                     );
                   }

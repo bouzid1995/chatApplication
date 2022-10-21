@@ -42,6 +42,8 @@ class _LoginState extends State<Login> {
   String? role_id ='Admin';
 final  Roles = ['Admin','user'];
 
+List test=[];
+
   @override
   Widget build(BuildContext context) {
     final firstNameField = TextFormField(
@@ -460,7 +462,6 @@ final  Roles = ['Admin','user'];
     userModel.email = user!.email;
     userModel.uid = user.uid;
     userModel.firstName = firstNameEditingController.text;
-    //userModel.secondName = secondNameEditingController.text;
     userModel.Fonction = fonctionEditingController.text;
     userModel.Group = groupEditingController.text;
     userModel.NumTel = numtelEditingController.text;

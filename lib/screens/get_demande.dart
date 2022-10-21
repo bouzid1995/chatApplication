@@ -431,18 +431,18 @@ class _GetDemandeState extends State<GetDemande> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: const Text("Suppression Groupe "),
-                                  content: const Text("Voulez vous supprimez cette Suggestion  ?"),
+                                  title: const Text("Suppression Suggestion "),
+                                  content: const Text("Voulez vous supprimez cette Suggestion ?"),
                                   actions: <Widget>[
                                     TextButton(
-                                      child:  const Text("Continue"),
+                                      child:  const Text("Continuer"),
                                       onPressed: () {
                                         deletSugg(doc.id);
 
                                       },
                                     ),
                                     TextButton(
-                                      child: const Text("Cancel"),
+                                      child: const Text("Annuler"),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
@@ -490,35 +490,6 @@ class _GetDemandeState extends State<GetDemande> {
         }),
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             ],
 
           ) ,
@@ -530,12 +501,9 @@ class _GetDemandeState extends State<GetDemande> {
  ///Ajouter une suggestion Popup
       floatingActionButton: FloatingActionButton(
       onPressed: () async {
-      // Add your onPressed code here!
-        print('button clicked');
         return await showDialog(
             context: context,
             builder: (context) {
-              bool? isChecked = false;
               return StatefulBuilder(builder: (context, setState) {
                 return AlertDialog(
                   content: Form(
@@ -566,7 +534,7 @@ class _GetDemandeState extends State<GetDemande> {
                       ],
                     ),
                   ),
-                  title: Text('Ajouter Une Suggestion'),
+                  title: const Center(child:Text('Ajouter Une Suggestion')),
 
                 );
               });

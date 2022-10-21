@@ -34,15 +34,19 @@ class _ChatScreenState extends State<ChatScreen> {
 
   String? messageText;
 
-
+  List<dynamic> UserList = [
+    {"uid": "", "secondName": "", "email": "", "firstName": "", "Role": ""}
+  ];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getCurrentUser();
-   // getMessage();
+    getUserNom();
     messsageStreams();
+    print('dataime');
+    print(DateTime.now());
   }
 
   void getCurrentUser() {
@@ -52,22 +56,41 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       if (user != null) {
         signedInUser = user;
-        signedInUser?.email;
+        signedInUser.email;
       }
     } catch (e) {
       print(e);
     }
   }
 
-  /*void getMessage() async {
-    //.where('UidGroupe',isEqualTo: widget.Idgroupe.toString())
-    final messages = await _firestore.collection('Message').where('UidGroupe',isEqualTo: widget.Idgroupe.toString()).get();
-    for (var message in messages.docs) {
+  getUserNom() async {
+    List ListUserNom = [];
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .where("uid", isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+          .get()
+          .then((QuerySnapshot querySnapshot) => {
+        querySnapshot.docs.forEach((doc) {
+          ListUserNom.add(doc.data());
+        }),
+      });
+      setState(() {
+        UserList = ListUserNom;
+      });
 
-      print(message.data());
+      print('Nom user connected  ');
+      print(UserList[0]['firstName']);
+      return UserList;
+    } catch (e) {
+      print(e.toString());
+      return null;
     }
-  }*/
-//.where('UidGroupe',isEqualTo:'RtbPamSsHdZtJL2s83ELLk6cC1y1')
+  }
+
+
+
+
   void messsageStreams() async {
     //.where('UidGroupe',isEqualTo:'Rk6xbMstHh64wwm1GBBH')
     await for (var snapshot in _firestore.collection('Message').where('UidGroupe',isEqualTo:widget.Idgroupe ).snapshots()) {
@@ -81,12 +104,21 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+
+  getTimec(dynamic Mydate) {
+    dynamic time = DateTime.fromMicrosecondsSinceEpoch(Mydate);
+
+    String formattedDate =
+    DateFormat('dd/MMM/yyyy hh:mm ').format(time);
+    print(formattedDate);
+    return formattedDate;
+  }
+
   //name.test@live.com
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //backgroundColor: Colors.red[300],
           backgroundColor: Colors.blue[300],
         title: Row(
           children:  [
@@ -139,7 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           vertical: 10,
                           horizontal: 20,
                         ),
-                        hintText: 'Write your message here...',
+                        hintText: 'Ecrire votre message Ici ...',
                         border: InputBorder.none,
                       ),
                     ),
@@ -176,6 +208,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           //'time': FieldValue.serverTimestamp(),
                            'time' : DateTime.now(),
                           'UidGroupe':widget.Idgroupe,
+                          'Name' : UserList[0]['firstName'],
                         });
                         messageText =null;
                       }
@@ -195,6 +228,14 @@ class _ChatScreenState extends State<ChatScreen> {
 
 class MessageStreamBuilder extends StatelessWidget {
   var Idgroupe;
+
+    Convertdate(Timestamp time){
+      DateTime date = time.toDate();
+     var mydate = DateFormat('dd-MM-yyyy–hh:mm').format(date);
+
+     return mydate ;
+    }
+
 
   MessageStreamBuilder({super.key,required this.Idgroupe,
   });
@@ -221,32 +262,18 @@ class MessageStreamBuilder extends StatelessWidget {
           for (var message in messages) {
           final messageText = message.get('text');
           final messageSender = message.get('sender');
-          final timeMessage = message.get('time');
+          final time = message.get('time');
+          final Name = message.get('Name');
           final currentUser = signedInUser.email;
-         // final UidGroupe = this.Idgroupe;
 
 
-
-          // testing get date form
-          getTimec(dynamic Mydate) {
-            dynamic time = DateTime.fromMicrosecondsSinceEpoch(Mydate);
-
-            String formattedDate =
-                DateFormat('dd.MMM yyyy hh:mm aaa').format(time);
-            return formattedDate;
-          }
-
-          /*
-                  * DateTime now = DateTime.now();
-                  String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
-                  * */
-          // TimeM:getTimec(timeMessage.microsecondsSinceEpoch)
 
           final messgaeWidget = MessageLine(
               sender: messageSender,
               text: messageText,
               isMe: currentUser == messageSender,
-
+              Name: Name,
+              time: Convertdate(time),
             );
 
           messageWidgets.add(messgaeWidget);
@@ -269,14 +296,15 @@ class MessageStreamBuilder extends StatelessWidget {
 //partie cors chat
 class MessageLine extends StatelessWidget {
 
-
   // required this.TimeM
-  const MessageLine({required this.isMe, this.text, this.sender, Key? key})
+  const MessageLine({required this.isMe,this.text, this.sender,this.Name,required this.time, Key? key})
       : super(key: key);
 
   final String? sender;
+  final String? Name;
   final String? text;
   final bool isMe;
+  final dynamic time;
 
   //final dynamic TimeM;
   @override
@@ -288,7 +316,7 @@ class MessageLine extends StatelessWidget {
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Text(
-            '$sender',
+            '$Name',
             style: const TextStyle(fontSize: 10, color:Colors.blue),
           ),
           Material(
@@ -315,11 +343,11 @@ class MessageLine extends StatelessWidget {
                       color: isMe ? Colors.white : Colors.black45),
                 ),
               )),
-          const SizedBox(height: 10),
-          /*Text('$TimeM',
-              style:TextStyle(fontSize: 10,color: Colors.yellow[900] ),
+          const SizedBox(height: 8 ),
+         Text('$time',
+              style:TextStyle(fontSize: 9,color: Colors.grey ),
 
-            ),*/
+            ),
         ],
       ),
     );

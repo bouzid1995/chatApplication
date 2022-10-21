@@ -1,10 +1,8 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../model/UsersModels.dart';
 import 'get_demande.dart';
-
 
 class DetailDemande extends StatefulWidget {
   DetailDemande(
@@ -45,7 +43,8 @@ class _DetailDemandeState extends State<DetailDemande> {
   final RemarqueEditingController = new TextEditingController();
   bool myvisibility = false;
   final idConnected = FirebaseAuth.instance.currentUser?.uid.toString();
- bool value = false;
+  bool value = false;
+
   //List<Object> _historyList = [];
 
   @override
@@ -56,10 +55,9 @@ class _DetailDemandeState extends State<DetailDemande> {
     // Role(FirebaseAuth.instance.currentUser?.uid,this.widget.Approuved,RoleList);
   }
 
-  changedata(){
-
+  changedata() {
     setState(() {
-      value=true;
+      value = true;
     });
   }
 
@@ -104,7 +102,7 @@ class _DetailDemandeState extends State<DetailDemande> {
         this.RoleList = dataList;
       });
 
-      (RoleList[0]['Role'] == 'Admin' && Approuved == 'False')
+      (RoleList[0]['Role'] == 'Admin' && Approuved == 'false')
           ? myvisibility = true
           : myvisibility = false;
 
@@ -149,14 +147,16 @@ class _DetailDemandeState extends State<DetailDemande> {
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.safety_check_rounded),
+        //prefixIcon: const Icon(Icons.safety_check_rounded),
         suffixIcon: IconButton(
           icon: Icon(Icons.close),
-          onPressed: () => '',
+          onPressed: () {
+            RemarqueEditingController.clear();
+          },
         ),
-        contentPadding: EdgeInsets.fromLTRB(50, 15, 20, 40),
+        contentPadding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
         hintText: "Remarque Suggestion ",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
       ),
     );
 
@@ -166,7 +166,7 @@ class _DetailDemandeState extends State<DetailDemande> {
       borderRadius: BorderRadius.circular(20),
       color: Colors.blue[300],
       child: MaterialButton(
-        padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        padding: EdgeInsets.fromLTRB(20, 10, 20, 15),
         // minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
           //Navigator.of(context).push(MaterialPageRoute(builder: (context) => GetDemande()))
@@ -185,7 +185,7 @@ class _DetailDemandeState extends State<DetailDemande> {
         title: Text('Detail Suggestion '),
         centerTitle: true,
       ),
-      body:  Column(
+      body: Column(
         children: [
           Container(
               decoration: const BoxDecoration(
@@ -230,7 +230,7 @@ class _DetailDemandeState extends State<DetailDemande> {
                                 child: Column(
                                   children: [
                                     const Text(
-                                      'Nom et Prenom',
+                                      ' Nom ',
                                       style: TextStyle(
                                         color: Colors.blue,
                                         fontSize: 15.0,
@@ -308,12 +308,129 @@ class _DetailDemandeState extends State<DetailDemande> {
                   ),
                 ),
               )),
-          Container(
+
+          Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Column(
+                  /// Add this
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      "Description:",
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 18.0),
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                      this.widget.Description.toString(),
+                      style: const TextStyle(
+                        fontSize: 15.0,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.black,
+                        letterSpacing: 2.0,
+                      ),
+                    ),
+                    const SizedBox(height: 35),
+                    const Text(
+                      "Situation Avant:",
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 18.0),
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Text(
+                      this.widget.SituationAvant.toString(),
+                      style: const TextStyle(
+                        fontSize: 15.0,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.black,
+                        letterSpacing: 2.0,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 35.0,
+                    ),
+                    const Text(
+                      "Situation Apres:",
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 18.0),
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Text(
+                      widget.SituationApres.toString(),
+                      style: const TextStyle(
+                        fontSize: 15.0,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.black,
+                        letterSpacing: 2.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                child: Visibility(
+                  visible: myvisibility,
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    //apply padding to all four sides
+                    child: RemarqueField,
+                  ),
+                ),
+              ),
+              Center(
+                child: Visibility(
+                  visible: myvisibility,
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        UpdateDemande(
+                            widget.IdDoc, RemarqueEditingController.text);
+                        Navigator.pop(context, const GetDemande());
+                      },
+                      child: Text('Approuver suggestion '),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+
+          //name.test@live.com        //kms.2@live.tn
+
+          /* Container(
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                  const EdgeInsets.fromLTRB(5,8,25,15),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+               //mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
@@ -340,12 +457,12 @@ class _DetailDemandeState extends State<DetailDemande> {
               ),
             ),
           ),
-          Container(
+        Container(
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+              const EdgeInsets.fromLTRB(5,8,25,15),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                //mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
@@ -371,15 +488,16 @@ class _DetailDemandeState extends State<DetailDemande> {
                 ],
               ),
             ),
-          ),
+          ),*/
 
-          Container(
+          /* Container(
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                  const EdgeInsets.only(right: 2.0),
               child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+               // mainAxisSize: MainAxisSize.min,
+                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     "Situation Apres:",
@@ -404,42 +522,8 @@ class _DetailDemandeState extends State<DetailDemande> {
                 ],
               ),
             ),
-          ),
+          ),*/
 
-          Expanded(
-              child: Visibility(
-            visible: myvisibility,
-            child: Padding(
-              padding: EdgeInsets.all(20), //apply padding to all four sides
-              child: RemarqueField,
-            ),
-          )),
-
-          //const SizedBox(height: 5),
-          Expanded(
-            child: Visibility(
-              visible: myvisibility,
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    UpdateDemande(widget.IdDoc, RemarqueEditingController.text);
-
-
-                    //await Navigator.pushNamed(context, AddScreen.screenRoute);
-                    Navigator.pop(context,const GetDemande());
-
-
-
-                    //await Navigator.pushNamed(context, WelcomeScreen.screenRoute);
-                    // Navigator.of(context).pop()await sleepAsync(1000);
-                     //Navigator.pop(context,GetDemande());
-                  },
-                  child: Text('Approuver suggestion '),
-                ),
-              ),
-            ),
-          )
           // addButton
         ],
       ),

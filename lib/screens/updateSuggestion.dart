@@ -59,7 +59,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title:  Text('Update Groupe'),
+          title:  Text('Edit Suggestion '),
           centerTitle: true,
         ),
         body: Container(
@@ -125,7 +125,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                         UpdateSuggestion(widget.Description,widget.SituationAvant,widget.SituationApres,Date());
 
                           Fluttertoast.showToast(
-                            msg: 'Groupe mise a jour   avec succceé ',
+                            msg: 'Groupe mise a jour avec succceé ',
                             backgroundColor:Colors.green,
                             timeInSecForIosWeb: 6,
                           );
@@ -134,7 +134,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
 
                       },
                       child: const Text(
-                        "Update Suggestion ",
+                        "Mise a jour Suggestion ",
                         textAlign: TextAlign.end,
                         style: TextStyle(
                             fontSize: 10,

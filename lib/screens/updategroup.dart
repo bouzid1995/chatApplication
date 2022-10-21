@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:chatapplication/screens/groupescreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,8 +14,7 @@ import 'package:multiselect_formfield/multiselect_formfield.dart';
 class UpdateGroupe extends StatefulWidget {
   var Description;
   var Name;
-  var  selecteduser;
-
+  var selecteduser;
 
   UpdateGroupe(
       {super.key,
@@ -41,21 +39,21 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
   List<dynamic> dataList1 = [
     {"uid": "", "secondName": "", "email": "", "firstName": ""}
   ];
+
   //List users = [];
   List<String> selected = [];
   final String value = '';
   final NameEditingController = TextEditingController(text: '');
-  final Stream<QuerySnapshot> symptomsStream = FirebaseFirestore.instance.collection('users').snapshots();
+  final Stream<QuerySnapshot> symptomsStream =
+      FirebaseFirestore.instance.collection('users').snapshots();
 
-   Future<QuerySnapshot<Map<String, dynamic>>> usersStream =
-  FirebaseFirestore.instance.collection('users').get();
+  Future<QuerySnapshot<Map<String, dynamic>>> usersStream =
+      FirebaseFirestore.instance.collection('users').get();
 
+  final usersRef = FirebaseFirestore.instance.collection('users');
 
-   final usersRef = FirebaseFirestore.instance.collection('users');
-
-
-   List   _myActivities = [];
-   var  _myActivitiesResult = '';
+  List _myActivities = [];
+  var _myActivitiesResult = '';
 
   _saveForm() {
     var form = formKey.currentState!;
@@ -66,11 +64,6 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
       });
     }
   }
-
-
-
-
-
 
   UpdateGroupe(String Name, String Description, List UserID) async {
     var collection = FirebaseFirestore.instance.collection('group');
@@ -85,15 +78,10 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
         .catchError((error) => print('Failed: $error'));
   }
 
-
-
-
   @override
   void initState() {
     this.getgroupeDetail();
     super.initState();
-
-
   }
 
   getgroupeDetail() async {
@@ -111,19 +99,12 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
       setState(() {
         this.GroupList = ListGrouoDet[0]['UserID'];
       });
-      print('groupe list');
-      print(GroupList);
       return GroupList;
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +134,6 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                   var Nom = data!['Name'];
                   var Description = data['Description'];
                   var users = data['UserID'];
-
 
                   return Container(
                       padding: const EdgeInsets.all(20.0),
@@ -189,80 +169,73 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                         const SizedBox(
                           height: 50,
                         ),
-                            StreamBuilder(
-                                stream: symptomsStream,
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                                  if (snapshot.hasError) {
-                                    print('Something went wrong');
-                                  }
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
+                        StreamBuilder(
+                            stream: symptomsStream,
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.hasError) {
+                                print('Something went wrong');
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
 
-                                  final List usersList = [];
-                                  final List listed = [];
-                                  //fill up the list symptoms
-                                  snapshot.data!.docs
-                                      .map((DocumentSnapshot document) {
-                                    Map a =
-                                    document.data() as Map<String, dynamic>;
-                                    usersList.add(a['firstName']);
-                                    a['id'] = document.id;
-                                    listed.add(a['id']);
-                                  }).toList();
-                                  print('id est suivant ');
-                                  print(listed);
+                              final List usersList = [];
+                              final List listed = [];
+                              //fill up the list symptoms
+                              snapshot.data!.docs
+                                  .map((DocumentSnapshot document) {
+                                Map a = document.data() as Map<String, dynamic>;
+                                usersList.add(a['firstName']);
+                                a['id'] = document.id;
+                                listed.add(a['id']);
+                              }).toList();
+
 
                               return MultiSelectFormField(
-                              autovalidate: AutovalidateMode.disabled,
-                              chipBackGroundColor: Colors.blue[900],
-                              chipLabelStyle: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                              dialogTextStyle: const TextStyle(
-                              fontWeight: FontWeight.bold),
-                              checkBoxActiveColor: Colors.blue[900],
-                              checkBoxCheckColor: Colors.white,
-                              dialogShapeBorder:
-                              const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                              Radius.circular(12.0))),
-                              title: const Text(
-                              "Membres ",
-                              style: TextStyle(fontSize: 14),
-                                  ),
-                                  validator: (value) {
+                                autovalidate: AutovalidateMode.disabled,
+                                chipBackGroundColor: Colors.blue[900],
+                                chipLabelStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                                dialogTextStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                                checkBoxActiveColor: Colors.blue[900],
+                                checkBoxCheckColor: Colors.white,
+                                dialogShapeBorder: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(12.0))),
+                                title: const Text(
+                                  "Membres de groupe  ",
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                validator: (value) {
                                   if (value == null || value.length == 0) {
-                                  return 'Selectionner un ou plus Membre ';
+                                    return 'Selectionner un ou plus Membre ';
                                   }
                                   return null;
-                                  },
-                                  dataSource: [
+                                },
+                                dataSource: [
                                   for (String i in usersList) {'value': i},
-
-                                  ],
-                                  textField: 'value',
-                                  valueField: 'value',
-                                  okButtonLabel: 'Valider',
-                                  cancelButtonLabel: 'Annuler',
-                                  hintWidget:
-                                  Text('Selectionner un ou plus Membre'),
-                                  initialValue: GroupList,
-                                  onSaved: (value) {
-
+                                ],
+                                textField: 'value',
+                                valueField: 'value',
+                                okButtonLabel: 'Valider',
+                                cancelButtonLabel: 'Annuler',
+                                hintWidget:
+                                    Text('Selectionner un ou plus Membre'),
+                                initialValue: GroupList,
+                                onSaved: (value) {
                                   if (value == null) return;
 
                                   //value.add(UserList[0]['firstName']);
 
-                                    GroupList = value ;
-
-
-                                  },
-                                  );
+                                  GroupList = value;
+                                },
+                              );
                             }),
                         const SizedBox(
                           height: 30,
@@ -276,7 +249,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                             //minWidth: MediaQuery.of(context).size.width,
                             onPressed: () {
                               _saveForm;
-                              UpdateGroupe(Nom,Description, GroupList);
+                              UpdateGroupe(Nom, Description, GroupList);
                               if (formKey != false) {
                                 Fluttertoast.showToast(
                                   msg: 'Groupe mise a jour avec succceé ',
