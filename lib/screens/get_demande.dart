@@ -12,6 +12,7 @@ import '../model/basket.dart';
 import '../model/UsersModels.dart';
 import 'Details.dart';
 import 'WelcomeScreen.dart';
+import 'add_sceen.dart';
 
 class GetDemande extends StatefulWidget {
   static const String screenRoute = 'Demande_screen';
@@ -159,7 +160,7 @@ class _GetDemandeState extends State<GetDemande> {
           icon: Icon(Icons.close),
           onPressed: ()=>descriptionEditingController.clear(),
         ),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        contentPadding: EdgeInsets.fromLTRB(20, 45, 30, 15),
         hintText: "Description Suggestion ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -193,7 +194,7 @@ class _GetDemandeState extends State<GetDemande> {
           icon: Icon(Icons.close),
           onPressed: ()=>descriptionEditingController.clear(),
         ),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        contentPadding: EdgeInsets.fromLTRB(20, 45, 20, 15),
         hintText: "Situation Avant ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -225,7 +226,7 @@ class _GetDemandeState extends State<GetDemande> {
           icon: Icon(Icons.close),
           onPressed: ()=>descriptionEditingController.clear(),
         ),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        contentPadding: EdgeInsets.fromLTRB(20, 45, 20, 15),
         hintText: "Situation Apres ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -287,7 +288,7 @@ class _GetDemandeState extends State<GetDemande> {
                 leading: const Icon(
                   Icons.train,
                 ),
-                title: const Text('Signout'),
+                title: const Text('Deconnexion'),
                 onTap: () {
                   FirebaseAuth.instance.signOut();
                   Navigator.push(
@@ -304,15 +305,15 @@ class _GetDemandeState extends State<GetDemande> {
           appBar: AppBar(
             backgroundColor: Colors.blue[300],
             title: Row(
-              children:  const [ SizedBox(width: 20),
-                Text('Liste Des Suggestions ')
+              children:  const [ SizedBox(width:1),
+                Text('Liste des suggestions ')
               ],
             ),
             bottom: const TabBar(
-              tabs:[Text('tous les  suggestion'),Text('Mes Suggestions encours ')],
+              tabs:[Text('tous les  suggestion'),Text('Mes Suggestions en cours ')],
             ),
 
-            actions: [
+           /* actions: [
               IconButton(
                   onPressed: () {
                     _auth.signOut();
@@ -322,7 +323,7 @@ class _GetDemandeState extends State<GetDemande> {
                     // Navigator.pop(context);
                   },
                   icon: const Icon(Icons.close))
-            ],
+            ],*/
           ),
           body:TabBarView(
 
@@ -375,7 +376,7 @@ class _GetDemandeState extends State<GetDemande> {
 
 
    StreamBuilder<QuerySnapshot>(
-        stream:  FirebaseFirestore.instance.collection('basket_items').where('Approuved',isEqualTo:'false' ).where("user",isEqualTo: FirebaseAuth.instance.currentUser!.uid).snapshots(),
+        stream:  FirebaseFirestore.instance.collection('basket_items').where('Approuved',isEqualTo:'False' ).where("user",isEqualTo: FirebaseAuth.instance.currentUser!.uid).snapshots(),
         //FirebaseFirestore.instance.collection('basket_items') .where("user",isEqualTo: FirebaseAuth.instance.currentUser!.uid).snapshots(),
 
         builder: (context, snapshot) {
@@ -393,7 +394,7 @@ class _GetDemandeState extends State<GetDemande> {
                 return Card(
                     child: ListTile(
                       title: Text(doc.get('Description').toString()),
-                      subtitle: Text(doc.get('Approuved')),//Text(doc.get('DateProp'))
+                      subtitle: Text(doc.get('Approuved').toString()),//Text(doc.get('DateProp'))
                       trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
@@ -438,7 +439,7 @@ class _GetDemandeState extends State<GetDemande> {
                                       child:  const Text("Continuer"),
                                       onPressed: () {
                                         deletSugg(doc.id);
-
+                                        Navigator.of(context).pop();
                                       },
                                     ),
                                     TextButton(
@@ -501,32 +502,32 @@ class _GetDemandeState extends State<GetDemande> {
  ///Ajouter une suggestion Popup
       floatingActionButton: FloatingActionButton(
       onPressed: () async {
-        return await showDialog(
+        await  Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) => AddScreen()));
+       /* return await showDialog(
             context: context,
             builder: (context) {
               return StatefulBuilder(builder: (context, setState) {
                 return AlertDialog(
-                  content: Form(
+                  scrollable: false,
+                    title: Text('Ajouter Une Suggestion'),
+                content: Padding(
+                padding: const EdgeInsets.all(20.0),
+                  child : Form(
                     key: _formKey,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      //mainAxisAlignment: MainAxisAlignment.center,
+                      //crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(
-                            height: 180,
-                            child: Image.asset(
-                              "images/MSPE_Logo.png",
-                              fit: BoxFit.contain,
-                            )),
 
-
-                        const SizedBox(height: 20),
                         DescriptionField,
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 30),
                         SituationAvantField,
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 30),
                         SituationApresField,
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 30),
                         // Button d'ahjout
                         addButton,
                         //SizedBox(height: 15)
@@ -534,11 +535,11 @@ class _GetDemandeState extends State<GetDemande> {
                       ],
                     ),
                   ),
-                  title: const Center(child:Text('Ajouter Une Suggestion')),
+                 // title: const Center(child:Text('Ajouter Une Suggestion')),
 
-                );
-              });
-            });
+                ));
+                 });
+            });*/
       },
       backgroundColor: Colors.blue,
       child: const Icon(Icons.add),

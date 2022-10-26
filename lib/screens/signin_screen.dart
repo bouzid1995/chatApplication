@@ -20,12 +20,12 @@ class _SignInScreenState extends State<SignInScreen> {
   late TextEditingController pwdInputController;
   late String password;
   late String email;
-
+  bool _obscureText = true ;
 
   @override
   initState() {
-    emailInputController = new TextEditingController();
-    pwdInputController = new TextEditingController();
+    emailInputController = new TextEditingController(text:'user2p@pre.fr');
+    pwdInputController = new TextEditingController(text:'ala123');
     super.initState();
   }
 
@@ -70,9 +70,8 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: Column(
                     children: <Widget>[
                     TextFormField(
-
                     autofocus: false, keyboardType: TextInputType.emailAddress,
-                    //controller: emailInputController,
+                    controller: emailInputController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return (" Enter votre Email");
@@ -100,7 +99,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                       TextFormField(
                         autofocus: false,
-                        obscureText: true,
+                        obscureText: _obscureText,
                         controller: pwdInputController,
                         validator: (value) {
                           RegExp regex = RegExp(r'^.{6,}$');
@@ -117,6 +116,14 @@ class _SignInScreenState extends State<SignInScreen> {
                        // textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.vpn_key),
+                            suffixIcon : GestureDetector(
+                              onTap: () {
+                              setState(() {
+                                _obscureText=!_obscureText;
+                              });
+                            },
+                              child :Icon(_obscureText ? Icons.visibility :Icons.visibility_off),
+                            ),
                           contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                           hintText: "Mot de passe ",
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),

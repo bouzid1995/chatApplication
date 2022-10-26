@@ -8,9 +8,10 @@ class UserModel{
   String? Group;
   String? Fonction;
   String? NumTel;
+  String? matricule;
 
 
-  UserModel({this.uid,this.email,this.firstName,this.secondName,this.Role,this.Group,this.Fonction,this.NumTel});
+  UserModel({this.uid,this.email,this.firstName,this.secondName,this.Role,this.Group,this.Fonction,this.NumTel,this.matricule});
 
 
   factory UserModel.fromMap(map)
@@ -25,6 +26,7 @@ class UserModel{
       Group: map['Group'],
       Fonction: map['Fonction'],
       NumTel: map['NumTel'],
+      matricule: map['matricule'],
 
     );
   }
@@ -40,6 +42,7 @@ class UserModel{
       'Group':Group,
       'Fonction':Fonction,
       'NumTel':NumTel,
+      'matricule':matricule,
 
     };
   }

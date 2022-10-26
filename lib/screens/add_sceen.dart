@@ -29,6 +29,7 @@ class AddScreen extends StatefulWidget {
 }
     //Description , Destination , Etat , Groupe , Image , Name , uid
 class _AddScreen extends State<AddScreen> {
+  final String Approuved='false' ;
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final descriptionEditingController = new TextEditingController();
@@ -36,7 +37,6 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ApresEditingController = new TextEditingController();
 
   Date() {
-
 
     String datetime = DateFormat("dd-MM-yyyy").format(DateTime.now());
     print(datetime);
@@ -157,11 +157,9 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
           if (_formKey.currentState!.validate()) {
             CreateDemande();
-
             Fluttertoast.showToast(msg: 'Suggestion ajouteé avec  succees ');
-          //Navigator.pushNamed(context, GetDemande.screenRoute);
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => WelcomeScreen()));
-        // Navigator.of(context).push(MaterialPageRoute(builder: (context) => GroupeScreen()));
+
 
     }
         },
@@ -174,53 +172,35 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
       ),
     );
 
+
+
     return Scaffold(
 
       appBar: AppBar(
-        //backgroundColor: Colors.red[300],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         backgroundColor: Colors.blue[300],
         title: Row(
-          children: const [
-            //Image.asset('images/image.jpg', height: 25),
+          children:  [
             SizedBox(width: 20),
             Text('Ajoute une Nouvelle Suggestion ')
           ],
         ),
         automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-              onPressed: () {
-              //_auth.signOut();
-                Navigator.pushNamed(context, GetDemande.screenRoute);
-                FirebaseAuth.instance.signOut();
-                // Navigator.pop(context);
-              },
-              icon: const Icon(Icons.close))
-        ],
       ),
 
       body: Center(
         child: SingleChildScrollView(
-           child: Container(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(36.0),
+          child: Padding(
+              padding: const EdgeInsets.only(left:20,right: 20),
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  //mainAxisAlignment: MainAxisAlignment.center,
+                  //crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-
-                    SizedBox(
-                        height: 180,
-                        child: Image.asset(
-                          "images/MSPE_Logo.png",
-                          fit: BoxFit.contain,
-                        )),
-
-
-                    const SizedBox(height: 20),
                     DescriptionField,
                     const SizedBox(height: 20),
                     SituationAvantField,
@@ -235,7 +215,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
                 ),
               ),
             ),
-          ),
+
         ),
       ),
     );
@@ -249,17 +229,9 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
       final user = FirebaseAuth.instance.currentUser!;
 
-
-          Map<String,dynamic> data = {"Description":descriptionEditingController.text,"SituationAvant":AvantEditingController.text,"SituationApres":ApresEditingController.text,"user":user.uid,"DateProp": Date(),"Approuved":"false", "Remarque":""};
+          Map<String,dynamic> data = {"Description":descriptionEditingController.text,"SituationAvant":AvantEditingController.text,"SituationApres":ApresEditingController.text,"user":user.uid,"DateProp": Date(),"Approuved":Approuved, "Remarque":""};
 
           await firebaseFirestore.collection("basket_items").add(data);
-
-
-      /*descriptionEditingController = new TextEditingController();
-    final DestinationEditingController = new TextEditingController();
-    final EtatEditingController = new TextEditingController();
-    final GroupeEditingController = new TextEditingController();
-    final NameEditingController*/
 
     }
 

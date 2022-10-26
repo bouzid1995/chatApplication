@@ -2,6 +2,7 @@ import 'package:chatapplication/screens/add_sceen.dart';
 import 'package:chatapplication/screens/chat_screen.dart';
 import 'package:chatapplication/screens/get_demande.dart';
 import 'package:chatapplication/screens/groupescreen.dart';
+import 'package:chatapplication/screens/profiledit.dart';
 import 'package:chatapplication/screens/searchuser.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,10 +34,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       Icons.chat_bubble,
       size: 30,
     ),
+
     Icon(
       Icons.search_outlined,
       size: 30,
-    )
+    ),
+    Icon(
+      Icons.personal_injury_outlined,
+      size: 30,
+    ),
   ];
 
 //final navigationkey = GlobalKey<CurvedNavigationBarState>();
@@ -89,6 +95,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   Widget getSelectedWidget({required int index}) {
     Widget widget;
+
     switch (index) {
       case 0:
         widget = const GetDemande()  ;
@@ -99,8 +106,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       case 2:
         widget =  const GroupeScreen() ;
         break;
-      default:
+      case 3:
         widget = const SearchUser();
+        break;
+      default:
+        widget =  const ProfileEdit() ;
         break;
     }
     return widget;

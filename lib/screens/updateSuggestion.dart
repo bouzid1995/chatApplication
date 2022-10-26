@@ -127,7 +127,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                           Fluttertoast.showToast(
                             msg: 'Groupe mise a jour avec succceé ',
                             backgroundColor:Colors.green,
-                            timeInSecForIosWeb: 6,
+                            timeInSecForIosWeb: 2,
                           );
 
                           Navigator.pop(context);

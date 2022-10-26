@@ -102,7 +102,7 @@ class _DetailDemandeState extends State<DetailDemande> {
         this.RoleList = dataList;
       });
 
-      (RoleList[0]['Role'] == 'Admin' && Approuved == 'false')
+      (RoleList[0]['Role'] == 'Admin' && Approuved == 'False')
           ? myvisibility = true
           : myvisibility = false;
 
@@ -185,141 +185,252 @@ class _DetailDemandeState extends State<DetailDemande> {
         title: Text('Detail Suggestion '),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Container(
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.blueAccent, Colors.blueGrey])),
-              child: Container(
-                padding: const EdgeInsets.only(top: 20),
-                width: double.infinity,
-                height: 180.0,
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      Text(
-                        this.widget.Date,
-                        style: const TextStyle(
-                          fontSize: 22.0,
-                          color: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.blueAccent, Colors.blueGrey])),
+                child: Container(
+                  padding: const EdgeInsets.only(top: 20),
+                  width: double.infinity,
+                  height: 180.0,
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 10.0,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      Card(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 3.0),
-                        clipBehavior: Clip.antiAlias,
-                        color: Colors.white,
-                        elevation: 10.0,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 22.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    const Text(
-                                      ' Nom ',
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold,
+                        Text(
+                          this.widget.Date,
+                          style: const TextStyle(
+                            fontSize: 22.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Card(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 5.0),
+                          clipBehavior: Clip.antiAlias,
+                          color: Colors.white,
+                          elevation: 30.0,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 22.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      const Text(
+                                        ' Nom & Prenom ',
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Text(
-                                      dataList1[0]['firstName'] == ''
-                                          ? ''
-                                          : '${dataList1[0]['firstName']} ',
-                                      style: const TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.black,
+                                      const SizedBox(
+                                        height: 5.0,
                                       ),
-                                    )
-                                  ],
+                                      Text.rich( new TextSpan(
+                                        text: ' ${dataList1[0]['firstName']}',
+                                      )),
+                                    ],
+                                  ),
+                                ),
+                                Expanded( //
+                                  child: Column(
+                                    children: [
+                                      const Text(
+                                        "Groupe",
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Text(
+                                        '${dataList1[0]['Groupe']}',
+                                        style: const TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.black,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      const Text(
+                                        "Fonction ",
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Text(
+                                        '${dataList1[0]['Fonction']}',
+                                        style: const TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.black,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )),
+
+            SingleChildScrollView(
+              // Padding( padding: const EdgeInsets.only(left: 20,bottom: 50)),
+                child: Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text(
+                                "Description:",
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontStyle: FontStyle.normal,
+                                    fontSize: 18.0),
+                              ),
+                              SizedBox(height: 15),
+                              Text(
+                             this.widget.Description.toString(),
+
+                                style: const TextStyle(
+                                  fontSize: 15.0,
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black,
+                                  letterSpacing: 2.0,
                                 ),
                               ),
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    const Text(
-                                      "Groupe",
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Text(
-                                      '${dataList1[0]['Groupe']}',
-                                      style: const TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.black,
-                                      ),
-                                    )
-                                  ],
+                              const SizedBox(height: 35),
+                              const Text(
+                                "Situation Avant:",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontStyle: FontStyle.normal,
+                                    fontSize: 18.0),
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              Text(this.widget.SituationAvant.toString(),
+                                style: const TextStyle(
+                                  fontSize: 15.0,
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black,
+                                  letterSpacing: 2.0,
                                 ),
                               ),
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    const Text(
-                                      "Fonction ",
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Text(
-                                      '${dataList1[0]['Fonction']}',
-                                      style: const TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.black,
-                                      ),
-                                    )
-                                  ],
+                              const SizedBox(
+                                height: 35.0,
+                              ),
+                              const Text(
+                                "Situation Apres:",
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontStyle: FontStyle.normal,
+                                    fontSize: 18.0),
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              Text(this.widget.SituationApres.toString(),
+                                style: const TextStyle(
+                                  fontSize: 15.0,
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black,
+                                  letterSpacing: 2.0,
                                 ),
                               ),
                             ],
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
+                ),
+
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                  child: Visibility(
+                    visible: myvisibility,
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      //apply padding to all four sides
+                      child: RemarqueField,
+                    ),
                   ),
                 ),
-              )),
-
-          Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Column(
-                  /// Add this
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const SizedBox(
-                      height: 20,
+                Center(
+                  child: Visibility(
+                    visible: myvisibility,
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          UpdateDemande(
+                              widget.IdDoc, RemarqueEditingController.text);
+                          Navigator.pop(context, const GetDemande());
+                        },
+                        child: Text('Approuver suggestion '),
+                      ),
                     ),
+                  ),
+                )
+              ],
+            ),
+
+            //name.test@live.com
+           //name.test@live.com
+            // kms.2@live.tn
+
+            /* Container(
+              child: Padding(
+                padding:
+                    const EdgeInsets.fromLTRB(5,8,25,15),
+                child: Column(
+                 //mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     const Text(
                       "Description:",
                       style: TextStyle(
@@ -327,7 +438,9 @@ class _DetailDemandeState extends State<DetailDemande> {
                           fontStyle: FontStyle.normal,
                           fontSize: 18.0),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
                     Text(
                       this.widget.Description.toString(),
                       style: const TextStyle(
@@ -338,7 +451,18 @@ class _DetailDemandeState extends State<DetailDemande> {
                         letterSpacing: 2.0,
                       ),
                     ),
-                    const SizedBox(height: 35),
+                  ],
+                ),
+              ),
+            ),
+          Container(
+              child: Padding(
+                padding:
+                const EdgeInsets.fromLTRB(5,8,25,15),
+                child: Column(
+                  //mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     const Text(
                       "Situation Avant:",
                       style: TextStyle(
@@ -347,7 +471,7 @@ class _DetailDemandeState extends State<DetailDemande> {
                           fontSize: 18.0),
                     ),
                     const SizedBox(
-                      height: 20.0,
+                      height: 5.0,
                     ),
                     Text(
                       this.widget.SituationAvant.toString(),
@@ -359,9 +483,20 @@ class _DetailDemandeState extends State<DetailDemande> {
                         letterSpacing: 2.0,
                       ),
                     ),
-                    const SizedBox(
-                      height: 35.0,
-                    ),
+                  ],
+                ),
+              ),
+            ),*/
+
+            /* Container(
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(right: 2.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                 // mainAxisSize: MainAxisSize.min,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     const Text(
                       "Situation Apres:",
                       style: TextStyle(
@@ -370,7 +505,7 @@ class _DetailDemandeState extends State<DetailDemande> {
                           fontSize: 18.0),
                     ),
                     const SizedBox(
-                      height: 20.0,
+                      height: 10.0,
                     ),
                     Text(
                       widget.SituationApres.toString(),
@@ -385,147 +520,11 @@ class _DetailDemandeState extends State<DetailDemande> {
                   ],
                 ),
               ),
-            ],
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                child: Visibility(
-                  visible: myvisibility,
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    //apply padding to all four sides
-                    child: RemarqueField,
-                  ),
-                ),
-              ),
-              Center(
-                child: Visibility(
-                  visible: myvisibility,
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        UpdateDemande(
-                            widget.IdDoc, RemarqueEditingController.text);
-                        Navigator.pop(context, const GetDemande());
-                      },
-                      child: Text('Approuver suggestion '),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+            ),*/
 
-          //name.test@live.com        //kms.2@live.tn
-
-          /* Container(
-            child: Padding(
-              padding:
-                  const EdgeInsets.fromLTRB(5,8,25,15),
-              child: Column(
-               //mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Description:",
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 18.0),
-                  ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  Text(
-                    this.widget.Description.toString(),
-                    style: const TextStyle(
-                      fontSize: 15.0,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w300,
-                      color: Colors.black,
-                      letterSpacing: 2.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        Container(
-            child: Padding(
-              padding:
-              const EdgeInsets.fromLTRB(5,8,25,15),
-              child: Column(
-                //mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Situation Avant:",
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 18.0),
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  Text(
-                    this.widget.SituationAvant.toString(),
-                    style: const TextStyle(
-                      fontSize: 15.0,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w300,
-                      color: Colors.black,
-                      letterSpacing: 2.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),*/
-
-          /* Container(
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(right: 2.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-               // mainAxisSize: MainAxisSize.min,
-                //crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Situation Apres:",
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 18.0),
-                  ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  Text(
-                    widget.SituationApres.toString(),
-                    style: const TextStyle(
-                      fontSize: 15.0,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w300,
-                      color: Colors.black,
-                      letterSpacing: 2.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),*/
-
-          // addButton
-        ],
+            // addButton
+          ],
+        ),
       ),
     );
   }

@@ -127,7 +127,7 @@ class _ChatScreenState extends State<ChatScreen> {
          Text(widget.Name)
           ],
         ),
-        actions: [
+       /* actions: [
           IconButton(
               onPressed: () {
                 _auth.signOut();
@@ -135,8 +135,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 //_auth.signOut();
                 // Navigator.pop(context);
               },
-              icon: const Icon(Icons.close))
-        ],
+              icon: const Icon(Icons.close)
+          )
+        ],*/
       ),
       body: SafeArea(
         child: Column(

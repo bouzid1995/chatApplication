@@ -136,7 +136,12 @@ class _GroupeScreenState extends State<GroupeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Liste Groupe '),
+          backgroundColor: Colors.blue[300],
+          title: Row(
+        children:  const [ SizedBox(width: 20),
+      Text('Liste des Groupes   ')
+      ],
+    ),
           centerTitle: true,
         ),
         body: StreamBuilder<QuerySnapshot>(
@@ -208,8 +213,9 @@ class _GroupeScreenState extends State<GroupeScreen> {
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: const Text("Suppression Groupe "),
-                                        content: const Text("Voulez vous supprimez cette groupe hahahahah ?"),
+                                        content: const Text("Voulez vous vraiment supprimez cette groupe ?"),
                                         actions: <Widget>[
+
                                           TextButton(
                                             child:  const Text("Continue"),
                                             onPressed: () {
@@ -266,15 +272,23 @@ class _GroupeScreenState extends State<GroupeScreen> {
                       content: Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Form(
+                          key: formKey,
                           child: SingleChildScrollView(
                               child: Column(children: <Widget>[
                                 TextFormField(
                                   controller: NameEditingController,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return (" choisir  Le nom de groupe");
+                                    }
+
+                                  },
                                   onSaved: (value) {
                                     NameEditingController.text = value!;
                                   },
                                   decoration: const InputDecoration(
                                     labelText: 'Nom de Groupe',
+                                    hintText: 'Nom Groupe',
                                     icon: Icon(Icons.account_box),
                                   ),
                                 ),
@@ -283,6 +297,14 @@ class _GroupeScreenState extends State<GroupeScreen> {
                                 ),
                                 TextFormField(
                                   controller: DescriptionEditingController,
+                                  validator: (value) {
+
+                                    if (value!.isEmpty) {
+                                      return ("Description ne peut pas etre vide");
+                                    }
+
+                                    return null;
+                                  },
                                   onSaved: (value) {
                                     DescriptionEditingController.text = value!;
                                   },
@@ -382,8 +404,8 @@ class _GroupeScreenState extends State<GroupeScreen> {
                                       padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
                                       //minWidth: MediaQuery.of(context).size.width,
                                       onPressed: () {
-                                        CreateGroupe();
-                                        if (formKey != false) {
+                                        if (formKey.currentState!.validate()) {
+                                          CreateGroupe();
                                           Fluttertoast.showToast(
                                               msg: 'Groupe ajouté avec succceé ',
                                               timeInSecForIosWeb: 2

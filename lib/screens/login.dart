@@ -29,7 +29,11 @@ class _LoginState extends State<Login> {
 
 
   final _formKey  = GlobalKey<FormState>();
-
+  bool _obscureText= true;
+  bool _obscureText1= true;
+  bool myvisibility = false;
+  bool myvisibility2 = true;
+  String Role='';
   final firstNameEditingController = new TextEditingController();
   final secondNameEditingController = new TextEditingController();
   final emailEditingController = new TextEditingController();
@@ -38,12 +42,44 @@ class _LoginState extends State<Login> {
   final numtelEditingController = new TextEditingController();
   final groupEditingController = new TextEditingController();
   final fonctionEditingController = new TextEditingController();
+  final matriculeEditingController = new TextEditingController();
 
-  String? role_id ='Admin';
-final  Roles = ['Admin','user'];
 
-List test=[];
+  fetch() async {
+    final firebaseUser = await FirebaseAuth.instance.currentUser!;
+    if (firebaseUser != null)
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .get()
+          .then((ds) async {
+        if (ds.exists) {
+          return  setState(() {
+            Role = ds.data()!['Role'];
+            if(Role=='Admin'){
+              print(Role);
+              myvisibility=true;
+              myvisibility2 = false;
+            }
 
+
+          });
+        }
+      }).catchError((e) {
+        print(e);
+      });
+  }
+
+    String? role_id ='Admin';
+    final  Roles = ['Admin','user'];
+    List test=[];
+
+  @override
+  void initState() {
+    super.initState();
+    fetch();
+    print(myvisibility2);
+  }
   @override
   Widget build(BuildContext context) {
     final firstNameField = TextFormField(
@@ -100,7 +136,26 @@ List test=[];
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
+    final MatriculeField = TextFormField(
+      controller: matriculeEditingController,
+      keyboardType: TextInputType.number,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return (" Matricule ne peut pas être vide");
+        }
 
+      },
+      onSaved: (value) {
+        matriculeEditingController.text = value!;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.perm_identity_sharp),
+        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: "Matricule",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
 
     final NumtelField = TextFormField(
       controller: numtelEditingController,
@@ -182,7 +237,7 @@ List test=[];
     final passwordField = TextFormField(
       autofocus: false,
       controller: passwordEditingController,
-     obscureText: true,
+     obscureText: _obscureText,
       validator: (value) {
         RegExp regex = new RegExp(r'^.{6,}$');
         if (value!.isEmpty) {
@@ -198,6 +253,14 @@ List test=[];
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.vpn_key),
+        suffixIcon: GestureDetector(onTap: (){
+          setState(() {
+            _obscureText=!_obscureText;
+          });
+
+        },
+        child :Icon(_obscureText ? Icons.visibility :Icons.visibility_off),
+          ),
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Mot de Passe ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -207,7 +270,7 @@ List test=[];
     final confirmpasswordField = TextFormField(
       autofocus: false,
       controller: confirmpasswordEditingController,
-        obscureText: true,
+        obscureText: _obscureText1,
       validator: (value) {
         if (confirmpasswordEditingController.text != passwordEditingController.text) {
           return "Mot de passe n'est pas conforme";
@@ -222,13 +285,27 @@ List test=[];
         confirmpasswordEditingController.text = value!;
       },
       textInputAction: TextInputAction.next,
-      decoration: const InputDecoration(
+      decoration:  InputDecoration(
         prefixIcon: Icon(Icons.vpn_key),
+        suffixIcon: GestureDetector(onTap:(){
+
+          setState(() {
+            _obscureText1=!_obscureText1;
+          });
+
+          },
+          child :Icon(_obscureText ? Icons.visibility :Icons.visibility_off),
+        ) ,
+
+
         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Confirm Password",
           border:OutlineInputBorder(),
       ),
     );
+
+
+
 
     final signUpButton = Material(
       elevation: 5,
@@ -295,7 +372,6 @@ List test=[];
 
 
 
-
     return Scaffold(
       backgroundColor: Colors.white,
 
@@ -336,83 +412,21 @@ List test=[];
         backgroundColor: Colors.blue[300],
         //automaticallyImplyLeading: false,
         title: Row(
-          children:  const [ SizedBox(width: 20),
-              Text('Ajouter un Nouvel utilisateur  ')
+          children:  const [ SizedBox(width: 1),
+              Text('Ajouter un nouvel utilisateur ')
             ],
         ),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-
-                    //SizedBox(height: 20),
-                   // Center(child: Text('Nouvelle utilisateur'),) ,
-                    SizedBox(height: 20),
-                    firstNameField,
-                    SizedBox(height: 20),
-                    NumtelField,
-                    SizedBox(height: 20),
-                    emailField,
-                    SizedBox(height: 20),
-                    groupeField,
-                    SizedBox(height: 20),
-                    fonctionField,
-                    SizedBox(height: 20),
-                    Roledropdown,
-                    SizedBox(height: 20),
-                    passwordField,
-                    SizedBox(height: 20),
-                    confirmpasswordField,
-                    SizedBox(height: 20),
-                    signUpButton,
-                    SizedBox(height: 15),
-
-                   /* Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("have an account? "),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    const SignInScreen()));
+      body: showwidget(myvisibility,firstNameField,NumtelField,emailField,groupeField,fonctionField,Roledropdown,passwordField,confirmpasswordField,signUpButton,_formKey),
 
 
-                          },
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15),
-                          ),
-                        )
-                      ],
-                    )*/
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
     );
+
   }
 
 
   void signUp(String email, String password) async {
-   // if (_formKey.currentUser!.validate()) {
+ // if (_formKey.currentUser!.validate()) {
       try {
         await _auth
             .createUserWithEmailAndPassword(email: email, password: password)
@@ -466,6 +480,8 @@ List test=[];
     userModel.Group = groupEditingController.text;
     userModel.NumTel = numtelEditingController.text;
     userModel.Role = role_id;
+    userModel.matricule=matriculeEditingController.text;
+
 
 
     if(firstNameEditingController.text == true){
@@ -485,4 +501,70 @@ List test=[];
             (route) => false);*/
     //Navigator.of(context).push(MaterialPageRoute(builder:(context) =>ChatScreen()  ));
   }
+}
+
+
+showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget emailField ,Widget groupeField , Widget fonctionField , Widget Roledropdown , Widget passwordField, Widget confirmpasswordField , Widget signUpButton , dynamic  _formKey   ){
+  if(myvisibility==true){
+
+    return  Container (
+      child: SingleChildScrollView(
+        child: Container(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+
+                  SizedBox(height: 20),
+                  firstNameField,
+                  SizedBox(height: 20),
+                  NumtelField,
+                  SizedBox(height: 20),
+                  emailField,
+                  SizedBox(height: 20),
+                  groupeField,
+                  SizedBox(height: 20),
+                  fonctionField,
+                  SizedBox(height: 20),
+                  Roledropdown,
+                  SizedBox(height: 20),
+                  passwordField,
+                  SizedBox(height: 20),
+                  confirmpasswordField,
+                  SizedBox(height: 20),
+                  signUpButton,
+                  SizedBox(height: 15),
+
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+  }
+  else if(myvisibility==false){
+
+    return  Column(
+      children:[
+        Center(child:CircularProgressIndicator(), ),
+        Center(child:Text('Vous etes pas autorisé '),)
+
+      ]
+
+    );
+
+  } else {
+
+    CircularProgressIndicator();
+  }
+
+
+
 }

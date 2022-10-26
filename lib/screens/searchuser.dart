@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -22,6 +23,13 @@ class _SearchUserState extends State<SearchUser> {
       throw 'Vous pouvez pas appelez $url';
     }
   }
+
+
+  _callNumber(String url) async{
+    const number = '08592119XXXX'; //set the number here
+    bool? res = await FlutterPhoneDirectCaller.callNumber(url);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,17 +116,59 @@ class _SearchUserState extends State<SearchUser> {
                       ),
                       leading: CircleAvatar(
                           backgroundColor: Colors.blue,
-                          child: Text(
-                              data['firstName'][0] == ''
-                                  ? ''
-                                  : data['firstName'][0].toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                              ))),
-                      trailing:IconButton(
-                        onPressed: () { _makePhoneCall(data['NumTel']); },
-                          icon:Icon(Icons.phone) ),
+                          child: IconButton(icon:Icon(Icons.person), onPressed: () {},color:Colors.white,)),
+                      trailing:Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                          IconButton(
+                              onPressed: () async  {
+                                // FlutterPhoneDirectCaller.callNumber(data['NumTel']);
+                                final Uri launchUri = Uri(
+                                    scheme: 'sms',
+                                    path: data['NumTel'].toString() );
+                                if(await canLaunchUrlString(launchUri.toString())){
+                                  await launchUrlString(launchUri.toString());
+                                }
+                                else {
+                                  print('The action is not supported ');
+
+                                }
+
+
+                                //launchUrl('tel:',data['NumTel']);
+
+                              },
+                            icon:Icon(Icons.phone) ),
+
+                          IconButton(
+                              onPressed: () async  {
+                               // FlutterPhoneDirectCaller.callNumber(data['NumTel']);
+                                final Uri launchUri = Uri(
+                                    scheme: 'msg',
+                                    path: data['NumTel'].toString() );
+                                if(await canLaunchUrlString(launchUri.toString())){
+                                  await launchUrlString(launchUri.toString());
+                                }
+                                else {
+                                  print('The action is not supported ');
+
+                                }
+
+
+                                //launchUrl('tel:',data['NumTel']);
+
+                              },
+                              icon:Icon(Icons.message_outlined) ),
+
+
+                        ]
+
+
+                      )
+
+
+
+
 
                     );
                   }
@@ -153,7 +203,54 @@ class _SearchUserState extends State<SearchUser> {
                                 color: Colors.white,
                                 fontSize: 20.0,
                               ))),
-                        trailing:Icon(Icons.phone),
+                        trailing:Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              IconButton(
+                                  onPressed: () async  {
+                                    // FlutterPhoneDirectCaller.callNumber(data['NumTel']);
+                                    final Uri launchUri = Uri(
+                                        scheme: 'sms',
+                                        path: data['NumTel'].toString() );
+                                    if(await canLaunchUrlString(launchUri.toString())){
+                                      await launchUrlString(launchUri.toString());
+                                    }
+                                    else {
+                                      print('The action is not supported ');
+
+                                    }
+
+
+                                    //launchUrl('tel:',data['NumTel']);
+
+                                  },
+                                  icon:Icon(Icons.phone) ),
+
+                              IconButton(
+                                  onPressed: () async  {
+                                    // FlutterPhoneDirectCaller.callNumber(data['NumTel']);
+                                    final Uri launchUri = Uri(
+                                        scheme: 'msg',
+                                        path: data['NumTel'].toString() );
+                                    if(await canLaunchUrlString(launchUri.toString())){
+                                      await launchUrlString(launchUri.toString());
+                                    }
+                                    else {
+                                      print('The action is not supported ');
+
+                                    }
+
+
+                                    //launchUrl('tel:',data['NumTel']);
+
+                                  },
+                                  icon:Icon(Icons.message_outlined) ),
+
+
+                            ]
+
+
+                        ),
                     );
                   }
                   return Container(
