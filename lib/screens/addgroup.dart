@@ -147,7 +147,7 @@ class _AddGroupState extends State<AddGroup> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Update Groupe'),
+          title: Text('Ajouter Groupe'),
           centerTitle: true,
         ),
         body: Form(
@@ -156,12 +156,16 @@ class _AddGroupState extends State<AddGroup> {
                       padding: const EdgeInsets.all(20.0),
                       child: SingleChildScrollView(
                           child: Column(children: <Widget>[
+                            Image.asset('images/groupe.png',width: 200,height: 200,),
+                            SizedBox(height: 20,),
                             TextFormField(
                               controller: NameEditingController,
                               validator: (value) {
+
                               if (value!.isEmpty) {
                               return (" choisir  Le nom de groupe");
                               }
+                              return null;
                               },
                               //controller: widget.Description,
                               onSaved: (value) {
@@ -273,8 +277,8 @@ class _AddGroupState extends State<AddGroup> {
                               borderRadius: BorderRadius.circular(30),
                               color: Colors.blue[300],
                               child: MaterialButton(
-                                padding: EdgeInsets.fromLTRB(32, 35, 32, 35),
-                                //minWidth: MediaQuery.of(context).size.width,
+                                padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                                minWidth: MediaQuery.of(context).size.width,
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
                                     _saveForm;

@@ -63,13 +63,13 @@ class _ProfileEditState extends State<ProfileEdit> {
 
 
 
-  void updateuser(String firstName , String NumTel,String uiduser) async{
+  void updateuser( String NumTel,String uiduser) async{
     //Create an instance of the current user.
     var collectionusers = FirebaseFirestore.instance.collection('users');
     collectionusers
         .doc(uiduser)
         .update(
-        {'firstName': firstName, 'NumTel':NumTel }) // <-- Nested value
+        { 'NumTel':NumTel }) // <-- Nested value
         .then((_) => print('Success'))
 
         .catchError((error) => print('Failed: $error'));
@@ -97,8 +97,10 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
   @override
   Widget build(BuildContext context) {
+
     final firstNameField = TextFormField(
       autofocus: false,
+      enabled: false,
       controller: TextEditingController(text: this.firstName),
       keyboardType: TextInputType.text,
       validator: (value) {
@@ -123,6 +125,46 @@ class _ProfileEditState extends State<ProfileEdit> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
+
+
+
+    final GroupeField = TextFormField(
+      autofocus: false,
+      enabled: false,
+      controller: TextEditingController(text: this.myGroupe),
+      keyboardType: TextInputType.text,
+
+      onSaved: (value) {
+        this.myGroupe = value;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.group_outlined),
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        labelText: "Groupe",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+
+    final fonctionField = TextFormField(
+      autofocus: false,
+      enabled: false,
+      controller: TextEditingController(text: this.myfonction),
+      keyboardType: TextInputType.text,
+
+      onChanged: (value) {
+        this.myfonction = value;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.functions),
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        //hintText: "Nom et Prenom",
+        labelText: "Fonction",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+
 
     final NumtelField = TextFormField(
       controller: TextEditingController(text:myNumTel.toString()),
@@ -240,7 +282,10 @@ class _ProfileEditState extends State<ProfileEdit> {
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
                 if(this.mypass!.isNotEmpty){
-                updateuser(firstName!,myNumTel!,uiduser!);
+                //updateuser(firstName!,myNumTel!,uiduser!);
+
+                  updateuser(myNumTel!,uiduser!);
+
                 updatepassword(mypass!);
                 Fluttertoast.showToast(
                   msg: 'profil mise a jour avec succceé vous devez reconnectez  ',
@@ -257,7 +302,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                 }
 
                 else if(this.mypass!.isEmpty) {
-                  updateuser(firstName!,myNumTel!,uiduser!);
+                  updateuser(myNumTel!,uiduser!);
+                 // updateuser(firstName!,myNumTel!,uiduser!);
                   Fluttertoast.showToast(
                   msg: 'profil mise a jour avec succceé ',
                   backgroundColor:Colors.green,
@@ -299,8 +345,13 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  SizedBox(height: 20),
+                                  Image.asset('images/personnes.png',width: 150,height: 150,),
+                                  SizedBox(height: 30),
                                   firstNameField,
+                                  SizedBox(height: 30),
+                                  fonctionField,
+                                  SizedBox(height: 30),
+                                  GroupeField,
                                   SizedBox(height: 20),
                                   NumtelField,
                                   SizedBox(height: 20),
@@ -321,7 +372,6 @@ class _ProfileEditState extends State<ProfileEdit> {
                                     controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
                                   ),
                                   SizedBox(height: 20),
-
 
                                   Visibility(
                                     visible: visibl!,

@@ -139,6 +139,8 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                       padding: const EdgeInsets.all(20.0),
                       child: SingleChildScrollView(
                           child: Column(children: <Widget>[
+                            Image.asset('images/add_group.png',width: 150,height: 150,),
+                            SizedBox(height: 20,),
                         TextFormField(
                           controller: TextEditingController(text: Nom),
                           //controller: widget.Description,

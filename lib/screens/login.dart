@@ -308,7 +308,6 @@ class _LoginState extends State<Login> {
 
 
 
-
     final signUpButton = Material(
       elevation: 5,
        borderRadius: BorderRadius.circular(30),
@@ -322,12 +321,12 @@ class _LoginState extends State<Login> {
              //print('Votre form est valide');
 
               signUp(emailEditingController.text,passwordEditingController.text);
-
+             // Navigator.pop(context);
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                       SearchUser()));
+                       WelcomeScreen()));
             // await  Navigator.pushNamed(context, sear.screenRoute);
             }
 
@@ -451,17 +450,11 @@ class _LoginState extends State<Login> {
     userModel.matricule=matriculeEditingController.text;
 
 
-
-    if(firstNameEditingController.text == true){
-
-      print('test is her');
-
-    }
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
-    Fluttertoast.showToast(msg: "Account created successfully :) ");
+    Fluttertoast.showToast(msg: "Utilisateur ajouté avec succes :) ");
 
    /* Navigator.pushAndRemoveUntil(
         (context),
@@ -488,6 +481,7 @@ showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget e
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
 
+                  Image.asset('images/personne2.png',width: 200,height: 200,),
                   SizedBox(height: 20),
                   firstNameField,
                   SizedBox(height: 20),
@@ -522,7 +516,6 @@ showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget e
     return  Column(
       children:[
         Center(child:CircularProgressIndicator(), ),
-        Center(child:Text('Vous etes pas autorisé '),)
 
       ]
 

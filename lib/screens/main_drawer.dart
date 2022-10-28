@@ -121,7 +121,8 @@ class _MainDrawerState extends State<MainDrawer> {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Deconnexion',style: TextStyle(fontSize: 18),),
-            onTap:(){
+            onTap:() async {
+              await FirebaseAuth.instance.signOut();
               Navigator.push(
                   context,
                   MaterialPageRoute(

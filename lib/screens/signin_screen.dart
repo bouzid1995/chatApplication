@@ -24,15 +24,15 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   initState() {
-    emailInputController = new TextEditingController(text:'user2p@pre.fr');
-    pwdInputController = new TextEditingController(text:'ala123');
+    emailInputController = new TextEditingController();
+    pwdInputController = new TextEditingController();
     super.initState();
   }
 
   Future<String> signIn(String email, String password) async {
     try{
       UserCredential result = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+          .signInWithEmailAndPassword(email: email+'@mspe.tn', password: password);
       User? user = result.user;
 
       return user!.uid;
@@ -77,10 +77,10 @@ class _SignInScreenState extends State<SignInScreen> {
                         return (" Enter votre Email");
                       }
                       // reg expression for email validation
-                      if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z.-]+.[a-z]")
+                     /* if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z.-]+.[a-z]")
                           .hasMatch(value)) {
                         return (" Enterer un email Valide ");
-                      }
+                      }*/
                       return null;
                     },
                     onChanged: (value) {
