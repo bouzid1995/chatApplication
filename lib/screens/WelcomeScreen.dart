@@ -23,7 +23,7 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final items = const [
     Icon(
-      Icons.list_alt,
+      Icons.list_alt_sharp,
       size: 30,
     ),
     Icon(
@@ -31,16 +31,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       size: 30,
     ),
     Icon(
-      Icons.chat_bubble,
+      Icons.group_add,
       size: 30,
     ),
 
     Icon(
-      Icons.search_outlined,
+      Icons.perm_contact_cal,
       size: 30,
     ),
     Icon(
-      Icons.personal_injury_outlined,
+      Icons.person,
       size: 30,
     ),
   ];
@@ -81,6 +81,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         animationCurve: Curves.easeInOut,
         animationDuration: const Duration(milliseconds: 300),
          color: Colors.blue,
+         //color: Colors.blue,
         // backgroundColor: Colors.blue[300]
       ),
       body: Container(

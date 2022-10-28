@@ -29,7 +29,7 @@ class AddScreen extends StatefulWidget {
 }
     //Description , Destination , Etat , Groupe , Image , Name , uid
 class _AddScreen extends State<AddScreen> {
-  final String Approuved='false' ;
+  final String Approuved='False' ;
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final descriptionEditingController = new TextEditingController();
@@ -72,7 +72,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
           icon: Icon(Icons.close),
           onPressed: ()=>descriptionEditingController.clear(),
         ),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        contentPadding: EdgeInsets.fromLTRB(20, 30, 20, 15),
         hintText: "Description Suggestion ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -106,7 +106,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
           icon: Icon(Icons.close),
           onPressed: ()=>descriptionEditingController.clear(),
         ),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        contentPadding: EdgeInsets.fromLTRB(20, 30, 20, 15),
         hintText: "Situation Avant ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -138,7 +138,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
           icon: Icon(Icons.close),
           onPressed: ()=>descriptionEditingController.clear(),
         ),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        contentPadding: EdgeInsets.fromLTRB(20, 30, 20, 15),
         hintText: "Situation Apres ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -182,25 +182,22 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.blue[300],
-        title: Row(
-          children:  [
-            SizedBox(width: 20),
-            Text('Ajoute une Nouvelle Suggestion ')
-          ],
-        ),
+        title: Text('Ajoute une Nouvelle Suggestion '),
         automaticallyImplyLeading: false,
       ),
 
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
-              padding: const EdgeInsets.only(left:20,right: 20),
+              padding: const EdgeInsets.only(left:20,right: 20,top:30,bottom:200),
               child: Form(
                 key: _formKey,
                 child: Column(
                   //mainAxisAlignment: MainAxisAlignment.center,
                   //crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                      Image.asset('images/sug.png',width: 150,height: 150,),
+                    const SizedBox(height: 25),
                     DescriptionField,
                     const SizedBox(height: 20),
                     SituationAvantField,

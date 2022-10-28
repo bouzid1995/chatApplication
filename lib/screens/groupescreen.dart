@@ -1,5 +1,6 @@
 
 
+import 'package:chatapplication/screens/addgroup.dart';
 import 'package:chatapplication/screens/updategroup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 import 'chat_screen.dart';
+import 'main_drawer.dart';
 
 class GroupeScreen extends StatefulWidget {
   static const String screenRoute = 'groupe_screen';
@@ -135,6 +137,7 @@ class _GroupeScreenState extends State<GroupeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawer:MainDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.blue[300],
           title: Row(
@@ -204,10 +207,6 @@ class _GroupeScreenState extends State<GroupeScreen> {
                                   color: Colors.brown[900],
                                 ),
                                 onPressed: () {
-                                  // print('ici Id ' + doc.id);
-                                  //deletGroupe(doc.id);
-                                  //Navigator.of(context).push(MaterialPageRoute(builder: (context) =>GroupeScreen()));
-                                  // Navigator.of(context).push(MaterialPageRoute(builder: (context) => UpdateGroupe(Idgroupe:doc.id,Name:doc.get('Name').toString(),Description:doc.get('Description').toString(),)));
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -260,210 +259,13 @@ class _GroupeScreenState extends State<GroupeScreen> {
         floatingActionButton: Visibility(
           visible: visibility,
           child: FloatingActionButton(
-              tooltip: 'ajouter group',
+              tooltip: 'ajouter groupe',
               child: const Icon(Icons.group_add),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      scrollable: false,
-                      title: Text('Nouvelle Groupe'),
-                      content: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Form(
-                          key: formKey,
-                          child: SingleChildScrollView(
-                              child: Column(children: <Widget>[
-                                TextFormField(
-                                  controller: NameEditingController,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return (" choisir  Le nom de groupe");
-                                    }
-
-                                  },
-                                  onSaved: (value) {
-                                    NameEditingController.text = value!;
-                                  },
-                                  decoration: const InputDecoration(
-                                    labelText: 'Nom de Groupe',
-                                    hintText: 'Nom Groupe',
-                                    icon: Icon(Icons.account_box),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 50.0,
-                                ),
-                                TextFormField(
-                                  controller: DescriptionEditingController,
-                                  validator: (value) {
-
-                                    if (value!.isEmpty) {
-                                      return ("Description ne peut pas etre vide");
-                                    }
-
-                                    return null;
-                                  },
-                                  onSaved: (value) {
-                                    DescriptionEditingController.text = value!;
-                                  },
-                                  decoration: const InputDecoration(
-                                    labelText: 'Description ',
-                                    icon: Icon(Icons.description),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 50.0,
-                                ),
-                                StreamBuilder(
-                                    stream: symptomsStream,
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                                      if (snapshot.hasError) {
-                                        print('Something went wrong');
-                                      }
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return const Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-
-                                      final List usersList = [];
-                                      final List listed = [];
-                                      //fill up the list symptoms
-                                      snapshot.data!.docs
-                                          .map((DocumentSnapshot document) {
-                                        Map a =
-                                        document.data() as Map<String, dynamic>;
-                                        usersList.add(a['firstName']);
-                                        a['id'] = document.id;
-                                        listed.add(a['id']);
-                                      }).toList();
-                                      print('id est suivant ');
-                                      print(listed);
-
-                                      return MultiSelectFormField(
-                                        autovalidate: AutovalidateMode.disabled,
-                                        chipBackGroundColor: Colors.blue[900],
-                                        chipLabelStyle: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
-                                        dialogTextStyle: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                        checkBoxActiveColor: Colors.blue[900],
-                                        checkBoxCheckColor: Colors.white,
-                                        dialogShapeBorder:
-                                        const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(12.0))),
-                                        title: const Text(
-                                          "Membres ",
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                        validator: (value) {
-                                          if (value == null || value.length == 0) {
-                                            return 'Selectionner un ou plus Membre ';
-                                          }
-                                          return null;
-                                        },
-                                        dataSource: [
-                                          for (String i in usersList) {'value': i},
-
-                                        ],
-                                        textField: 'value',
-                                        valueField: 'value',
-                                        okButtonLabel: 'Valider',
-                                        cancelButtonLabel: 'Annuler',
-                                        hintWidget:
-                                        const Text('Selectionner un ou plus Membre'),
-                                        initialValue: users,
-                                        onSaved: (value) {
-
-                                          if (value == null) return;
-                                          setState(() {
-
-                                             value.add(UserList[0]['firstName']);
-
-                                              users = value ;
-
-                                          });
-                                        },
-                                      );
-                                    }),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                Container(
-                                  child: Material(
-                                    elevation: 5,
-                                    borderRadius: BorderRadius.circular(30),
-                                    color: Colors.blue[300],
-                                    child: MaterialButton(
-                                      padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                                      //minWidth: MediaQuery.of(context).size.width,
-                                      onPressed: () {
-                                        if (formKey.currentState!.validate()) {
-                                          CreateGroupe();
-                                          Fluttertoast.showToast(
-                                              msg: 'Groupe ajouté avec succceé ',
-                                              timeInSecForIosWeb: 2
-                                          );
-                                          users.clear();
-                                          NameEditingController.clear();
-                                          DescriptionEditingController.clear();
-                                          Navigator.pop(context);
-
-                                        }  //Navigator.of(context).pop();
-                                      },
-                                      child: const Text(
-                                        "Ajouter groupe",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Material(
-                                  elevation: 5,
-                                  borderRadius: BorderRadius.circular(30),
-                                  color: Colors.blue[300],
-                                  child: MaterialButton(
-                                    padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                                    //minWidth: MediaQuery.of(context).size.width,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      users.clear();
-                                      NameEditingController.clear();
-                                      DescriptionEditingController.clear();
-                                    },
-                                    child: const Text(
-                                      "Annuler",
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                              ])),
-                        ),
-                      ),
-                      /* actions: [
-                        cancelButton,
-                        continueButton,
-                      ],*/
-                    );
-                  },
-                );
+              onPressed: () async {
+                await  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddGroup()));
               }),
         ));
   }

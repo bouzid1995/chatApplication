@@ -13,6 +13,7 @@ import '../model/UsersModels.dart';
 import 'Details.dart';
 import 'WelcomeScreen.dart';
 import 'add_sceen.dart';
+import 'main_drawer.dart';
 
 class GetDemande extends StatefulWidget {
   static const String screenRoute = 'Demande_screen';
@@ -28,6 +29,7 @@ class _GetDemandeState extends State<GetDemande> {
   List<UsersModels> UserItem = [];
   final _auth = FirebaseAuth.instance;
   List<dynamic> RoleList = [{"uid": "", "secondName": "", "email": "", "firstName": "", "Role": ""}];
+  Color mycolor = Colors.white;
 
 
   Stream<QuerySnapshot>  StreamGroupe = FirebaseFirestore.instance.collection('basket_items').orderBy('DateProp', descending: true).snapshots();
@@ -231,7 +233,7 @@ class _GetDemandeState extends State<GetDemande> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
-
+    
 
 
     final addButton = Material(
@@ -264,51 +266,11 @@ class _GetDemandeState extends State<GetDemande> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-                drawer: Drawer(
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Text('Drawer Header'),
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.home,
-                ),
-                title: const Text('Page 1'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.train,
-                ),
-                title: const Text('Deconnexion'),
-                onTap: () {
-                  FirebaseAuth.instance.signOut();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              SignInScreen()));
-                },
-              ),
-            ],
-          ),
-        ),
+                drawer: MainDrawer(),
 
           appBar: AppBar(
             backgroundColor: Colors.blue[300],
-            title: Row(
-              children:  const [ SizedBox(width:1),
-                Text('Liste des suggestions ')
-              ],
-            ),
+            title: Text('Liste des suggestions '),
             bottom: const TabBar(
               tabs:[Text('tous les  suggestion'),Text('Mes Suggestions en cours ')],
             ),
@@ -339,11 +301,12 @@ class _GetDemandeState extends State<GetDemande> {
                   {
                     return ListView(
                       children: snapshot.data!.docs.map((doc) {
-
+                        doc.get('Approuved') =='true' ? mycolor=Colors.green : mycolor=Colors.red;
                         return Card(
                             child: ListTile(
-                              title: Text(doc.get('Description').toString()),
-                              subtitle: Text(doc.get('Approuved')),
+                                tileColor: mycolor,
+                              title: Text(doc.get('Description').toString().substring(0,7)),
+                              subtitle: doc.get('Approuved') =='false' ? Text('Pas Approuver') : Text(' Approuver') ,
                               trailing: Text(doc.get('DateProp').toString()),
                               onTap: () async {
                                 await  Navigator.push(
@@ -394,11 +357,13 @@ class _GetDemandeState extends State<GetDemande> {
                 return Card(
                     child: ListTile(
                       title: Text(doc.get('Description').toString()),
-                      subtitle: Text(doc.get('Approuved').toString()),//Text(doc.get('DateProp'))
+                      subtitle: Text(doc.get('DateProp').toString()) ,//Text(doc.get('DateProp'))
                       trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                       // Text(doc.get('DateProp').toString()),
+                       // Text(doc.get('DateProp').toString()),doc.get('Approuved') =='True' ? Text('Approuver') : Text('Pas Approuver')
+
+                        //Text(doc.get('DateProp').toString()),
                         IconButton(
                           icon: Icon(
                             Icons.edit,
@@ -506,40 +471,6 @@ class _GetDemandeState extends State<GetDemande> {
             context,
             MaterialPageRoute(
             builder: (context) => AddScreen()));
-       /* return await showDialog(
-            context: context,
-            builder: (context) {
-              return StatefulBuilder(builder: (context, setState) {
-                return AlertDialog(
-                  scrollable: false,
-                    title: Text('Ajouter Une Suggestion'),
-                content: Padding(
-                padding: const EdgeInsets.all(20.0),
-                  child : Form(
-                    key: _formKey,
-                    child: Column(
-                      //mainAxisAlignment: MainAxisAlignment.center,
-                      //crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-
-                        DescriptionField,
-                        const SizedBox(height: 30),
-                        SituationAvantField,
-                        const SizedBox(height: 30),
-                        SituationApresField,
-                        const SizedBox(height: 30),
-                        // Button d'ahjout
-                        addButton,
-                        //SizedBox(height: 15)
-
-                      ],
-                    ),
-                  ),
-                 // title: const Center(child:Text('Ajouter Une Suggestion')),
-
-                ));
-                 });
-            });*/
       },
       backgroundColor: Colors.blue,
       child: const Icon(Icons.add),

@@ -142,6 +142,16 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                         TextFormField(
                           controller: TextEditingController(text: Nom),
                           //controller: widget.Description,
+                          validator: (value) {
+                            RegExp regex = new RegExp(r'^.{10,}$');
+                            if (value!.isEmpty) {
+                              return ("Nom ne peut pas être vide ");
+                            }
+                            if (!regex.hasMatch(value)) {
+                              return (" Nom doit etre  (Min. 10 Character)");
+                            }
+                            return null;
+                          },
                           onChanged: (value) {
                             Nom = value;
                           },
@@ -157,6 +167,17 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                         TextFormField(
                           controller: TextEditingController(text: Description),
                           //controller: widget.Description,
+                          validator: (value) {
+                            RegExp regex = new RegExp(r'^.{10,}$');
+                            if (value!.isEmpty) {
+                              return ("Description ne peut pas être vide ");
+                            }
+                            if (!regex.hasMatch(value)) {
+                              return ("Description doit etre (Min. 10 Character)");
+                            }
+                            return null;
+                          },
+
                           onChanged: (value) {
                             Description = value;
                           },
@@ -193,7 +214,6 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                                 a['id'] = document.id;
                                 listed.add(a['id']);
                               }).toList();
-
 
                               return MultiSelectFormField(
                                 autovalidate: AutovalidateMode.disabled,
@@ -245,23 +265,18 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                           borderRadius: BorderRadius.circular(30),
                           color: Colors.blue[300],
                           child: MaterialButton(
-                            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                            padding: EdgeInsets.fromLTRB(32, 35, 32, 35),
                             //minWidth: MediaQuery.of(context).size.width,
                             onPressed: () {
-                              _saveForm;
-                              UpdateGroupe(Nom, Description, GroupList);
-                              if (formKey != false) {
+                               if (formKey.currentState!.validate()) {
+                                //_saveForm;
+                                UpdateGroupe(Nom, Description, GroupList);
                                 Fluttertoast.showToast(
                                   msg: 'Groupe mise a jour avec succceé ',
-                                  backgroundColor: Colors.red,
+                                  backgroundColor: Colors.green,
                                   timeInSecForIosWeb: 1,
                                 );
-//Container(
-//                 padding: EdgeInsets.all(8),
-//                 child: ElevatedButton(
-//                   child: Text('Save'),
-//                   onPressed: _saveForm,
-//                 ),
+
                                 Navigator.pop(context);
                               }
                             },

@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,18 +6,15 @@ import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 class UpdateSuggestion extends StatefulWidget {
   var Idgsugg;
-  var SituationAvant,SituationApres,Description;
+  var SituationAvant, SituationApres, Description;
 
-
-
-  UpdateSuggestion({super.key,
+  UpdateSuggestion({
+    super.key,
     required this.Idgsugg,
     required this.SituationAvant,
     required this.SituationApres,
     required this.Description,
-
   });
-
 
   @override
   State<UpdateSuggestion> createState() => _UpdateSuggestionState();
@@ -27,93 +23,148 @@ class UpdateSuggestion extends StatefulWidget {
 class _UpdateSuggestionState extends State<UpdateSuggestion> {
   final formKey = new GlobalKey<FormState>();
   List SuggList = [];
-    List users = [];
-  final String value='';
-  final NameEditingController = TextEditingController(text:'');
-  final Stream<QuerySnapshot> symptomsStream = FirebaseFirestore.instance.collection('users').snapshots();
+  List users = [];
+  final String value = '';
+  final NameEditingController = TextEditingController(text: '');
+  final Stream<QuerySnapshot> symptomsStream =
+      FirebaseFirestore.instance.collection('users').snapshots();
 
-  UpdateSuggestion(String Description,String SituationAvant ,String SituationApres ,dynamic DateProp   ) async {
+  UpdateSuggestion(String Description, String SituationAvant,
+      String SituationApres, dynamic DateProp) async {
     var collection = FirebaseFirestore.instance.collection('basket_items');
     collection
         .doc(this.widget.Idgsugg)
-        .update(
-        {'Description': Description, 'SituationAvant': SituationAvant, 'SituationApres':SituationApres , 'DateProp':DateProp }) // <-- Nested value
+        .update({
+          'Description': Description,
+          'SituationAvant': SituationAvant,
+          'SituationApres': SituationApres,
+          'DateProp': DateProp
+        }) // <-- Nested value
         .then((_) => print('Success'))
         .catchError((error) => print('Failed: $error'));
   }
 
-    Date() {
+  Date() {
     String datetime = DateFormat("dd-MM-yyyy").format(DateTime.now());
     print(datetime);
     return datetime;
   }
 
-
   @override
   void initState() {
     super.initState();
-   }
-
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title:  Text('Edit Suggestion '),
+          title: Text('Edit Suggestion '),
           centerTitle: true,
         ),
         body: Container(
           padding: const EdgeInsets.all(20.0),
           child: Form(
-            key: formKey ,
+              key: formKey,
               child: SingleChildScrollView(
+
                 child: Column(children: <Widget>[
-                  TextFormField(
-                    controller: TextEditingController(text:widget.Description),
-                    //controller: widget.Description,
-                    onChanged: (value) {
-                      this.widget.Description =value;
-                    },
+                  Image.asset('images/sug.png',width: 250,height: 250,),
 
-                    decoration: const InputDecoration(
-                      labelText: 'Description Suggestion',
-                      icon: Icon(Icons.description),
+                  TextFormField(
+                    autofocus: false,
+                    controller: TextEditingController(text: widget.Description),
+                    minLines: 2,
+                    maxLines: 5,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      RegExp regex = new RegExp(r'^.{10,}$');
+                      if (value!.isEmpty) {
+                        return ("Description ne peut pas être vide");
+                      }
+                      if (!regex.hasMatch(value)) {
+                        return ("Enter Valid Description (Min. 10 Character)");
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      this.widget.Description = value;
+                    },
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.description),
+                      contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      hintText: "Description Suggestion ",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                   ),
                   const SizedBox(
                     height: 50.0,
                   ),
                   TextFormField(
-                    controller: TextEditingController(text:widget.SituationAvant),
-
-                    onChanged: (value) {
-
-                      this.widget.SituationAvant = value;
-
+                    autofocus: false,
+                    controller: TextEditingController(text: widget.Description),
+                    minLines: 2,
+                    maxLines: 5,
+                    keyboardType: TextInputType.multiline,
+                    validator: (value) {
+                      RegExp regex = new RegExp(r'^.{10,}$');
+                      if (value!.isEmpty) {
+                        return ("Situation Avant ne peut pas être vide");
+                      }
+                      if (!regex.hasMatch(value)) {
+                        return ("Enter Valid Situation Avant (Min. 10 Character)");
+                      }
+                      return null;
                     },
-                    decoration: const InputDecoration(
-                      labelText: 'Situation Avant ',
-                      icon: Icon(Icons.real_estate_agent_rounded),
+                    onChanged: (value) {
+                      this.widget.Description = value;
+                    },
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.safety_check_sharp),
+                      contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      hintText: "Situation Avant ",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                   ),
                   const SizedBox(
                     height: 50.0,
                   ),
                   TextFormField(
-                    controller: TextEditingController(text:widget.SituationApres),
-
+                    autofocus: false,
+                    controller:
+                        TextEditingController(text: widget.SituationApres),
+                    minLines: 2,
+                    maxLines: 5,
+                    keyboardType: TextInputType.multiline,
+                    validator: (value) {
+                      RegExp regex = new RegExp(r'^.{10,}$');
+                      if (value!.isEmpty) {
+                        return ("Situation ne peut pas être vide ");
+                      }
+                      if (!regex.hasMatch(value)) {
+                        return ("Enter Valid Situation Apres (Min. 10 Character)");
+                      }
+                      return null;
+                    },
                     onChanged: (value) {
                       this.widget.SituationApres = value;
-
                     },
-                    decoration: const InputDecoration(
-                      labelText: 'Situation Apres ',
-                      icon: Icon(Icons.real_estate_agent_rounded),
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.safety_check_rounded),
+                      contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      hintText: "Situation Apres ",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                   ),
-
-                  SizedBox(height: 30,),
-
+                  SizedBox(
+                    height: 30,
+                  ),
                   Material(
                     elevation: 5,
                     borderRadius: BorderRadius.circular(30),
@@ -122,17 +173,21 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                       padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
                       //minWidth: MediaQuery.of(context).size.width,
                       onPressed: () {
-                        UpdateSuggestion(widget.Description,widget.SituationAvant,widget.SituationApres,Date());
+                        if(formKey.currentState!.validate()){
+                        UpdateSuggestion(
+                            widget.Description,
+                            widget.SituationAvant,
+                            widget.SituationApres,
+                            Date());
 
-                          Fluttertoast.showToast(
-                            msg: 'Groupe mise a jour avec succceé ',
-                            backgroundColor:Colors.green,
-                            timeInSecForIosWeb: 2,
-                          );
+                        Fluttertoast.showToast(
+                          msg: 'Groupe mise a jour avec succceé ',
+                          backgroundColor: Colors.green,
+                          timeInSecForIosWeb: 2,
+                        );
 
-                          Navigator.pop(context);
-
-                      },
+                        Navigator.pop(context);
+                      }},
                       child: const Text(
                         "Mise a jour Suggestion ",
                         textAlign: TextAlign.end,
@@ -143,14 +198,8 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                       ),
                     ),
                   ),
-
-
-
-
                 ]),
               )),
         ));
   }
 }
-
-

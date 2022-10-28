@@ -218,20 +218,20 @@ class _DetailDemandeState extends State<DetailDemande> {
                         ),
                         Card(
                           margin: const EdgeInsets.symmetric(
-                              horizontal: 30.0, vertical: 5.0),
+                              horizontal: 30.0, vertical: 15.0),
                           clipBehavior: Clip.antiAlias,
                           color: Colors.white,
-                          elevation: 30.0,
+                          elevation: 35.0,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 22.0),
+                                horizontal: 20.0, vertical: 22.0),
                             child: Row(
                               children: [
                                 Expanded(
                                   child: Column(
                                     children: [
                                       const Text(
-                                        ' Nom & Prenom ',
+                                        'Nom',
                                         style: TextStyle(
                                           color: Colors.blue,
                                           fontSize: 15.0,
@@ -378,14 +378,46 @@ class _DetailDemandeState extends State<DetailDemande> {
                                   letterSpacing: 2.0,
                                 ),
                               ),
+
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+
+                              Visibility(
+                                visible:!myvisibility,
+                                child:const Text(
+                                "Remarque:",
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontStyle: FontStyle.normal,
+                                    fontSize: 18.0),
+                              ),
+                              ),
+
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              Visibility(
+                                visible:!myvisibility ,
+                                child:Text(this.widget.Remarque.toString(),
+                                style: const TextStyle(
+                                  fontSize: 15.0,
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black,
+                                  letterSpacing: 2.0,
+                                ),
+                              ),
+
+                              )
+
+
                             ],
                     ),
                 ),
 
             ),
-            const SizedBox(
-              height: 5,
-            ),
+
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -394,7 +426,7 @@ class _DetailDemandeState extends State<DetailDemande> {
                   child: Visibility(
                     visible: myvisibility,
                     child: Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(5),
                       //apply padding to all four sides
                       child: RemarqueField,
                     ),
@@ -403,8 +435,7 @@ class _DetailDemandeState extends State<DetailDemande> {
                 Center(
                   child: Visibility(
                     visible: myvisibility,
-                    child: Padding(
-                      padding: EdgeInsets.all(20),
+
                       child: ElevatedButton(
                         onPressed: () async {
                           UpdateDemande(
@@ -413,7 +444,7 @@ class _DetailDemandeState extends State<DetailDemande> {
                         },
                         child: Text('Approuver suggestion '),
                       ),
-                    ),
+
                   ),
                 )
               ],

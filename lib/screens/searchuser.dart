@@ -4,6 +4,8 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import 'main_drawer.dart';
+
 class SearchUser extends StatefulWidget {
   const SearchUser({Key? key}) : super(key: key);
 
@@ -35,38 +37,7 @@ class _SearchUserState extends State<SearchUser> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-        drawer: Drawer(
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Text('Drawer Header'),
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.home,
-                ),
-                title: const Text('Page 1'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.train,
-                ),
-                title: const Text('Page 2'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        ),
+        drawer:MainDrawer(),
 
         appBar: AppBar(
             backgroundColor: Colors.blue[300],
@@ -124,7 +95,7 @@ class _SearchUserState extends State<SearchUser> {
                               onPressed: () async  {
                                 // FlutterPhoneDirectCaller.callNumber(data['NumTel']);
                                 final Uri launchUri = Uri(
-                                    scheme: 'sms',
+                                    scheme: 'tel',
                                     path: data['NumTel'].toString() );
                                 if(await canLaunchUrlString(launchUri.toString())){
                                   await launchUrlString(launchUri.toString());
@@ -144,7 +115,7 @@ class _SearchUserState extends State<SearchUser> {
                               onPressed: () async  {
                                // FlutterPhoneDirectCaller.callNumber(data['NumTel']);
                                 final Uri launchUri = Uri(
-                                    scheme: 'msg',
+                                    scheme: 'sms',
                                     path: data['NumTel'].toString() );
                                 if(await canLaunchUrlString(launchUri.toString())){
                                   await launchUrlString(launchUri.toString());

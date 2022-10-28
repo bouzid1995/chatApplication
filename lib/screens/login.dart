@@ -5,10 +5,12 @@ import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/typicons_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import '../model/user_model.dart';
 import 'WelcomeScreen.dart';
+import 'main_drawer.dart';
 
 
 
@@ -252,7 +254,7 @@ class _LoginState extends State<Login> {
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.vpn_key),
+        prefixIcon: const Icon(Typicons.key_outline),
         suffixIcon: GestureDetector(onTap: (){
           setState(() {
             _obscureText=!_obscureText;
@@ -375,48 +377,14 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.white,
 
-      drawer: Drawer(
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('Drawer Header'),
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.home,
-              ),
-              title: const Text('Page 1'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.train,
-              ),
-              title: const Text('Page 2'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: MainDrawer(),
 
       appBar:AppBar(
         backgroundColor: Colors.blue[300],
-        //automaticallyImplyLeading: false,
-        title: Row(
-          children:  const [ SizedBox(width: 1),
-              Text('Ajouter un nouvel utilisateur ')
-            ],
+        title: Text('Ajouter un nouvel utilisateur '),
+
         ),
-      ),
+
       body: showwidget(myvisibility,firstNameField,NumtelField,emailField,groupeField,fonctionField,Roledropdown,passwordField,confirmpasswordField,signUpButton,_formKey),
 
 
