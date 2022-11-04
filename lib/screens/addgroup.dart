@@ -48,29 +48,24 @@ class _AddGroupState extends State<AddGroup> {
   bool visibility = false;
   List RoleList = [];
   List users = [];
+  bool? checkedValue=false ;
+  bool? visibl =false ;
+  List<String>UsersName1 =[] ;
+  List<String>UsersName =[] ;
 
-  List _myActivities = [];
-  var _myActivitiesResult = '';
+  List<String> groups = ['Comptabilité','Développement','Formation','FST-Logistique','GRH','IE','Informatique','Logistique Externe','Logistique Interne','PPS','Production','PrûfTechnique','Qualité','Technique','FFC','Commerciale','Direction'];
+  String? groupes= 'Informatique';
 
-  _saveForm() {
-    var form = formKey.currentState!;
-    if (form.validate()) {
-      form.save();
-      setState(() {
-        _myActivitiesResult = _myActivities.toString();
-      });
-    }
-  }
 
-  CreateGroupe() async {
+
+
+  CreateGroupe(List usis) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    final user = FirebaseAuth.instance.currentUser!;
-
 
     Map<String, dynamic> data = {
       "Description": DescriptionEditingController.text,
       "Name": NameEditingController.text,
-      "UserID": users,
+      "UserID": usis,
       "AdminUid": FirebaseAuth.instance.currentUser?.uid
     };
 
@@ -106,6 +101,7 @@ class _AddGroupState extends State<AddGroup> {
     getUserNom();
     getMy(FirebaseAuth.instance.currentUser?.uid);
     super.initState();
+    getNameselected();
   }
 
 
@@ -143,8 +139,27 @@ class _AddGroupState extends State<AddGroup> {
   }
 
 
+
+        getNameselected() async {
+          List<String>UsersName =[] ;
+          final QuerySnapshot result =
+              await FirebaseFirestore.instance.collection('users').where('Groupe',isEqualTo:groupes.toString() ).get();
+          final List<DocumentSnapshot> documents = result.docs;
+          documents.forEach((data) =>
+                  UsersName.add(data['firstName']));
+        print('UsersName');
+        print(UsersName);
+        setState(() {
+          UsersName1 = UsersName ;
+        });
+      return UsersName1 ;
+        }
+
+
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
         appBar: AppBar(
           title: Text('Ajouter Groupe'),
@@ -200,9 +215,57 @@ class _AddGroupState extends State<AddGroup> {
                                 icon: Icon(Icons.account_box),
                               ),
                             ),
-                            const SizedBox(
-                              height: 50,
+                            const SizedBox( height: 50,),
+
+                            CheckboxListTile(
+                              title: Text("checker pour ajouter groupe par service  "),
+                              value: checkedValue,
+                              onChanged: (checkedValue) {
+                                setState(() {
+                                  this.checkedValue = checkedValue!;
+                                  this.visibl = checkedValue;
+                                  print('visible est ');
+                                  print(visibl);
+                                  print('checkbox');
+                                  print(checkedValue);
+                                });
+                              },
+                              controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
                             ),
+
+                            const SizedBox( height: 30,),
+
+                 Visibility(
+                    visible:visibl! ,
+                     child: DropdownButtonFormField(
+                       value: groupes,
+                       hint: const Text('selectionner un Role'),
+                       items: groups.map((e) {
+                         return DropdownMenuItem(child: Text(e),value:e,);
+                       }
+                       ).toList(),
+                       onChanged: (val){
+                         setState(() {
+                           groupes = val as String;
+                           getNameselected();
+                         });
+                       },
+                       icon: const Icon(
+                         Icons.arrow_drop_down_circle,
+                         color: Colors.blueAccent,
+                       ),
+                       decoration: const InputDecoration(
+                         labelText: 'Group ',
+                         prefixIcon: Icon(
+                           Icons.groups,
+                         ),
+                         border:OutlineInputBorder(),
+                       ),
+                     ),
+                 ),
+
+                            const SizedBox( height: 30,),
+
                             StreamBuilder(
                                 stream: symptomsStream,
                                 builder: (BuildContext context,
@@ -226,8 +289,9 @@ class _AddGroupState extends State<AddGroup> {
                                     a['id'] = document.id;
                                     listed.add(a['id']);
                                   }).toList();
-
-                                  return MultiSelectFormField(
+                                  return  Visibility(
+                                    visible:!visibl! ,
+                                      child: MultiSelectFormField(
                                     autovalidate: AutovalidateMode.disabled,
                                     chipBackGroundColor: Colors.blue[900],
                                     chipLabelStyle: const TextStyle(
@@ -264,9 +328,9 @@ class _AddGroupState extends State<AddGroup> {
                                       if (value == null) return;
 
                                       value.add(UserList[0]['firstName']);
-
                                       users = value ;
                                     },
+                                  ),
                                   );
                                 }),
                             const SizedBox(
@@ -281,8 +345,24 @@ class _AddGroupState extends State<AddGroup> {
                                 minWidth: MediaQuery.of(context).size.width,
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
-                                    _saveForm;
-                                    CreateGroupe();
+                                    if(visibl== false){
+                                      UsersName1.clear();
+                                      print('users');
+                                      print(users);
+
+                                     CreateGroupe(users);
+
+                                    }
+                                    else{
+                                      setState(() {
+                                        print('users avant cheked');
+                                        print(this.UsersName1);
+                                        UsersName1.add(UserList[0]['firstName']);
+                                        print('users apres cheked');
+                                        print(UsersName1);
+                                      });
+                                     CreateGroupe(UsersName1);
+                                    }
                                     Fluttertoast.showToast(
                                       msg: 'Groupe ajouté avec succceé',
                                       backgroundColor: Colors.green,
