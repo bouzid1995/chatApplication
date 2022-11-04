@@ -158,7 +158,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
           if (_formKey.currentState!.validate()) {
             CreateDemande();
             Fluttertoast.showToast(msg: 'Suggestion ajouteé avec  succees ');
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => WelcomeScreen()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => WelcomeScreen(MyIndex: 0,)));
 
 
     }
@@ -181,7 +181,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        backgroundColor: Colors.blue[300],
+        backgroundColor: Colors.blue,
         title: Text('Ajoute une Nouvelle Suggestion '),
         automaticallyImplyLeading: false,
       ),
@@ -226,7 +226,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
       final user = FirebaseAuth.instance.currentUser!;
 
-          Map<String,dynamic> data = {"Description":descriptionEditingController.text,"SituationAvant":AvantEditingController.text,"SituationApres":ApresEditingController.text,"user":user.uid,"DateProp": Date(),"Approuved":Approuved, "Remarque":""};
+          Map<String,dynamic> data = {"Description":descriptionEditingController.text,"SituationAvant":AvantEditingController.text,"SituationApres":ApresEditingController.text,"user":user.uid,"DateProp": Date(),"Etat":'En attente', "Remarque":""};
 
           await firebaseFirestore.collection("basket_items").add(data);
 

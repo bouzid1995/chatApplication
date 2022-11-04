@@ -36,6 +36,8 @@ class _LoginState extends State<Login> {
   bool myvisibility = false;
   bool myvisibility2 = true;
   String Role='';
+
+
   final firstNameEditingController = new TextEditingController();
   final secondNameEditingController = new TextEditingController();
   final emailEditingController = new TextEditingController();
@@ -46,7 +48,11 @@ class _LoginState extends State<Login> {
   final fonctionEditingController = new TextEditingController();
   final matriculeEditingController = new TextEditingController();
 
+  List<String> groups = ['Comptabilité','Développement','Formation','FST-Logistique','GRH','IE','Informatique','Logistique Externe','Logistique Interne','PPS','Production','PrûfTechnique','Qualité','Technique','FFC','Commerciale','Direction'];
+  String? groupes='Formation';
 
+  List<String> useretatList =['Actif','NonActif'];
+  String? useretat = 'Actif';
   fetch() async {
     final firebaseUser = await FirebaseAuth.instance.currentUser!;
     if (firebaseUser != null)
@@ -118,12 +124,12 @@ class _LoginState extends State<Login> {
       keyboardType: TextInputType.text,
       validator: (value) {
         if (value!.isEmpty) {
-          return ("Please Entrer votre Email");
+          return ("Email ne peut pas être vide ");
         }
         // reg expression for email validation
         if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
             .hasMatch(value)) {
-          return ("Please Entrer un email valide");
+          return ("Entrer un émail Valide ");
         }
         return null;
       },
@@ -143,7 +149,7 @@ class _LoginState extends State<Login> {
       keyboardType: TextInputType.number,
       validator: (value) {
         if (value!.isEmpty) {
-          return (" Matricule ne peut pas être vide");
+          return ("Matricule ne peut pas être vide");
         }
 
       },
@@ -169,7 +175,7 @@ class _LoginState extends State<Login> {
           return ("Numero Tel ne peut pas être vide");
         }
         if (!regex.hasMatch(value)) {
-          return ("Entrer Valide Numero Tel(Min. 8 Character)");
+          return ("Entrer un Numero Tel Valide (Min. 8 Character)");
         }
       },
       onSaved: (value) {
@@ -184,31 +190,6 @@ class _LoginState extends State<Login> {
       ),
     );
 
-    final groupeField = TextFormField(
-      autofocus: false,
-      controller: groupEditingController,
-      keyboardType: TextInputType.text,
-      validator: (value) {
-        RegExp regex =  RegExp(r'^.{3,}$');
-        if (value!.isEmpty) {
-          return ("Groupe ne peut pas être vide");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Entrer Valide Groupe(Min. 3 Charactere)");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        groupEditingController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.account_circle),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Groupe",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
 
     final fonctionField = TextFormField(
       autofocus: false,
@@ -216,11 +197,11 @@ class _LoginState extends State<Login> {
       keyboardType: TextInputType.text,
       validator: (value) {
         RegExp regex =  RegExp(r'^.{3,}$');
-        if (value!.isEmpty) {
+      /*  if (value!.isEmpty) {
           return ("Fonction ne peut pas être vide");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Entrer Valide Fonction (Min. 3 Charactere)");
+        }*/
+        if (!regex.hasMatch(value!)) {
+          return ("Entrer une Fonction Valide(Min. 3 Charactere)");
         }
         return null;
       },
@@ -246,7 +227,7 @@ class _LoginState extends State<Login> {
           return ("Mot de Passe est obligatoire pour inscription ");
         }
         if (!regex.hasMatch(value)) {
-          return ("Entrer Valide Mot de Passe(Min. 6 Charactere)");
+          return ("Entrer un Mot de Passe Valide (Min. 6 Characteres)");
         }
       },
       onSaved: (value) {
@@ -259,7 +240,6 @@ class _LoginState extends State<Login> {
           setState(() {
             _obscureText=!_obscureText;
           });
-
         },
         child :Icon(_obscureText ? Icons.visibility :Icons.visibility_off),
           ),
@@ -275,11 +255,11 @@ class _LoginState extends State<Login> {
         obscureText: _obscureText1,
       validator: (value) {
         if (confirmpasswordEditingController.text != passwordEditingController.text) {
-          return "Mot de passe n'est pas conforme";
+          return "Mot de passe invalide ";
         }
         else if(confirmpasswordEditingController.text.isEmpty)
           {
-            return "Mot de passe vide ";
+            return "Confirme Mot de passe est vide ";
           }
         return null;
       },
@@ -301,7 +281,7 @@ class _LoginState extends State<Login> {
 
 
         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Confirm Password",
+        hintText: "Confirm Mot de passe",
           border:OutlineInputBorder(),
       ),
     );
@@ -319,18 +299,15 @@ class _LoginState extends State<Login> {
           if (_formKey.currentState!.validate())
             {
              //print('Votre form est valide');
-
               signUp(emailEditingController.text,passwordEditingController.text);
              // Navigator.pop(context);
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                       WelcomeScreen()));
+                       WelcomeScreen(MyIndex: 1,)));
             // await  Navigator.pushNamed(context, sear.screenRoute);
             }
-
-
         },
         child: const Text(
           "Ajouter",
@@ -344,6 +321,7 @@ class _LoginState extends State<Login> {
     );
 
 
+//groups
 
     final Roledropdown = DropdownButtonFormField(
 
@@ -372,6 +350,62 @@ class _LoginState extends State<Login> {
         );
 
 
+    final groupsropdown = DropdownButtonFormField(
+
+      value: groupes,
+      hint: const Text('selectionner un Role'),
+      items: groups.map((e) {
+        return DropdownMenuItem(child: Text(e),value:e,);
+      }
+      ).toList(),
+      onChanged: (val){
+        setState(() {
+          groupes = val as String;
+        });
+      },
+      icon: const Icon(
+        Icons.arrow_drop_down_circle,
+        color: Colors.blueAccent,
+      ),
+      decoration: const InputDecoration(
+        labelText: 'Group ',
+        prefixIcon: Icon(
+          Icons.groups,
+        ),
+        border:OutlineInputBorder(),
+      ),
+    );
+
+
+
+
+    final Etatuserdropdown = DropdownButtonFormField(
+
+      value: useretat,
+      hint: const Text('selectionner une etat'),
+      items: useretatList.map((e) {
+        return DropdownMenuItem(child: Text(e),value:e,);
+      }
+      ).toList(),
+      onChanged: (val){
+        setState(() {
+          useretat = val as String;
+        });
+      },
+      icon: const Icon(
+        Icons.arrow_drop_down_circle,
+        color: Colors.blueAccent,
+      ),
+      decoration: const InputDecoration(
+        labelText: 'Etat ',
+        prefixIcon: Icon(
+          Icons.person_pin_outlined,
+        ),
+        border:OutlineInputBorder(),
+      ),
+    );
+
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -379,18 +413,17 @@ class _LoginState extends State<Login> {
       drawer: MainDrawer(),
 
       appBar:AppBar(
-        backgroundColor: Colors.blue[300],
-        title: Text('Ajouter un nouvel utilisateur '),
+        backgroundColor: Colors.blue,
+        title: Text('Ajouter utilisateur '),
 
         ),
 
-      body: showwidget(myvisibility,firstNameField,NumtelField,emailField,groupeField,fonctionField,Roledropdown,passwordField,confirmpasswordField,signUpButton,_formKey),
+      body: showwidget(myvisibility,firstNameField,NumtelField,emailField,groupsropdown,fonctionField,Roledropdown,passwordField,confirmpasswordField,signUpButton,_formKey,Etatuserdropdown),
 
 
     );
 
   }
-
 
   void signUp(String email, String password) async {
  // if (_formKey.currentUser!.validate()) {
@@ -444,10 +477,10 @@ class _LoginState extends State<Login> {
     userModel.uid = user.uid;
     userModel.firstName = firstNameEditingController.text;
     userModel.Fonction = fonctionEditingController.text;
-    userModel.Group = groupEditingController.text;
+    userModel.Groupe = groupes;
     userModel.NumTel = numtelEditingController.text;
     userModel.Role = role_id;
-    userModel.matricule=matriculeEditingController.text;
+    userModel.etat =useretat;
 
 
     await firebaseFirestore
@@ -456,16 +489,12 @@ class _LoginState extends State<Login> {
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Utilisateur ajouté avec succes :) ");
 
-   /* Navigator.pushAndRemoveUntil(
-        (context),
-        MaterialPageRoute(builder: (context) => ChatScreen(firstName:this.firstNameEditingController.text,secondName:secondNameEditingController.text)),
-            (route) => false);*/
-    //Navigator.of(context).push(MaterialPageRoute(builder:(context) =>ChatScreen()  ));
+
   }
 }
 
 
-showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget emailField ,Widget groupeField , Widget fonctionField , Widget Roledropdown , Widget passwordField, Widget confirmpasswordField , Widget signUpButton , dynamic  _formKey   ){
+showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget emailField ,Widget groupsropdown , Widget fonctionField , Widget Roledropdown , Widget passwordField, Widget confirmpasswordField , Widget signUpButton , dynamic  _formKey,Widget Etatuserdropdown   ){
   if(myvisibility==true){
 
     return  Container (
@@ -480,8 +509,10 @@ showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget e
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-
-                  Image.asset('images/personne2.png',width: 200,height: 200,),
+                Opacity(
+                    opacity: 0.8,
+                    child: Image.asset('images/personne2.png',width: 100,height: 100,)
+                ),
                   SizedBox(height: 20),
                   firstNameField,
                   SizedBox(height: 20),
@@ -489,11 +520,13 @@ showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget e
                   SizedBox(height: 20),
                   emailField,
                   SizedBox(height: 20),
-                  groupeField,
+                  groupsropdown,
                   SizedBox(height: 20),
                   fonctionField,
                   SizedBox(height: 20),
                   Roledropdown,
+                  SizedBox(height: 20),
+                  Etatuserdropdown,
                   SizedBox(height: 20),
                   passwordField,
                   SizedBox(height: 20),

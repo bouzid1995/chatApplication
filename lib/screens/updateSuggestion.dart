@@ -59,7 +59,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Edit Suggestion '),
+          title: Text(this.widget.SituationApres),
           centerTitle: true,
         ),
         body: Container(
@@ -104,7 +104,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                   ),
                   TextFormField(
                     autofocus: false,
-                    controller: TextEditingController(text: widget.Description),
+                    controller: TextEditingController(text: widget.SituationAvant),
                     minLines: 2,
                     maxLines: 5,
                     keyboardType: TextInputType.multiline,
@@ -119,7 +119,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                       return null;
                     },
                     onChanged: (value) {
-                      this.widget.Description = value;
+                      this.widget.SituationAvant = value;
                     },
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
@@ -181,7 +181,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                             Date());
 
                         Fluttertoast.showToast(
-                          msg: 'Groupe mise a jour avec succceé ',
+                          msg: 'suggestion mise a jour avec succceé ',
                           backgroundColor: Colors.green,
                           timeInSecForIosWeb: 2,
                         );

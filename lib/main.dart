@@ -5,11 +5,14 @@ import 'package:chatapplication/screens/chat_screen.dart';
 import 'package:chatapplication/screens/get_demande.dart';
 import 'package:chatapplication/screens/groupescreen.dart';
 import 'package:chatapplication/screens/login.dart';
+import 'package:chatapplication/screens/profiledit.dart';
 import 'package:chatapplication/screens/registration_screen.dart';
+import 'package:chatapplication/screens/searchuser.dart';
 import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 /*void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,26 +45,37 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MaterialApp(
-
+         debugShowCheckedModeBanner: false,
         title: 'Pac_mspe',
 
        //'/': (context) => const FirstScreen(),
         initialRoute: _auth.currentUser != null ? WelcomeScreen.screenRoute :SignInScreen.screenRoute ,
 
         routes: {
-          WelcomeScreen.screenRoute:(context)=>const WelcomeScreen(),
+          WelcomeScreen.screenRoute:(context)=> WelcomeScreen(MyIndex: 0,),
           SignInScreen.screenRoute:(context)=>   SignInScreen(),
          // RegistrationScreen.screenRoute:(context)=>RegistrationScreen(),
           //ChatScreen.screenRoute:(context)=> const ChatScreen(),
           GroupeScreen.screenRoute:(context)=>const GroupeScreen(),
           Login.screenRoute:(context)=>Login(),
           GetDemande.screenRoute:(context)=>const GetDemande(),
-
         }
     );
-
   }
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

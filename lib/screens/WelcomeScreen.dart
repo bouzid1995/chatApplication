@@ -14,7 +14,9 @@ import 'login.dart';
 class WelcomeScreen extends StatefulWidget {
   static const String screenRoute = 'Welcome_screen';
 
-  const WelcomeScreen({Key? key}) : super(key: key);
+  var MyIndex;
+
+   WelcomeScreen({Key? key,required this.MyIndex}) : super(key: key);
 
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();
@@ -25,23 +27,28 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     Icon(
       Icons.list_alt_sharp,
       size: 30,
+      color: Colors.white,
     ),
     Icon(
       Icons.add,
       size: 30,
+      color: Colors.white,
     ),
     Icon(
       Icons.group_add,
       size: 30,
+      color:Colors.white ,
     ),
 
     Icon(
       Icons.perm_contact_cal,
       size: 30,
+      color: Colors.white,
     ),
     Icon(
       Icons.person,
       size: 30,
+      color: Colors.white,
     ),
   ];
 
@@ -64,18 +71,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     ),*/
 
-
-
-
-
       bottomNavigationBar: CurvedNavigationBar(
         items: items,
-        index: index,
+        index: this.widget.MyIndex,
         onTap: (selctedIndex) {
           setState(() {
-            index = selctedIndex;
+            this.widget.MyIndex = selctedIndex;
           });
         },
+        buttonBackgroundColor: Colors.blue,
         backgroundColor: Colors.white,
         height: 50,
         animationCurve: Curves.easeInOut,
@@ -89,7 +93,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           width: double.infinity,
           height: double.infinity,
           alignment: Alignment.center,
-          child: getSelectedWidget(index: index)),
+          child: getSelectedWidget(index: this.widget.MyIndex)),
     );
   }
   //testing@test.fr

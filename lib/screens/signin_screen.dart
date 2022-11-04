@@ -74,7 +74,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     controller: emailInputController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return (" Enter votre Email");
+                        return (" Enter votre Matricule");
                       }
                       // reg expression for email validation
                      /* if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z.-]+.[a-z]")
@@ -90,7 +90,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.mail),
                       contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                      hintText: "Email",
+                      hintText: "Matricule",
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                     ),
                   ),
@@ -165,7 +165,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => WelcomeScreen()));
+                                      builder: (context) => WelcomeScreen(MyIndex: 0,)));
                             }).catchError((err) {
                               print(err);
                               showDialog(

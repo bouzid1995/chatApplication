@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'main_drawer.dart';
@@ -17,22 +16,31 @@ class SearchUser extends StatefulWidget {
 class _SearchUserState extends State<SearchUser> {
 
   String name = "";
+  String myGroupe="";
 
-  Future<void> _makePhoneCall(String url) async {
-    if (await canLaunchUrlString(url)) {
-      await launchUrlString(url);
-    } else {
-      throw 'Vous pouvez pas appelez $url';
-    }
+  fetch() async {
+    final firebaseUser = await FirebaseAuth.instance.currentUser!;
+    if (firebaseUser != null)
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .get()
+          .then((ds) async {
+        if (ds.exists) {
+          return  setState(() {
+            myGroupe = ds.data()!['Groupe'];
+
+          });
+        }
+      }).catchError((e) {
+        print(e);
+      });
   }
-
-
-  _callNumber(String url) async{
-    const number = '08592119XXXX'; //set the number here
-    bool? res = await FlutterPhoneDirectCaller.callNumber(url);
+  @override
+  void initState() {
+    super.initState();
+    fetch();
   }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +73,7 @@ class _SearchUserState extends State<SearchUser> {
                   var data = snapshots.data!.docs[index].data()
                   as Map<String, dynamic>;
 
-                  if (name.isEmpty) {
+                  if (name.isEmpty   &&  data['Groupe']== myGroupe) {
                     return ListTile(
                       title: Text(
                         data['firstName'],
@@ -138,12 +146,9 @@ class _SearchUserState extends State<SearchUser> {
                       )
 
 
-
-
-
                     );
                   }
-                  if (data['firstName'].toString().toLowerCase().startsWith(name.toLowerCase()) )
+                  if (data['firstName'].toString().toLowerCase().startsWith(name.toLowerCase()) &&  data['Groupe']== myGroupe )
                   {
                     return ListTile(
                       title: Text(

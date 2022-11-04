@@ -157,10 +157,10 @@ class _GroupeScreenState extends State<GroupeScreen> {
                 !snapshot.hasData ||
                 snapshot.data?.size == '' ||
                 snapshot.hasError) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(),
+              );
             }
-
-            {
+            else
               return ListView(
                 children: snapshot.data!.docs.map((doc) {
                   // const Icon(Icons.group) Text(doc.id)
@@ -226,7 +226,6 @@ class _GroupeScreenState extends State<GroupeScreen> {
                                                   timeInSecForIosWeb: 2,
                                                 );
 
-//alabouzidi@mspe.fr
                                                 Navigator.pop(context);
                                               }
                                             },
@@ -251,7 +250,7 @@ class _GroupeScreenState extends State<GroupeScreen> {
                       ));
                 }).toList(),
               );
-            }
+
           },
         ),
 

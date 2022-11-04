@@ -74,7 +74,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     margin: EdgeInsets.only(top: 30,bottom: 10),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                     image: DecorationImage(image:NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP76yk4UPaSClbNxLRlY3i94wcuLwg5K3VNg&usqp=CAU'),
+                     image: DecorationImage(image:NetworkImage('https://cdn-icons-png.flaticon.com/512/3135/3135715.png'),
                          fit:BoxFit.fill ),
 
                     ),
@@ -89,13 +89,13 @@ class _MainDrawerState extends State<MainDrawer> {
             ),
           ),
           ListTile(
-              leading: Icon(Icons.person),
+              leading: Icon(Icons.home_filled),
               title: Text('Acceuil',style: TextStyle(fontSize: 18),),
               onTap:(){ Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          WelcomeScreen()));
+                          WelcomeScreen(MyIndex: 0,)));
               }
           ),
           ListTile(
@@ -105,11 +105,11 @@ class _MainDrawerState extends State<MainDrawer> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          ProfileEdit()));
+                          WelcomeScreen(MyIndex: 4,)));
               }
           ),
           ListTile(
-            leading: Icon(Icons.group_add),
+            leading: Icon(Icons.description),
             title: Text('Ajouter Suggestion ',style: TextStyle(fontSize: 18),),
             onTap:(){ Navigator.push(
           context,
@@ -118,10 +118,25 @@ class _MainDrawerState extends State<MainDrawer> {
           AddScreen()));
             }
           ),
+
+
+          ListTile(
+              leading: Icon(Icons.description),
+              title: Text('Ajouter utilisateur ',style: TextStyle(fontSize: 18),),
+              onTap:(){ Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          WelcomeScreen(MyIndex: 1,)));
+              }
+          ),
+
+
           ListTile(
             leading: Icon(Icons.exit_to_app),
-            title: Text('Deconnexion',style: TextStyle(fontSize: 18),),
+            title: Text('Déconnexion',style: TextStyle(fontSize: 18),),
             onTap:() async {
+              await FirebaseAuth.instance.signOut();
               await FirebaseAuth.instance.signOut();
               Navigator.push(
                   context,

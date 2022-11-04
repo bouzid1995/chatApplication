@@ -159,7 +159,6 @@ class _ProfileEditState extends State<ProfileEdit> {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.functions),
         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        //hintText: "Nom et Prenom",
         labelText: "Fonction",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -167,9 +166,9 @@ class _ProfileEditState extends State<ProfileEdit> {
 
 
     final NumtelField = TextFormField(
+      autofocus: false,
       controller: TextEditingController(text:myNumTel.toString()),
-      keyboardType: TextInputType.phone,
-      obscureText: false,
+      keyboardType: TextInputType.text,
       validator: (value) {
         RegExp regex = new RegExp(r'^.{8,}$');
         if (value!.isEmpty) {
@@ -184,20 +183,16 @@ class _ProfileEditState extends State<ProfileEdit> {
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        labelText: 'Num Portable ',
-        prefixIcon: const Icon(Icons.phone_android),
-        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        //hintText: "Num tel",
-        border:OutlineInputBorder(),
+        prefixIcon: Icon(Icons.phone_android),
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        //hintText: "Nom et Prenom",
+        labelText: "Télèphone",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
-
     );
 
 
-
-
     final passwordField = TextFormField(
-
       autofocus: false,
       obscureText: _obscureText,
       validator: (value) {
@@ -209,23 +204,12 @@ class _ProfileEditState extends State<ProfileEdit> {
           return ("Entrer Valide Mot de Passe(Min. 6 Charactere)");
         }
       },
-
-            onChanged: (value) {
-
-              mypass = value;
-
+      onChanged: (value) {
+        mypass = value;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        prefixIcon: const Icon(Typicons.key_outline),
-        suffixIcon: GestureDetector(
-          onTap: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-          child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
-        ),
+        prefixIcon: Icon(Icons.vpn_key),
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         labelText: "Mot de Passe ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -245,7 +229,6 @@ class _ProfileEditState extends State<ProfileEdit> {
         if (value!.isEmpty) {
           return (" Mot de passe n'est peut pas etre vide  ");
         }
-
         return null;
       },
       onSaved: (value) {
@@ -253,7 +236,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       },
       textInputAction: TextInputAction.next,
       decoration:  InputDecoration(
-        prefixIcon: Icon(Typicons.key_outline),
+        prefixIcon: Icon(Icons.vpn_key),
         suffixIcon: GestureDetector(onTap:(){
 
           setState(() {
@@ -266,8 +249,8 @@ class _ProfileEditState extends State<ProfileEdit> {
 
 
         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        labelText: "Confirm Mot de passe ",
-        border:OutlineInputBorder(),
+        labelText: "Confirmer Mot de passe ",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
 
@@ -290,7 +273,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 Fluttertoast.showToast(
                   msg: 'profil mise a jour avec succceé vous devez reconnectez  ',
                   backgroundColor:Colors.green,
-                  timeInSecForIosWeb: 2,
+                  timeInSecForIosWeb:1,
                 );
                 print('test1');
                 FirebaseAuth.instance.signOut();
@@ -307,11 +290,11 @@ class _ProfileEditState extends State<ProfileEdit> {
                   Fluttertoast.showToast(
                   msg: 'profil mise a jour avec succceé ',
                   backgroundColor:Colors.green,
-                  timeInSecForIosWeb: 2,
+                  timeInSecForIosWeb: 1,
                   );
                       Navigator.of(context).push(
                       MaterialPageRoute(
-                      builder: (context) => WelcomeScreen()),
+                      builder: (context) => WelcomeScreen(MyIndex: 3,)),
                      );
                   print('test2');
                 }
@@ -319,7 +302,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 },
 
         child: const Text(
-          "Mettre a jour ",
+          "Mettre à jour ",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
@@ -330,8 +313,8 @@ class _ProfileEditState extends State<ProfileEdit> {
     return Scaffold(
         drawer: MainDrawer(),
         appBar: AppBar(
-          backgroundColor: Colors.blue[300],
-          title:Text('Edit Profile '),
+          backgroundColor: Colors.blue,
+          title:Text('Modifier Profil '),
           //centerTitle: true,
         ),
         body: SingleChildScrollView(
@@ -345,7 +328,12 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  Image.asset('images/personnes.png',width: 150,height: 150,),
+                                 Opacity(
+                                   opacity: 0.8,
+                                 child:Image.asset('images/personnes.png',width: 100,height: 100,),
+                                 ),
+
+
                                   SizedBox(height: 30),
                                   firstNameField,
                                   SizedBox(height: 30),
@@ -354,7 +342,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                   GroupeField,
                                   SizedBox(height: 20),
                                   NumtelField,
-                                  SizedBox(height: 20),
+                                  SizedBox(height: 10),
 
                                   CheckboxListTile(
                                     title: Text("checker pour mettre a jour votre mot de passe "),
@@ -371,14 +359,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                                     },
                                     controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
                                   ),
-                                  SizedBox(height: 20),
+                                  SizedBox(height: 2),
 
                                   Visibility(
                                     visible: visibl!,
                                     child: passwordField,
                                   ),
 
-                                  SizedBox(height: 20),
+                                  SizedBox(height: 10),
 
                                   Visibility(
                                        visible: visibl!,

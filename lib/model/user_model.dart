@@ -5,13 +5,13 @@ class UserModel{
   String? firstName;
   String? secondName;
   String? Role;
-  String? Group;
+  String? Groupe;
   String? Fonction;
   String? NumTel;
-  String? matricule;
+  String? etat;
 
 
-  UserModel({this.uid,this.email,this.firstName,this.secondName,this.Role,this.Group,this.Fonction,this.NumTel,this.matricule});
+  UserModel({this.uid,this.email,this.firstName,this.secondName,this.Role,this.Groupe,this.Fonction,this.NumTel,this.etat});
 
 
   factory UserModel.fromMap(map)
@@ -23,10 +23,10 @@ class UserModel{
       firstName: map['firstName'],
       secondName: map['secondName'],
       Role: map['Role'],
-      Group: map['Group'],
+      Groupe: map['Group'],
       Fonction: map['Fonction'],
       NumTel: map['NumTel'],
-      matricule: map['matricule'],
+      etat: map['etat'],
 
     );
   }
@@ -39,10 +39,10 @@ class UserModel{
       'firstName': firstName,
       'secondName':secondName,
       'Role':Role,
-      'Group':Group,
+      'Groupe':Groupe,
       'Fonction':Fonction,
       'NumTel':NumTel,
-      'matricule':matricule,
+      'etat':etat,
 
     };
   }
