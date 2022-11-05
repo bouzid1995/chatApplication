@@ -1,13 +1,8 @@
-import 'package:chatapplication/screens/chat_screen.dart';
-import 'package:chatapplication/screens/registration_screen.dart';
-import 'package:chatapplication/screens/searchuser.dart';
-import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter/material.dart';
 import '../model/user_model.dart';
 import 'WelcomeScreen.dart';
 import 'main_drawer.dart';
@@ -48,9 +43,6 @@ class _LoginState extends State<Login> {
   final fonctionEditingController = new TextEditingController();
   final matriculeEditingController = new TextEditingController();
 
-  List<String> groups = ['Comptabilité','Développement','Formation','FST-Logistique','GRH','IE','Informatique','Logistique Externe','Logistique Interne','PPS','Production','PrûfTechnique','Qualité','Technique','FFC','Commerciale','Direction'];
-  String? groupes='Formation';
-
   List<String> useretatList =['Actif','NonActif'];
   String? useretat = 'Actif';
   fetch() async {
@@ -80,13 +72,38 @@ class _LoginState extends State<Login> {
 
     String? role_id ='Admin';
     final  Roles = ['Admin','user'];
-    List test=[];
+
+
+  List<String> groups = ['Comptabilité','Développement','Formation','FST-Logistique','GRH','IE','Informatique','Logistique Externe','Logistique Interne','PPS','Production','PrûfTechnique','Qualité','Technique','FFC','Commerciale','Direction'];
+  String? groupes='Formation';
+
+  List<String> CommercialeProvince  = ['Resp Technico-commerciale','Responsable Comptabilité','Chef Service Comptabilité'];
+  List<String> DeveloppementProvince  = ["Agent Développement","Responsable Développement","Chef Service Développement"];
+  List<String> FormationProvince  = ["Formateur","Responsable Formation","Chef Service Formation","Formation Team Leader"];
+  List<String> FSTLogistiqueProvince  = ["Agent FST","Responsable FST","Chef Service FST – Logistique"];
+  List<String> GRHProvince  = ["Chauffeur","Concierge","Femme Ménage","Responsable RH","Chef Service GRH","Agent Administrative","Agent Sos","Assistant","Coordinateur Recrutement et Intégration","RH Team Leader","Directeur"];
+  List<String> IEProvince  = ["Agent Ratio","Agent AV","AV Team leader","Chef de Poste AV","Responsable IE","Chef Service IE",", Agent FBB"];
+  List<String> InformatiqueProvince  = ["Agent Informatique","Responsable Informatique","Chef Service Informatique"];
+  List<String> LogistiqueExterneProvince  = ["Agent Logistique Externe","Responsable Logistique Externe","Agent Logistique Interne","Chef Poste Logistique Interne"];
+  List<String> LogistiqueInterneProvince  = ["Agent Logistique Interne","Chef Poste Logistique Interne","Responsable Logistique","Chef Service Logistique Interne"];
+  List<String> PPSProvince   = ["Agent PPS","Responsable PPS","PPS Team Leader"];
+  List<String> ProductionProvince   = ["Alimentateur","Montage","Agent CFE","Agent Contrôle 100%","Agent Emballage","Chef de Poste Production","Chef de poste KPI Reporting","Prod Team Leader","Réparateur","Porte-parole"];
+  List<String> PrufTechniqueProvince   = ["Agent PrûfTechnique","Responsable PrûfTechnique","Chef Service PrûfTechnique","Chef de Poste Prûftechnik"];
+  List<String> QualiteProvince   = ["Agent Qualité","Agent QGate","Coordinateur Client","Responsable Fournisseur","Responsable Qualité","Responsable Qualité Produit","Chef Service Qualité","Chef de poste Qualité","Responsable Processus ESD","Assistante Qualité"];
+  List<String> TechniqueProvince    = ["Agent Technique","Agent Maintenance","Responsable Technique","Chef Service Technique","Chef de Poste Tech"];
+  List<String> FFCProvince    = ["Conducteur Machine","Ingénieur Projet","Team Leader Plasturgie","Responsable Logistique"];
+  List<String> DirectionProvince    = ["Gerant"];
+
+  List<String>? Functions = [];
+  String? selectedGroupe;
+  String? selectedFunction ;
+
+
 
   @override
   void initState() {
     super.initState();
     fetch();
-    print(myvisibility2);
   }
   @override
   Widget build(BuildContext context) {
@@ -141,26 +158,6 @@ class _LoginState extends State<Login> {
         prefixIcon: const Icon(Icons.mail),
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Email",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-    final MatriculeField = TextFormField(
-      controller: matriculeEditingController,
-      keyboardType: TextInputType.number,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return ("Matricule ne peut pas être vide");
-        }
-
-      },
-      onSaved: (value) {
-        matriculeEditingController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.perm_identity_sharp),
-        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Matricule",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
@@ -350,17 +347,56 @@ class _LoginState extends State<Login> {
         );
 
 
-    final groupsropdown = DropdownButtonFormField(
+        final groupsropdown = DropdownButtonFormField(
 
-      value: groupes,
-      hint: const Text('selectionner un Role'),
+      value: selectedGroupe,
+      hint: const Text('selectionner un groupe'),
       items: groups.map((e) {
         return DropdownMenuItem(child: Text(e),value:e,);
       }
       ).toList(),
-      onChanged: (val){
+          onChanged: (country) {
+        if (country == 'Comptabilité') {
+          Functions = CommercialeProvince;
+        } else if (country == 'Développement') {
+          Functions = DeveloppementProvince;
+        } else if (country == 'Formation') {
+          Functions = FormationProvince;
+        }else if (country == 'FST-Logistique') {
+          Functions = FSTLogistiqueProvince;
+        }else if (country == 'GRH') {
+          Functions = GRHProvince;
+        }else if (country == 'IE') {
+          Functions = IEProvince;
+        }else if (country == 'Informatique') {
+          Functions = InformatiqueProvince;
+        }else if (country == 'Logistique Externe') {
+          Functions = LogistiqueExterneProvince;
+        }else if (country == 'Logistique Interne') {
+          Functions = LogistiqueInterneProvince;
+        }else if (country == 'PPS') {
+          Functions = PPSProvince;
+        }else if (country == 'Production') {
+          Functions = ProductionProvince;
+        }else if (country == 'PrûfTechnique') {
+          Functions = PrufTechniqueProvince;
+        }else if (country == 'Qualité') {
+          Functions = QualiteProvince;
+        }else if (country == 'Technique') {
+          Functions = TechniqueProvince;
+        }else if (country == 'FFC') {
+          Functions = FFCProvince;
+        }else if (country == 'Commerciale') {
+          Functions = CommercialeProvince;
+        }else if (country == 'Direction') {
+          Functions = DirectionProvince;
+        }
+        else {
+          Functions = [];
+        }
         setState(() {
-          groupes = val as String;
+         selectedFunction = null;
+          selectedGroupe = country!;
         });
       },
       icon: const Icon(
@@ -376,6 +412,33 @@ class _LoginState extends State<Login> {
       ),
     );
 
+    final functionsropdown = DropdownButtonFormField(
+
+      value: selectedFunction,
+      hint: const Text('selectionner une function '),
+      items: Functions?.map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onChanged: (province) {
+        setState(() {
+          selectedFunction = province!;
+        });
+      },
+      icon: const Icon(
+        Icons.arrow_drop_down_circle,
+        color: Colors.blueAccent,
+      ),
+      decoration: const InputDecoration(
+        labelText: 'function ',
+        prefixIcon: Icon(
+          Icons.groups,
+        ),
+        border:OutlineInputBorder(),
+      ),
+    );
 
 
 
@@ -418,7 +481,7 @@ class _LoginState extends State<Login> {
 
         ),
 
-      body: showwidget(myvisibility,firstNameField,NumtelField,emailField,groupsropdown,fonctionField,Roledropdown,passwordField,confirmpasswordField,signUpButton,_formKey,Etatuserdropdown),
+      body: showwidget(myvisibility,firstNameField,NumtelField,emailField,groupsropdown,functionsropdown,Roledropdown,passwordField,confirmpasswordField,signUpButton,_formKey,Etatuserdropdown),
 
 
     );
@@ -476,8 +539,8 @@ class _LoginState extends State<Login> {
     userModel.email = user!.email;
     userModel.uid = user.uid;
     userModel.firstName = firstNameEditingController.text;
-    userModel.Fonction = fonctionEditingController.text;
-    userModel.Groupe = groupes;
+    userModel.Fonction = selectedFunction;
+    userModel.Groupe = selectedGroupe;
     userModel.NumTel = numtelEditingController.text;
     userModel.Role = role_id;
     userModel.etat =useretat;
@@ -489,14 +552,12 @@ class _LoginState extends State<Login> {
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Utilisateur ajouté avec succes :) ");
 
-
   }
 }
 
+showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget emailField ,Widget groupsropdown , Widget functionsropdown , Widget Roledropdown , Widget passwordField, Widget confirmpasswordField , Widget signUpButton , dynamic  _formKey,Widget Etatuserdropdown   ){
 
-showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget emailField ,Widget groupsropdown , Widget fonctionField , Widget Roledropdown , Widget passwordField, Widget confirmpasswordField , Widget signUpButton , dynamic  _formKey,Widget Etatuserdropdown   ){
   if(myvisibility==true){
-
     return  Container (
       child: SingleChildScrollView(
         child: Container(
@@ -522,7 +583,7 @@ showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget e
                   SizedBox(height: 20),
                   groupsropdown,
                   SizedBox(height: 20),
-                  fonctionField,
+                  functionsropdown,
                   SizedBox(height: 20),
                   Roledropdown,
                   SizedBox(height: 20),
@@ -542,7 +603,6 @@ showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget e
         ),
       ),
     );
-
   }
   else if(myvisibility==false){
 
