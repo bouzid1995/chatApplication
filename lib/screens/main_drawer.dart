@@ -1,12 +1,14 @@
 
 import 'package:chatapplication/screens/WelcomeScreen.dart';
 import 'package:chatapplication/screens/profiledit.dart';
+import 'package:chatapplication/screens/searchuser.dart';
 import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'add_sceen.dart';
+import 'listuser.dart';
 
 class MainDrawer extends StatefulWidget {
   const MainDrawer({Key? key}) : super(key: key);
@@ -27,6 +29,7 @@ class _MainDrawerState extends State<MainDrawer> {
   String? uiduser = '' ;
   String? email ='' ;
   String? Role ='' ;
+  bool visibility = false;
 
   fetchdata() async {
     final firebaseUser = await FirebaseAuth.instance.currentUser!;
@@ -49,6 +52,13 @@ class _MainDrawerState extends State<MainDrawer> {
       }).catchError((e) {
         print(e);
       });
+    if(Role=='Admin'){
+      visibility = true;
+    }
+    else if(Role=='user'){
+      visibility=false;
+    }
+
   }
 
   @override
@@ -122,7 +132,7 @@ class _MainDrawerState extends State<MainDrawer> {
           ),
 
          Visibility(
-           visible:false ,
+           visible: visibility ,
            child:ListTile(
              leading: Icon(Icons.person_add),
              title: Text('Ajouter utilisateur ',style: TextStyle(fontSize: 18),),
@@ -133,6 +143,21 @@ class _MainDrawerState extends State<MainDrawer> {
                          WelcomeScreen(MyIndex: 1,)));
              }
          ), ),
+          //
+          Visibility(
+            visible:visibility ,
+            child: ListTile(
+              leading: Icon(Icons.person_pin_rounded),
+              title: Text('Liste des utilisateurs  ',style: TextStyle(fontSize: 18),),
+              onTap:(){ Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ListUser()));
+              }
+          ),
+          ),
+
 
 
 
@@ -141,14 +166,14 @@ class _MainDrawerState extends State<MainDrawer> {
             title: Text('Déconnexion',style: TextStyle(fontSize: 18),),
             onTap:() async {
               await FirebaseAuth.instance.signOut();
-              await FirebaseAuth.instance.signOut();
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           SignInScreen()));
             },
-          )
+          ),
+
         ],
       ),
     );

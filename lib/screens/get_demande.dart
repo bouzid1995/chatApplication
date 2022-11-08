@@ -1,20 +1,15 @@
 import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:chatapplication/screens/updateSuggestion.dart';
-import 'package:chatapplication/screens/updategroup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import '../model/basket.dart';
 import '../model/UsersModels.dart';
 import 'Details.dart';
-import 'WelcomeScreen.dart';
 import 'add_sceen.dart';
-import 'customeerror.dart';
 import 'main_drawer.dart';
 
 class GetDemande extends StatefulWidget {
@@ -140,127 +135,26 @@ class _GetDemandeState extends State<GetDemande> {
     await collection.doc(ID).delete();
   }
 
-  test(){
-    print('test');
-  }
 
-  _onAlertButtonPressed(context) {
-    Alert(
-      context: context,
-      type: AlertType.error,
-      title: "RFLUTTER ALERT",
-      desc: "Flutter is more awesome with RFlutter Alert.",
-      buttons: [
-        DialogButton(
-          child: Text(
-            "COOL",
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-         onPressed: () => test(),
-          width: 120,
-        )
-      ],
-    ).show();
-  }
+
 
 
   @override
   Widget build(BuildContext context) {
-    final DescriptionField = TextFormField(
-      autofocus: false,
-      controller: descriptionEditingController,
-      minLines: 2,
-      maxLines: 5,
-      keyboardType: TextInputType.text,
-      validator: (value) {
-        RegExp regex = new RegExp(r'^.{10,}$');
-        if (value!.isEmpty) {
-          return ("Description ne peut pas être vide");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Enter Valid Description (Min. 10 Character)");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        descriptionEditingController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.description),
-        suffixIcon: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () => descriptionEditingController.clear(),
-        ),
-        contentPadding: EdgeInsets.fromLTRB(20, 45, 30, 15),
-        hintText: "Description Suggestion ",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
 
-    final SituationAvantField = TextFormField(
-      autofocus: false,
-      controller: AvantEditingController,
-      minLines: 2,
-      maxLines: 5,
-      keyboardType: TextInputType.multiline,
-      validator: (value) {
-        RegExp regex = new RegExp(r'^.{10,}$');
-        if (value!.isEmpty) {
-          return ("Situation Avant ne peut pas être vide");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Enter Valid Situation Avant (Min. 10 Character)");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        AvantEditingController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.safety_check_sharp),
-        suffixIcon: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () => descriptionEditingController.clear(),
-        ),
-        contentPadding: EdgeInsets.fromLTRB(20, 45, 20, 15),
-        hintText: "Situation Avant ",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
 
-    final SituationApresField = TextFormField(
-      autofocus: false,
-      controller: ApresEditingController,
-      minLines: 2,
-      maxLines: 5,
-      keyboardType: TextInputType.multiline,
-      validator: (value) {
-        RegExp regex = new RegExp(r'^.{10,}$');
-        if (value!.isEmpty) {
-          return ("Situation ne peut pas être vide ");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Enter Valid Situation Apres (Min. 10 Character)");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        ApresEditingController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.safety_check_rounded),
-        suffixIcon: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () => descriptionEditingController.clear(),
-        ),
-        contentPadding: EdgeInsets.fromLTRB(20, 45, 20, 15),
-        hintText: "Situation Apres ",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
+    _navigate() {
+      final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+      Future.delayed(const Duration(seconds: 2)).then((value) async {
+        await FirebaseAuth.instance.signOut();
+        Navigator.pushNamed(context, SignInScreen.screenRoute);
+
+        // Navigator.pushNamed(context, RoutePaths.homepage);
+       // navigatorKey.currentState?.pushNamed('/SignInScreen');
+
+      });
+    }
+
 
 
 
@@ -323,9 +217,8 @@ class _GetDemandeState extends State<GetDemande> {
                   icon: const Icon(Icons.close))
             ],*/
         ),
-        body: this.RoleList[0]['etat'] == 'Actif'
-
-              ? TabBarView(
+        body:
+          TabBarView(
           children: [
             StreamBuilder<QuerySnapshot>(
                 stream: StreamGroupe,
@@ -732,13 +625,7 @@ class _GetDemandeState extends State<GetDemande> {
                   return Container();
                 }),
           ],
-        )
-        : AbsorbPointer(
-          child: Center
-          (
-          child: Text('Not authorized0'),
-      ),
-    ),
+        ),
 
 
         /// Redirection vers la page d'ajout d'une suggestion
@@ -753,3 +640,5 @@ class _GetDemandeState extends State<GetDemande> {
     );
   }
 }
+
+

@@ -139,7 +139,7 @@ class _GroupeScreenState extends State<GroupeScreen> {
     return Scaffold(
         drawer:MainDrawer(),
         appBar: AppBar(
-          backgroundColor: Colors.blue[300],
+          backgroundColor: Colors.blue,
           title: Row(
         children:  const [ SizedBox(width: 20),
       Text('Liste des Groupes   ')

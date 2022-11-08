@@ -17,6 +17,8 @@ class _SearchUserState extends State<SearchUser> {
 
   String name = "";
   String myGroupe="";
+  String etat="";
+
 
   fetch() async {
     final firebaseUser = await FirebaseAuth.instance.currentUser!;
@@ -29,6 +31,7 @@ class _SearchUserState extends State<SearchUser> {
         if (ds.exists) {
           return  setState(() {
             myGroupe = ds.data()!['Groupe'];
+            etat = ds.data()!['etat'];
 
           });
         }
@@ -48,7 +51,7 @@ class _SearchUserState extends State<SearchUser> {
         drawer:MainDrawer(),
 
         appBar: AppBar(
-            backgroundColor: Colors.blue[300],
+            backgroundColor: Colors.blue,
             title: Card(
               child: TextField(
                 decoration: const InputDecoration(
@@ -145,7 +148,6 @@ class _SearchUserState extends State<SearchUser> {
 
                       )
 
-
                     );
                   }
                   if (data['firstName'].toString().toLowerCase().startsWith(name.toLowerCase()) &&  data['Groupe']== myGroupe )
@@ -234,6 +236,8 @@ class _SearchUserState extends State<SearchUser> {
                   );
                 });
           },
-        ));
+        )
+    );
+
   }
 }

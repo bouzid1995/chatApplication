@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:chatapplication/screens/WelcomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:getwidget/position/gf_badge_position.dart';
 
 import '../widgets/my_button.dart';
 
@@ -21,38 +25,69 @@ class _SignInScreenState extends State<SignInScreen> {
   late String password;
   late String email;
   bool _obscureText = true ;
-   String ? etat;
+   String  etat = '';
+   String  myetat='';
 
-  fetch() async {
-    final firebaseUser = await FirebaseAuth.instance.currentUser!;
+  fetch(dynamic user) async {
+
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(firebaseUser.uid)
+        .doc(user)
         .get()
         .then((ds) async {
       if (ds.exists) {
-        return setState(() {
+
+         // setState(() {  });
 
           etat = ds.data()!['etat'];
           print('etat est ${etat}');
 
-        });
+          if(mounted){
+            setState(() {
+              myetat=etat;
+            });
+          }
+
       }
     }).catchError((e) {
       print(e);
     });
+
+    if (myetat=='NonActif') {
+      print('test1');
+      await Fluttertoast.showToast(
+          msg: "votre compte est désactivé contactez votre administration",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          timeInSecForIosWeb: 3,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+
+    // do something else
+    if (myetat=='Actif') {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => WelcomeScreen(MyIndex: 0,)));
+    }
+
+
+
   }
+
 
   @override
   initState() {
     emailInputController = new TextEditingController();
     pwdInputController = new TextEditingController();
     super.initState();
-    fetch();
-  }
+
+      }
 
   Future<String> signIn(String email, String password) async {
-
 
 
     try{
@@ -60,7 +95,6 @@ class _SignInScreenState extends State<SignInScreen> {
            UserCredential result = await FirebaseAuth.instance
          .signInWithEmailAndPassword(email: email+'@mspe.tn', password: password);
      User? user = result.user;
-     print('hahahahaha');
      return user!.uid;
 
 
@@ -68,10 +102,6 @@ class _SignInScreenState extends State<SignInScreen> {
       return Future.error(error);
     }
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -106,11 +136,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       if (value!.isEmpty) {
                         return (" Enter votre Matricule");
                       }
-                      // reg expression for email validation
-                     /* if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z.-]+.[a-z]")
-                          .hasMatch(value)) {
-                        return (" Enterer un email Valide ");
-                      }*/
+
                       return null;
                     },
                     onChanged: (value) {
@@ -167,18 +193,16 @@ class _SignInScreenState extends State<SignInScreen> {
                       MyButton (
                         color: Colors.blue[300]!,
                         title: 'Connexion',
-                        //child: Theme.of(context).primaryColor,
-                        //textColor: Colors.white,
-//name.test@live.com
-                        onPressed: () async {
+
+                        onPressed: ()  async {
                           if (_loginFormKey.currentState!.validate()) {
 
-                            await signIn(email,password).then((onSuccess){
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => WelcomeScreen(MyIndex: 0,)));
-                            }).catchError((err) {
+
+                             signIn(email,password).then((onSuccess) async {
+
+                               fetch(FirebaseAuth.instance.currentUser!.uid);
+
+    }).catchError((err) {
                               print(err);
                               showDialog(
                                   context: context,
@@ -197,6 +221,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                     );
                                   });
                             });
+
+
+
 
 
 

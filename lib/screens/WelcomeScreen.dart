@@ -2,6 +2,7 @@ import 'package:chatapplication/screens/add_sceen.dart';
 import 'package:chatapplication/screens/chat_screen.dart';
 import 'package:chatapplication/screens/get_demande.dart';
 import 'package:chatapplication/screens/groupescreen.dart';
+import 'package:chatapplication/screens/listuser.dart';
 import 'package:chatapplication/screens/profiledit.dart';
 import 'package:chatapplication/screens/searchuser.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';

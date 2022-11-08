@@ -1,10 +1,6 @@
-import 'package:chatapplication/screens/signin_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
@@ -20,19 +16,8 @@ class ChatScreen extends StatefulWidget {
 
   var Idgroupe,Name;
 
- AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'high_importance_channel',
-  'High Importance Notification',
-    importance : Importance.high,
-  playSound : true);
-
-final AndroidFlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin() as AndroidFlutterLocalNotificationsPlugin;
 
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message ) async {
-  await Firebase.initializeApp();
-  print('A bg message just show up:${message.messageId}');
-}
 
  // const ChatScreen({Key? key , Idgroupe}) : super(key: key);
 
@@ -50,8 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
   String? messageText;
 
   List<dynamic> UserList = [
-    {"uid": "", "secondName": "", "email": "", "firstName": "", "Role": ""}
-  ];
+    {"uid": "", "secondName": "", "email": "", "firstName": "", "Role": ""} ];
 
   @override
   void initState() {
