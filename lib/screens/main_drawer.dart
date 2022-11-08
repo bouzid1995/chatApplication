@@ -26,6 +26,7 @@ class _MainDrawerState extends State<MainDrawer> {
   String? myNumTel ='';
   String? uiduser = '' ;
   String? email ='' ;
+  String? Role ='' ;
 
   fetchdata() async {
     final firebaseUser = await FirebaseAuth.instance.currentUser!;
@@ -42,6 +43,7 @@ class _MainDrawerState extends State<MainDrawer> {
             myGroupe = ds.data()!['Groupe'];
             myNumTel = ds.data()!['NumTel'];
             email = firebaseUser.email;
+            Role = ds.data()!['Role'];
           });
         }
       }).catchError((e) {
@@ -119,17 +121,19 @@ class _MainDrawerState extends State<MainDrawer> {
             }
           ),
 
+         Visibility(
+           visible:false ,
+           child:ListTile(
+             leading: Icon(Icons.person_add),
+             title: Text('Ajouter utilisateur ',style: TextStyle(fontSize: 18),),
+             onTap:(){ Navigator.push(
+                 context,
+                 MaterialPageRoute(
+                     builder: (context) =>
+                         WelcomeScreen(MyIndex: 1,)));
+             }
+         ), ),
 
-          ListTile(
-              leading: Icon(Icons.description),
-              title: Text('Ajouter utilisateur ',style: TextStyle(fontSize: 18),),
-              onTap:(){ Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          WelcomeScreen(MyIndex: 1,)));
-              }
-          ),
 
 
           ListTile(

@@ -284,7 +284,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                             },
 
                             child: const Text(
-                              "Update Groupe",
+                              "Mettre a jour Groupe",
                               textAlign: TextAlign.end,
                               style: TextStyle(
                                   fontSize: 10,

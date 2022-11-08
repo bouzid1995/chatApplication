@@ -188,31 +188,6 @@ class _LoginState extends State<Login> {
     );
 
 
-    final fonctionField = TextFormField(
-      autofocus: false,
-      controller: fonctionEditingController,
-      keyboardType: TextInputType.text,
-      validator: (value) {
-        RegExp regex =  RegExp(r'^.{3,}$');
-      /*  if (value!.isEmpty) {
-          return ("Fonction ne peut pas être vide");
-        }*/
-        if (!regex.hasMatch(value!)) {
-          return ("Entrer une Fonction Valide(Min. 3 Charactere)");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        fonctionEditingController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.functions),
-        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Fonction",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
 
     final passwordField = TextFormField(
       autofocus: false,
@@ -432,7 +407,7 @@ class _LoginState extends State<Login> {
         color: Colors.blueAccent,
       ),
       decoration: const InputDecoration(
-        labelText: 'function ',
+        labelText: 'fonction ',
         prefixIcon: Icon(
           Icons.groups,
         ),

@@ -59,6 +59,9 @@ dependencies:
   fluttericon: ^2.0.0
   persistent_bottom_nav_bar: ^5.0.2
   snippet_coder_utils: ^1.0.12
+  firebase_messaging: ^13.1.0
+  flutter_local_notifications: ^12.0.3
+  rflutter_alert: ^2.0.4
 
 
 

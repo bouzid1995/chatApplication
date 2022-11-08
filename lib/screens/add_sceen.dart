@@ -139,7 +139,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
           onPressed: ()=>descriptionEditingController.clear(),
         ),
         contentPadding: EdgeInsets.fromLTRB(20, 30, 20, 15),
-        hintText: "Situation Apres ",
+        hintText: "Situation Après ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );

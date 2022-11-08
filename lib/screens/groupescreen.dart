@@ -216,7 +216,7 @@ class _GroupeScreenState extends State<GroupeScreen> {
                                         actions: <Widget>[
 
                                           TextButton(
-                                            child:  const Text("Continue"),
+                                            child:  const Text("Continuer"),
                                             onPressed: () {
                                               deletGroupe(doc.id);
                                               if (formKey != false) {
@@ -231,7 +231,7 @@ class _GroupeScreenState extends State<GroupeScreen> {
                                             },
                                           ),
                                           TextButton(
-                                            child: const Text("Cancel"),
+                                            child: const Text("Annuler"),
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },

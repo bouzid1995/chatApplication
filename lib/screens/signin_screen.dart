@@ -21,26 +21,56 @@ class _SignInScreenState extends State<SignInScreen> {
   late String password;
   late String email;
   bool _obscureText = true ;
+   String ? etat;
+
+  fetch() async {
+    final firebaseUser = await FirebaseAuth.instance.currentUser!;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(firebaseUser.uid)
+        .get()
+        .then((ds) async {
+      if (ds.exists) {
+        return setState(() {
+
+          etat = ds.data()!['etat'];
+          print('etat est ${etat}');
+
+        });
+      }
+    }).catchError((e) {
+      print(e);
+    });
+  }
 
   @override
   initState() {
     emailInputController = new TextEditingController();
     pwdInputController = new TextEditingController();
     super.initState();
+    fetch();
   }
 
   Future<String> signIn(String email, String password) async {
-    try{
-      UserCredential result = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email+'@mspe.tn', password: password);
-      User? user = result.user;
 
-      return user!.uid;
+
+
+    try{
+
+           UserCredential result = await FirebaseAuth.instance
+         .signInWithEmailAndPassword(email: email+'@mspe.tn', password: password);
+     User? user = result.user;
+     print('hahahahaha');
+     return user!.uid;
+
 
     }on FirebaseAuthException  catch(error){
       return Future.error(error);
     }
   }
+
+
+
 
 
   @override
@@ -142,24 +172,6 @@ class _SignInScreenState extends State<SignInScreen> {
 //name.test@live.com
                         onPressed: () async {
                           if (_loginFormKey.currentState!.validate()) {
-
-                          /* FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                                email: email,
-                                password: password)
-                                .then((currentUser) =>  FirebaseFirestore.instance
-                                .collection("users")
-                                .doc( FirebaseAuth.instance.currentUser?.uid)
-                                .get()
-                                .then((DocumentSnapshot result) =>
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => WelcomeScreen())))
-                                .catchError((err){
-                                 print(err);
-
-                                        }));*/
 
                             await signIn(email,password).then((onSuccess){
                               Navigator.pushReplacement(

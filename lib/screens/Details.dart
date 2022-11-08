@@ -107,7 +107,7 @@ class _DetailDemandeState extends State<DetailDemande> {
         this.RoleList = dataList;
       });
 
-      (RoleList[0]['Role'] == 'Admin' && Etat != 'Approuved')
+      (RoleList[0]['Role'] == 'Admin' && Etat == 'En attente')
           ? myvisibility = true
           : myvisibility = false;
 
@@ -490,7 +490,7 @@ class _DetailDemandeState extends State<DetailDemande> {
                               }
                             },
                             child: const Text(
-                              "Approuver suggestion ",
+                              "confirmer suggestion ",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold ),

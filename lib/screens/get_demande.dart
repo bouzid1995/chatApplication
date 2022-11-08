@@ -8,11 +8,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../model/basket.dart';
 import '../model/UsersModels.dart';
 import 'Details.dart';
 import 'WelcomeScreen.dart';
 import 'add_sceen.dart';
+import 'customeerror.dart';
 import 'main_drawer.dart';
 
 class GetDemande extends StatefulWidget {
@@ -83,6 +85,7 @@ class _GetDemandeState extends State<GetDemande> {
 
       if (this.RoleList[0]['Role'] == 'Admin') {
         print('user connected is Admin');
+        print('etat user est ${this.RoleList[0]['etat']}');
 
         this.StreamGroupe = await FirebaseFirestore.instance
             .collection('basket_items')
@@ -90,7 +93,7 @@ class _GetDemandeState extends State<GetDemande> {
             .snapshots();
       } else if (this.RoleList[0]['Role'] == 'user') {
         print('User connected is  user');
-
+        print('etat user est ${this.RoleList[0]['etat']}');
         setState(() {
           this.StreamGroupe = FirebaseFirestore.instance
               .collection('basket_items')
@@ -98,12 +101,14 @@ class _GetDemandeState extends State<GetDemande> {
               .snapshots();
         });
       }
+      //NonActif
 
       return StreamGroupe;
     } catch (e) {
       print(e.toString());
       return null;
     }
+
   }
 
   Date() {
@@ -134,6 +139,30 @@ class _GetDemandeState extends State<GetDemande> {
     var collection = FirebaseFirestore.instance.collection('basket_items');
     await collection.doc(ID).delete();
   }
+
+  test(){
+    print('test');
+  }
+
+  _onAlertButtonPressed(context) {
+    Alert(
+      context: context,
+      type: AlertType.error,
+      title: "RFLUTTER ALERT",
+      desc: "Flutter is more awesome with RFlutter Alert.",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "COOL",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+         onPressed: () => test(),
+          width: 120,
+        )
+      ],
+    ).show();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -294,7 +323,9 @@ class _GetDemandeState extends State<GetDemande> {
                   icon: const Icon(Icons.close))
             ],*/
         ),
-        body: TabBarView(
+        body: this.RoleList[0]['etat'] == 'Actif'
+
+              ? TabBarView(
           children: [
             StreamBuilder<QuerySnapshot>(
                 stream: StreamGroupe,
@@ -473,7 +504,9 @@ class _GetDemandeState extends State<GetDemande> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Text(data['DateProp'].toString()),
-                                      IconButton(
+                                      Visibility(
+                                        visible: data['Etat'] == 'En attente' ? true : false ,
+                                          child:IconButton(
                                         icon: Icon(
                                           Icons.edit,
                                           size: 20.0,
@@ -500,46 +533,49 @@ class _GetDemandeState extends State<GetDemande> {
                                                                 .toString(),
                                                           )));
                                         },
-                                      ),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.delete,
-                                          size: 20.0,
-                                          color: Colors.brown[900],
+                                      )),
+                                      Visibility(
+                                        visible: data['Etat'] == 'En attente' ? true : false ,
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.delete,
+                                            size: 20.0,
+                                            color: Colors.brown[900],
+                                          ),
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: const Text(
+                                                      "Suppression Suggestion "),
+                                                  content: const Text(
+                                                      "Voulez vous supprimez cette Suggestion ?"),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      child:
+                                                          const Text("Continuer"),
+                                                      onPressed: () {
+                                                        deletSugg(snapshots.data!
+                                                            .docs[index].id);
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      child:
+                                                          const Text("Annuler"),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
                                         ),
-                                        onPressed: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: const Text(
-                                                    "Suppression Suggestion "),
-                                                content: const Text(
-                                                    "Voulez vous supprimez cette Suggestion ?"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    child:
-                                                        const Text("Continuer"),
-                                                    onPressed: () {
-                                                      deletSugg(snapshots.data!
-                                                          .docs[index].id);
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
-                                                  TextButton(
-                                                    child:
-                                                        const Text("Annuler"),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
                                       ),
                                     ],
                                   ),
@@ -696,7 +732,14 @@ class _GetDemandeState extends State<GetDemande> {
                   return Container();
                 }),
           ],
-        ),
+        )
+        : AbsorbPointer(
+          child: Center
+          (
+          child: Text('Not authorized0'),
+      ),
+    ),
+
 
         /// Redirection vers la page d'ajout d'une suggestion
         floatingActionButton: FloatingActionButton(
