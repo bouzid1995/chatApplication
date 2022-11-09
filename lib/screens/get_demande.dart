@@ -30,6 +30,7 @@ class _GetDemandeState extends State<GetDemande> {
   ];
   Color mycolor = Colors.white;
   String text = "";
+  String etat ="";
 
   Stream<QuerySnapshot> StreamGroupe = FirebaseFirestore.instance
       .collection('basket_items')
@@ -51,11 +52,7 @@ class _GetDemandeState extends State<GetDemande> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    getstream(_auth.currentUser?.uid.toString());
-    super.initState();
-  }
+
 
   getstream(dynamic username) async {
     List dataList = [];
@@ -136,7 +133,47 @@ class _GetDemandeState extends State<GetDemande> {
   }
 
 
+  fetchstate() async {
+    final firebaseUser = await FirebaseAuth.instance.currentUser!;
+    if (firebaseUser != null)
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .get()
+          .then((ds) async {
+        if (ds.exists) {
+          return  setState(() {
+            etat = ds.data()!['etat'];
 
+          });
+        }
+      }).catchError((e) {
+        print(e);
+      });
+    setState(() {
+      etat;
+    });
+
+    if(etat=='NonActif'){
+      await FirebaseAuth.instance.signOut();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  SignInScreen()));
+
+    }
+
+
+  }
+
+
+  @override
+  void initState() {
+    getstream(_auth.currentUser?.uid.toString());
+    super.initState();
+    fetchstate();
+  }
 
 
   @override

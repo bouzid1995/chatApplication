@@ -1,3 +1,4 @@
+import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -97,8 +98,41 @@ class _LoginState extends State<Login> {
   List<String>? Functions = [];
   String? selectedGroupe;
   String? selectedFunction ;
+  String etat ="";
+
+  fetchstate() async {
+    final firebaseUser = await FirebaseAuth.instance.currentUser!;
+    if (firebaseUser != null)
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .get()
+          .then((ds) async {
+        if (ds.exists) {
+          return  setState(() {
+            etat = ds.data()!['etat'];
+
+          });
+        }
+      }).catchError((e) {
+        print(e);
+      });
+    setState(() {
+      etat;
+    });
+
+    if(etat=='NonActif'){
+      await FirebaseAuth.instance.signOut();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  SignInScreen()));
+
+    }
 
 
+  }
 
   @override
   void initState() {

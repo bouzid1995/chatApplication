@@ -1,3 +1,4 @@
+import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,21 @@ class _SearchUserState extends State<SearchUser> {
       }).catchError((e) {
         print(e);
       });
+
+    setState(() {
+      etat;
+    });
+
+    if(etat=='NonActif'){
+      await FirebaseAuth.instance.signOut();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  SignInScreen()));
+
+    }
+
   }
   @override
   void initState() {

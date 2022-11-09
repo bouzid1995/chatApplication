@@ -146,7 +146,9 @@ class _AddGroupState extends State<AddGroup> {
               await FirebaseFirestore.instance.collection('users').where('Groupe',isEqualTo:groupes.toString() ).get();
           final List<DocumentSnapshot> documents = result.docs;
           documents.forEach((data) =>
-                  UsersName.add(data['firstName']));
+                  UsersName.add(data['firstName']),
+
+          );
         print('UsersName');
         print(UsersName);
         setState(() {
@@ -317,6 +319,7 @@ class _AddGroupState extends State<AddGroup> {
                                     dataSource: [
                                       for (String i in usersList) {'value': i},
                                     ],
+
                                     textField: 'value',
                                     valueField: 'value',
                                     okButtonLabel: 'Valider',
@@ -326,9 +329,9 @@ class _AddGroupState extends State<AddGroup> {
                                     initialValue: users,
                                     onSaved: (value) {
                                       if (value == null) return;
-
                                       value.add(UserList[0]['firstName']);
                                       users = value ;
+
                                     },
                                   ),
                                   );

@@ -37,6 +37,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   bool _obscureText1 = true;
   bool? checkedValue=false ;
   bool? visibl =false ;
+  String etat="";
 
 
   fetch() async {
@@ -54,11 +55,26 @@ class _ProfileEditState extends State<ProfileEdit> {
              myGroupe = ds.data()!['Groupe'];
              myNumTel = ds.data()!['NumTel'];
              uiduser = firebaseUser.uid;
+             etat = ds.data()!['etat'];
           });
         }
       }).catchError((e) {
         print(e);
       });
+
+    setState(() {
+      etat;
+    });
+
+    if(etat=='NonActif'){
+      FirebaseAuth.instance.signOut();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  SignInScreen()));
+    }
+
   }
 
 
