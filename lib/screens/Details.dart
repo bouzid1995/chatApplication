@@ -188,7 +188,7 @@ class _DetailDemandeState extends State<DetailDemande> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Details Suggestion '),
+        title: Text('Détails Suggestion '),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -373,7 +373,7 @@ class _DetailDemandeState extends State<DetailDemande> {
                       height: 35.0,
                     ),
                     const Text(
-                      "Situation Apres:",
+                      "Situation Après:",
                       style: TextStyle(
                           color: Colors.blue,
                           fontStyle: FontStyle.normal,
@@ -393,9 +393,9 @@ class _DetailDemandeState extends State<DetailDemande> {
                       ),
                     ),
 
-                    const SizedBox(
-                      height: 5.0,
-                    ),
+                          const SizedBox(
+                          height: 35.0,
+                          ),
                     Visibility(
                       visible: !myvisibility,
                       child: Text(
@@ -480,7 +480,7 @@ class _DetailDemandeState extends State<DetailDemande> {
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.blue[300],
                           child: MaterialButton(
-                            padding: EdgeInsets.only(left:70,right: 70,bottom: 10),
+                            padding: EdgeInsets.fromLTRB(20, 15, 20, 35),
                            // minWidth: MediaQuery.of(context).size.width,
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {

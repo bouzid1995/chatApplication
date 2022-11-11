@@ -148,10 +148,10 @@ class _LoginState extends State<Login> {
       validator: (value) {
         RegExp regex = new RegExp(r'^.{5,}$');
         if (value!.isEmpty) {
-          return ("Votre Nom et Prenom n'est pas Valide ");
+          return ("Votre Nom et prénom n'est pas Valide ");
         }
         if (!regex.hasMatch(value)) {
-          return (" Nom Prenom doit etre plus que 5 caractere )");
+          return (" Nom prénom doit etre plus que 5 caractere )");
         }
         return null;
       },
@@ -162,7 +162,7 @@ class _LoginState extends State<Login> {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.account_circle),
         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Nom et Prenom",
+        hintText: "Nom et prénom",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
@@ -250,7 +250,7 @@ class _LoginState extends State<Login> {
         child :Icon(_obscureText ? Icons.visibility :Icons.visibility_off),
           ),
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Mot de Passe ",
+        hintText: "Mot de passe ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
@@ -332,7 +332,7 @@ class _LoginState extends State<Login> {
     final Roledropdown = DropdownButtonFormField(
 
         value: role_id,
-        hint: const Text('selectionner un Role'),
+        hint: const Text('selectionner un Rôle'),
         items: Roles.map((e) {
           return DropdownMenuItem(child: Text(e),value:e,);
         }
@@ -347,7 +347,7 @@ class _LoginState extends State<Login> {
           color: Colors.blueAccent,
         ),
       decoration: const InputDecoration(
-        labelText: 'Role ',
+        labelText: 'Rôle ',
         prefixIcon: Icon(
         Icons.verified_user,
         ),

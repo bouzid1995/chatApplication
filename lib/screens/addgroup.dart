@@ -202,7 +202,7 @@ class _AddGroupState extends State<AddGroup> {
                               validator: (value) {
 
                               if (value!.isEmpty) {
-                              return ("Description ne peut pas etre vide");
+                              return ("Déscription ne peut pas etre vide");
                               }
 
                               return null;
@@ -213,14 +213,14 @@ class _AddGroupState extends State<AddGroup> {
                               },
 
                               decoration: const InputDecoration(
-                                labelText: ' Description  de Groupe',
+                                labelText: ' Déscription  de Groupe',
                                 icon: Icon(Icons.account_box),
                               ),
                             ),
                             const SizedBox( height: 50,),
 
                             CheckboxListTile(
-                              title: Text("checker pour ajouter groupe par service  "),
+                              title: Text("Cliquer pour ajouter groupe par service  "),
                               value: checkedValue,
                               onChanged: (checkedValue) {
                                 setState(() {
@@ -241,7 +241,7 @@ class _AddGroupState extends State<AddGroup> {
                     visible:visibl! ,
                      child: DropdownButtonFormField(
                        value: groupes,
-                       hint: const Text('selectionner un Role'),
+                       hint: const Text('Sélectionner un rôle'),
                        items: groups.map((e) {
                          return DropdownMenuItem(child: Text(e),value:e,);
                        }
@@ -257,7 +257,7 @@ class _AddGroupState extends State<AddGroup> {
                          color: Colors.blueAccent,
                        ),
                        decoration: const InputDecoration(
-                         labelText: 'Group ',
+                         labelText: 'Groupe ',
                          prefixIcon: Icon(
                            Icons.groups,
                          ),
@@ -312,7 +312,7 @@ class _AddGroupState extends State<AddGroup> {
                                     ),
                                     validator: (value) {
                                       if (value == null || value.length == 0) {
-                                        return 'Selectionner un ou plus Membre ';
+                                        return 'Sélectionner un ou plusieurs Membre ';
                                       }
                                       return null;
                                     },
@@ -325,7 +325,7 @@ class _AddGroupState extends State<AddGroup> {
                                     okButtonLabel: 'Valider',
                                     cancelButtonLabel: 'Annuler',
                                     hintWidget:
-                                    Text('Selectionner un ou plus Membre'),
+                                    Text('Sélectionner un ou plusieurs Membre'),
                                     initialValue: users,
                                     onSaved: (value) {
                                       if (value == null) return;

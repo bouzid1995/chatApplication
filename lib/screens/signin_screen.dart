@@ -262,12 +262,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 )])
             )))));
 
-  showMyDialog() {
-  exit(0);
-    }
+
 
   }
-
 
 Future<bool> onWillPop() {
   DateTime now = DateTime.now();

@@ -1,7 +1,5 @@
 
 import 'package:chatapplication/screens/WelcomeScreen.dart';
-import 'package:chatapplication/screens/profiledit.dart';
-import 'package:chatapplication/screens/searchuser.dart';
 import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -123,7 +121,7 @@ class _MainDrawerState extends State<MainDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.description),
-            title: Text('Ajouter Suggestion ',style: TextStyle(fontSize: 18),),
+            title: Text('Ajouter suggestion ',style: TextStyle(fontSize: 18),),
             onTap:(){ Navigator.push(
           context,
           MaterialPageRoute(

@@ -145,12 +145,12 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                           controller: TextEditingController(text: Nom),
                           //controller: widget.Description,
                           validator: (value) {
-                            RegExp regex = new RegExp(r'^.{10,}$');
+                            RegExp regex = new RegExp(r'^.{3,}$');
                             if (value!.isEmpty) {
                               return ("Nom ne peut pas être vide ");
                             }
                             if (!regex.hasMatch(value)) {
-                              return (" Nom doit etre  (Min. 10 Character)");
+                              return (" Nom invalide ( Minimun 3 Character)");
                             }
                             return null;
                           },
@@ -175,7 +175,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                               return ("Description ne peut pas être vide ");
                             }
                             if (!regex.hasMatch(value)) {
-                              return ("Description doit etre (Min. 10 Character)");
+                              return ("Description invalide (Minimun 10 Character)");
                             }
                             return null;
                           },
@@ -236,7 +236,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                                 ),
                                 validator: (value) {
                                   if (value == null || value.length == 0) {
-                                    return 'Selectionner un ou plus Membre ';
+                                    return 'Selectionner un ou plusieurs  Membre ';
                                   }
                                   return null;
                                 },
@@ -248,7 +248,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                                 okButtonLabel: 'Valider',
                                 cancelButtonLabel: 'Annuler',
                                 hintWidget:
-                                    Text('Selectionner un ou plus Membre'),
+                                    Text('Selectionner un ou plusieurs Membre'),
                                 initialValue: GroupList,
                                 onSaved: (value) {
                                   if (value == null) return;
@@ -262,37 +262,44 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                         const SizedBox(
                           height: 30,
                         ),
-                        Material(
-                          elevation: 5,
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.blue[300],
-                          child: MaterialButton(
-                            padding: EdgeInsets.fromLTRB(32, 35, 32, 35),
-                            //minWidth: MediaQuery.of(context).size.width,
-                            onPressed: () {
-                               if (formKey.currentState!.validate()) {
-                                //_saveForm;
-                                UpdateGroupe(Nom, Description, GroupList);
-                                Fluttertoast.showToast(
-                                  msg: 'Groupe mise a jour avec succceé ',
-                                  backgroundColor: Colors.green,
-                                  timeInSecForIosWeb: 1,
-                                );
 
-                                Navigator.pop(context);
-                              }
-                            },
 
-                            child: const Text(
-                              "Mettre a jour Groupe",
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                            Material(
+                              elevation: 5,
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.blue[300],
+                              child: MaterialButton(
+                                padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                                //minWidth: MediaQuery.of(context).size.width,
+                                onPressed: () {
+                                  if (formKey.currentState!.validate()) {
+                                    //_saveForm;
+                                    UpdateGroupe(Nom, Description, GroupList);
+                                    Fluttertoast.showToast(
+                                      msg: 'Groupe modifier avec succceé ',
+                                      backgroundColor: Colors.green,
+                                      timeInSecForIosWeb: 1,
+                                    );
+
+                                    Navigator.pop(context);
+                                  }},
+                                child: const Text(
+                                  "Modifier groupe ",
+                                  textAlign: TextAlign.end,
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
+
+
+
+
+
+
+
                       ])));
                 })));
 

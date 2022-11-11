@@ -94,39 +94,50 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   updatepassword (String password) async {
     final user = await FirebaseAuth.instance.currentUser!;
-    //Pass in the password to updatePassword.
-    user.updatePassword(password).then((_){
-      print("Successfully changed password");
-    }).catchError((error){
-      print("Password can't be changed" + error.toString());
-      //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
-    });
+    try{
+      await user.updatePassword(password);
+      print('password changed successufly');
+
+    }catch(error){
+      print(error);
+    }
+
 
   }
-
 
   updateusers(String NumTel,String uiduser,String password ){
 
     if(password!=''){
-      updateuser(NumTel!,uiduser!);
-      updatepassword(password!);
+      updateuser(NumTel,uiduser);
 
-      Fluttertoast.showToast(
-        msg: 'profil mise a jour avec succceé vous devez reconnectez  ',
-        backgroundColor:Colors.green,
-        timeInSecForIosWeb:1,
-      );
-      print('test1');
-      FirebaseAuth.instance.signOut();
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  SignInScreen()));
+      setState(() async {
+        final user = await FirebaseAuth.instance.currentUser!;
+        try{
+          await user.updatePassword(password);
+          print('password changed successufly');
+
+          Fluttertoast.showToast(
+            msg: 'profil mise a jour avec succceé vous devez reconnectez  ',
+            backgroundColor:Colors.green,
+            timeInSecForIosWeb:1,
+          );
+          print('test1');
+          FirebaseAuth.instance.signOut();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      SignInScreen()));
+
+        }catch(error){
+          print(error);
+        }
+      });
+
 
     }
     else {
-      updateuser(NumTel!,uiduser!);
+      updateuser(NumTel,uiduser);
       Fluttertoast.showToast(
         msg: 'profil mise a jour avec succceé ',
         backgroundColor:Colors.green,
@@ -138,8 +149,6 @@ class _ProfileEditState extends State<ProfileEdit> {
       );
 
     }
-
-
 
 
   }
@@ -328,9 +337,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           if (_formKey.currentState!.validate()) {
 
             updateusers(myNumTel!, uiduser!,mypass!);
-
-          }
-                },
+          }    },
 
         child: const Text(
           "Mettre à jour ",
@@ -376,7 +383,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                   SizedBox(height: 10),
 
                                   CheckboxListTile(
-                                    title: Text("checker pour mettre a jour votre mot de passe "),
+                                    title: Text("Cliquer pour mettre a jour votre mot de passe "),
                                     value: checkedValue,
                                     onChanged: (checkedValue) {
                                       setState(() {

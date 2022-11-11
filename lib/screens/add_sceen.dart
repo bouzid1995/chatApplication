@@ -182,7 +182,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.blue,
-        title: Text('Ajout une Nouvelle Suggestion '),
+        title: Text('Ajouter une Nouvelle Suggestion '),
         automaticallyImplyLeading: false,
       ),
 

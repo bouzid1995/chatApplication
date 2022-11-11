@@ -59,7 +59,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(this.widget.SituationApres),
+          title: Text('Modifier suggestion'),
           centerTitle: true,
         ),
         body: Container(
@@ -80,10 +80,10 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                     validator: (value) {
                       RegExp regex = new RegExp(r'^.{10,}$');
                       if (value!.isEmpty) {
-                        return ("Description ne peut pas être vide");
+                        return ("Déscription ne peut pas être vide");
                       }
                       if (!regex.hasMatch(value)) {
-                        return ("Enter Valid Description (Min. 10 Character)");
+                        return (" Description invalide ( Minimun 10 caractère )");
                       }
                       return null;
                     },
@@ -94,7 +94,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.description),
                       contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                      hintText: "Description Suggestion ",
+                      hintText: "Déscription suggestion ",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
@@ -111,10 +111,10 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                     validator: (value) {
                       RegExp regex = new RegExp(r'^.{10,}$');
                       if (value!.isEmpty) {
-                        return ("Situation Avant ne peut pas être vide");
+                        return ("Situation avant ne peut pas être vide");
                       }
                       if (!regex.hasMatch(value)) {
-                        return ("Enter Valid Situation Avant (Min. 10 Character)");
+                        return ("Situation avant invalide ( Minimun 10 caractère )");
                       }
                       return null;
                     },
@@ -125,7 +125,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.safety_check_sharp),
                       contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                      hintText: "Situation Avant ",
+                      hintText: "Situation avant ",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
@@ -143,10 +143,10 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                     validator: (value) {
                       RegExp regex = new RegExp(r'^.{10,}$');
                       if (value!.isEmpty) {
-                        return ("Situation ne peut pas être vide ");
+                        return ("Situation aprés ne peut pas être vide ");
                       }
                       if (!regex.hasMatch(value)) {
-                        return ("Enter Valid Situation Apres (Min. 10 Character)");
+                        return ("Situation aprés invalide (Minimun 10 caractères)");
                       }
                       return null;
                     },
@@ -157,7 +157,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.safety_check_rounded),
                       contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                      hintText: "Situation Apres ",
+                      hintText: "Situation aprés ",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
@@ -181,7 +181,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                             Date());
 
                         Fluttertoast.showToast(
-                          msg: 'suggestion mise a jour avec succceé ',
+                          msg: 'suggestion modifier avec succceé ',
                           backgroundColor: Colors.green,
                           timeInSecForIosWeb: 2,
                         );
@@ -189,7 +189,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                         Navigator.pop(context);
                       }},
                       child: const Text(
-                        "Mise a jour Suggestion ",
+                        "Modifier suggestion ",
                         textAlign: TextAlign.end,
                         style: TextStyle(
                             fontSize: 10,
