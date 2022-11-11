@@ -105,6 +105,44 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
 
+  updateusers(String NumTel,String uiduser,String password ){
+
+    if(password!=''){
+      updateuser(NumTel!,uiduser!);
+      updatepassword(password!);
+
+      Fluttertoast.showToast(
+        msg: 'profil mise a jour avec succceé vous devez reconnectez  ',
+        backgroundColor:Colors.green,
+        timeInSecForIosWeb:1,
+      );
+      print('test1');
+      FirebaseAuth.instance.signOut();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  SignInScreen()));
+
+    }
+    else {
+      updateuser(NumTel!,uiduser!);
+      Fluttertoast.showToast(
+        msg: 'profil mise a jour avec succceé ',
+        backgroundColor:Colors.green,
+        timeInSecForIosWeb: 1,
+      );
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => WelcomeScreen(MyIndex: 3,)),
+      );
+
+    }
+
+
+
+
+  }
 
   @override
   void initState() {
@@ -229,8 +267,16 @@ class _ProfileEditState extends State<ProfileEdit> {
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         labelText: "Mot de Passe ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        suffixIcon: GestureDetector(onTap:(){
+
+          setState(() {
+            _obscureText=!_obscureText;
+          });
+
+        },
+          child :Icon(_obscureText ? Icons.visibility :Icons.visibility_off),
       ),
-    );
+      ) );
 
 
     final confirmpasswordField = TextFormField(
@@ -280,40 +326,9 @@ class _ProfileEditState extends State<ProfileEdit> {
         minWidth: MediaQuery.of(context).size.width-15,
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
-                if(this.mypass!.isNotEmpty){
-                //updateuser(firstName!,myNumTel!,uiduser!);
 
-                  updateuser(myNumTel!,uiduser!);
+            updateusers(myNumTel!, uiduser!,mypass!);
 
-                updatepassword(mypass!);
-                Fluttertoast.showToast(
-                  msg: 'profil mise a jour avec succceé vous devez reconnectez  ',
-                  backgroundColor:Colors.green,
-                  timeInSecForIosWeb:1,
-                );
-                print('test1');
-                FirebaseAuth.instance.signOut();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            SignInScreen()));
-                }
-
-                else if(this.mypass!.isEmpty) {
-                  updateuser(myNumTel!,uiduser!);
-                 // updateuser(firstName!,myNumTel!,uiduser!);
-                  Fluttertoast.showToast(
-                  msg: 'profil mise a jour avec succceé ',
-                  backgroundColor:Colors.green,
-                  timeInSecForIosWeb: 1,
-                  );
-                      Navigator.of(context).push(
-                      MaterialPageRoute(
-                      builder: (context) => WelcomeScreen(MyIndex: 3,)),
-                     );
-                  print('test2');
-                }
           }
                 },
 

@@ -618,6 +618,7 @@ showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget e
     return  Column(
       children:[
         Center(child:CircularProgressIndicator(), ),
+        //Text("Vous etes pas autorisé de cette section")
 
       ]
 

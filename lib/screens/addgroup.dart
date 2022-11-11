@@ -173,7 +173,7 @@ class _AddGroupState extends State<AddGroup> {
                       padding: const EdgeInsets.all(20.0),
                       child: SingleChildScrollView(
                           child: Column(children: <Widget>[
-                            Image.asset('images/groupe.png',width: 200,height: 200,),
+                            Image.asset('images/group2.png',width: 130,height: 130,),
                             SizedBox(height: 20,),
                             TextFormField(
                               controller: NameEditingController,

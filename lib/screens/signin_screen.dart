@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:getwidget/position/gf_badge_position.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/my_button.dart';
 
 
 class SignInScreen extends StatefulWidget {
-  //SignInScreen({required Key key}) : super(key: key);
+
   static const String screenRoute = 'signin_screen';
 
   @override
@@ -27,6 +27,14 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _obscureText = true ;
    String  etat = '';
    String  myetat='';
+  bool isLoggedIn = false;
+  String name = '';
+  late DateTime currentBackPressTime;
+
+  bool wrongEmail=false; // to check if email entered exists
+  bool wrongPassword=false; // to check if password entered is correct
+  bool emailDisabled=false;
+
 
   fetch(dynamic user) async {
 
@@ -79,6 +87,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
 
+
   @override
   initState() {
     emailInputController = new TextEditingController();
@@ -87,12 +96,17 @@ class _SignInScreenState extends State<SignInScreen> {
 
       }
 
+
+
+
+
+
   Future<String> signIn(String email, String password) async {
 
 
     try{
 
-           UserCredential result = await FirebaseAuth.instance
+        UserCredential result = await FirebaseAuth.instance
          .signInWithEmailAndPassword(email: email+'@mspe.tn', password: password);
      User? user = result.user;
      return user!.uid;
@@ -104,8 +118,15 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) =>
+    WillPopScope(
+        onWillPop: ()async {
+          final shouldPop = await onWillPop();
+          return shouldPop ;
+
+        },
+        child:
+        Scaffold(
         body: Container(
             padding: const EdgeInsets.all(20.0),
             child: SingleChildScrollView(
@@ -197,10 +218,19 @@ class _SignInScreenState extends State<SignInScreen> {
                         onPressed: ()  async {
                           if (_loginFormKey.currentState!.validate()) {
 
-
                              signIn(email,password).then((onSuccess) async {
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
 
-                               fetch(FirebaseAuth.instance.currentUser!.uid);
+                              if(await prefs.setString("email", email.toString()))  {
+
+                                fetch(FirebaseAuth.instance.currentUser!.uid);
+                              }
+                              else{
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SignInScreen()));
+                              }
 
     }).catchError((err) {
                               print(err);
@@ -208,7 +238,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: Text("Error"),
+                                      title: Text("Erreur"),
                                       content: Text(err.message),
                                       actions: [
                                         TextButton(
@@ -222,22 +252,33 @@ class _SignInScreenState extends State<SignInScreen> {
                                   });
                             });
 
-
-
-
-
-
-
                           }
 
                         },
-
-
                       ),
 
                     ],
                   ),
                 )])
-            ))));
+            )))));
+
+  showMyDialog() {
+  exit(0);
+    }
+
   }
+
+
+Future<bool> onWillPop() {
+  DateTime now = DateTime.now();
+
+  var currentBackPressTime;
+  if (currentBackPressTime == null ||
+      now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+    currentBackPressTime = now;
+
+    return Future.value(true);
+  }
+  return Future.value(true);
 }
+

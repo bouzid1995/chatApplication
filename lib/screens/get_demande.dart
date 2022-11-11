@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../model/basket.dart';
 import '../model/UsersModels.dart';
 import 'Details.dart';
@@ -52,7 +53,7 @@ class _GetDemandeState extends State<GetDemande> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-
+String email ='';
 
   getstream(dynamic username) async {
     List dataList = [];
@@ -173,24 +174,24 @@ class _GetDemandeState extends State<GetDemande> {
     getstream(_auth.currentUser?.uid.toString());
     super.initState();
     fetchstate();
+    getData();
   }
 
+
+  getData() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      var optionemail = prefs.getString('email')!;
+      setState(() {
+        email = optionemail;
+      });
+      print(email);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
 
-
-    _navigate() {
-      final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-      Future.delayed(const Duration(seconds: 2)).then((value) async {
-        await FirebaseAuth.instance.signOut();
-        Navigator.pushNamed(context, SignInScreen.screenRoute);
-
-        // Navigator.pushNamed(context, RoutePaths.homepage);
-       // navigatorKey.currentState?.pushNamed('/SignInScreen');
-
-      });
-    }
 
 
 
@@ -422,18 +423,12 @@ class _GetDemandeState extends State<GetDemande> {
                                   ),
                                   tileColor: Colors.white,
                                   title: Text(data['Description']
-                                      .toString()
-                                      .substring(
-                                          0,
-                                          data['Description']
-                                                  .toString()
-                                                  .length -
-                                              4)),
+                                      .toString()),
                                   subtitle: Text(data['Etat'].toString()) ,
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      Text(data['DateProp'].toString()),
+                                     // Text(data['DateProp'].toString()),
                                       Visibility(
                                         visible: data['Etat'] == 'En attente' ? true : false ,
                                           child:IconButton(

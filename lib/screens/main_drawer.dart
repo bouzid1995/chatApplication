@@ -6,6 +6,7 @@ import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'add_sceen.dart';
 import 'listuser.dart';
@@ -160,17 +161,27 @@ class _MainDrawerState extends State<MainDrawer> {
 
 
 
-
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Déconnexion',style: TextStyle(fontSize: 18),),
             onTap:() async {
+              final SharedPreferences prefs = await SharedPreferences.getInstance();
+              var optionemail = prefs.getString('email')!;
+              prefs.remove('optionemail');
+              await prefs.clear();
+              Navigator.pop(context,true);
+              print(optionemail);
               await FirebaseAuth.instance.signOut();
-              Navigator.push(
+             /* Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          SignInScreen()));
+                          SignInScreen()));*/
+
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=>SignInScreen()), (route) => false);
+             // Navigator.of(context).pushAndRemoveUntil('/SignInScreen',(Route<dynamic>route)=>false);
+
+
             },
           ),
 

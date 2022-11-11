@@ -9,7 +9,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'basket_page.dart';
+
 import 'login.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -24,6 +24,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+
   final items = const [
     Icon(
       Icons.list_alt_sharp,
@@ -66,11 +67,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* appBar: AppBar(
-     // title: const Text('Curved Navigation Bar'),
-      // backgroundColor: Colors.redAccent,
 
-    ),*/
 
       bottomNavigationBar: CurvedNavigationBar(
         items: items,
@@ -86,8 +83,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         animationCurve: Curves.easeInOut,
         animationDuration: const Duration(milliseconds: 300),
          color: Colors.blue,
-         //color: Colors.blue,
-        // backgroundColor: Colors.blue[300]
+
       ),
       body: Container(
           // color: Colors.redAccent,

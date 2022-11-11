@@ -135,8 +135,10 @@ class _GroupeScreenState extends State<GroupeScreen> {
 
   //group
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context){
+
+     return
+     Scaffold(
         drawer:MainDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.blue,
@@ -153,10 +155,12 @@ class _GroupeScreenState extends State<GroupeScreen> {
               .where("UserID", arrayContains: UserList[0]['firstName'])
               .snapshots(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting ||
-                !snapshot.hasData ||
-                snapshot.data?.size == '' ||
-                snapshot.hasError) {
+            if (snapshot.connectionState == ConnectionState.waiting ) {
+              return Center(child: CircularProgressIndicator(),
+              );
+            }
+            else if( snapshot.data?.size == null ){
+
               return Center(child: CircularProgressIndicator(),
               );
             }
@@ -267,5 +271,11 @@ class _GroupeScreenState extends State<GroupeScreen> {
                         builder: (context) => AddGroup()));
               }),
         ));
+
   }
-}
+
+  }
+
+
+
+
