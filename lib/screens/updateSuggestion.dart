@@ -60,7 +60,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Modifier suggestion'),
-          centerTitle: true,
+          //centerTitle: true,
         ),
         body: Container(
           padding: const EdgeInsets.all(20.0),
@@ -69,7 +69,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
               child: SingleChildScrollView(
 
                 child: Column(children: <Widget>[
-                  Image.asset('images/sug.png',width: 250,height: 250,),
+                  Image.asset('images/discussion.png',width: 250,height: 250,),
 
                   TextFormField(
                     autofocus: false,

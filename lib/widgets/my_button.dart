@@ -22,7 +22,7 @@ class MyButton extends StatelessWidget{
             minWidth: 200,
             height: 42,
             child:  Text(title ,
-              style: TextStyle(color:Colors.white ),
+              style: TextStyle(color:Colors.white,fontSize: 16,fontWeight: FontWeight.bold ),
             ),
           )
       ),

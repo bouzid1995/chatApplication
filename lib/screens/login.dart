@@ -1,4 +1,5 @@
 import 'package:chatapplication/screens/signin_screen.dart';
+import 'package:chatapplication/widgets/my_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -294,7 +295,28 @@ class _LoginState extends State<Login> {
 
 
 
-    final signUpButton = Material(
+    final signUpButton = MyButton(color: Colors.blue[300],
+
+        title: 'Ajouter',
+        onPressed: () async {
+          if (_formKey.currentState!.validate())
+          {
+            //print('Votre form est valide');
+            signUp(emailEditingController.text,passwordEditingController.text);
+            // Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        WelcomeScreen(MyIndex: 1,)));
+            // await  Navigator.pushNamed(context, sear.screenRoute);
+          }
+        }
+
+    );
+
+
+    final signUpButton1 = Material(
       elevation: 5,
        borderRadius: BorderRadius.circular(30),
       color: Colors.blue[300],
@@ -332,7 +354,7 @@ class _LoginState extends State<Login> {
     final Roledropdown = DropdownButtonFormField(
 
         value: role_id,
-        hint: const Text('selectionner un Rôle'),
+        hint: const Text('sélectionner un Rôle'),
         items: Roles.map((e) {
           return DropdownMenuItem(child: Text(e),value:e,);
         }
@@ -359,7 +381,7 @@ class _LoginState extends State<Login> {
         final groupsropdown = DropdownButtonFormField(
 
       value: selectedGroupe,
-      hint: const Text('selectionner un groupe'),
+      hint: const Text('sélectionner un groupe'),
       items: groups.map((e) {
         return DropdownMenuItem(child: Text(e),value:e,);
       }
@@ -413,7 +435,7 @@ class _LoginState extends State<Login> {
         color: Colors.blueAccent,
       ),
       decoration: const InputDecoration(
-        labelText: 'Group ',
+        labelText: 'Groupe ',
         prefixIcon: Icon(
           Icons.groups,
         ),
@@ -424,7 +446,7 @@ class _LoginState extends State<Login> {
     final functionsropdown = DropdownButtonFormField(
 
       value: selectedFunction,
-      hint: const Text('selectionner une function '),
+      hint: const Text('sélectionner une function '),
       items: Functions?.map((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -454,7 +476,7 @@ class _LoginState extends State<Login> {
     final Etatuserdropdown = DropdownButtonFormField(
 
       value: useretat,
-      hint: const Text('selectionner une etat'),
+      hint: const Text('sélectionner un état'),
       items: useretatList.map((e) {
         return DropdownMenuItem(child: Text(e),value:e,);
       }
@@ -537,7 +559,7 @@ class _LoginState extends State<Login> {
   postDetailsToFirestore() async {
     // calling our firestore
     // calling our user model
-    // sedning these values
+    // sedning these values to database
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
@@ -581,7 +603,7 @@ showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget e
                 children: <Widget>[
                 Opacity(
                     opacity: 0.8,
-                    child: Image.asset('images/personne2.png',width: 100,height: 100,)
+                    child: Image.asset('images/add-user.png',width: 100,height: 100,)
                 ),
                   SizedBox(height: 20),
                   firstNameField,
@@ -618,7 +640,7 @@ showwidget(bool myvisibility,Widget firstNameField,Widget NumtelField , Widget e
     return  Column(
       children:[
         Center(child:CircularProgressIndicator(), ),
-        //Text("Vous etes pas autorisé de cette section")
+      //Text("Vous etes pas autorisé de cette section")
 
       ]
 

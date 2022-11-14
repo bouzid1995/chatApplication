@@ -1,5 +1,6 @@
 import 'package:chatapplication/screens/WelcomeScreen.dart';
 import 'package:chatapplication/screens/signin_screen.dart';
+import 'package:chatapplication/widgets/my_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -238,7 +239,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           return ("Numero Tel ne peut pas être vide");
         }
         if (!regex.hasMatch(value)) {
-          return ("Entrer Valide Numero Tel(Min. 8 Character)");
+          return (" Numero Tel iunvalid ( Minimun  8 caractère )");
         }
       },
       onChanged: (value) {
@@ -248,7 +249,6 @@ class _ProfileEditState extends State<ProfileEdit> {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.phone_android),
         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        //hintText: "Nom et Prenom",
         labelText: "Télèphone",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -264,8 +264,9 @@ class _ProfileEditState extends State<ProfileEdit> {
           return (" Mot de passe n'est peut pas etre vide  ");
         }
         if (!regex.hasMatch(value)) {
-          return ("Entrer Valide Mot de Passe(Min. 6 Charactere)");
+          return ("Mot de Passe invalid (Minimun 6 caractère)");
         }
+        return null;
       },
       onChanged: (value) {
         mypass = value;
@@ -274,7 +275,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.vpn_key),
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        labelText: "Mot de Passe ",
+        labelText: "Nouveau mot de passe ",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         suffixIcon: GestureDetector(onTap:(){
 
@@ -357,7 +358,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         ),
         body: SingleChildScrollView(
                 child: Container(
-                    color: Colors.white,
+                    //color: Colors.white,
                     child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Form(
@@ -368,9 +369,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 children: <Widget>[
                                  Opacity(
                                    opacity: 0.8,
-                                 child:Image.asset('images/personnes.png',width: 100,height: 100,),
+                                 child:Image.asset('images/user.png',width: 100,height: 100,),
                                  ),
-
 
                                   SizedBox(height: 30),
                                   firstNameField,
@@ -382,7 +382,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                   NumtelField,
                                   SizedBox(height: 10),
 
-                                  CheckboxListTile(
+                                /*  CheckboxListTile(
                                     title: Text("Cliquer pour mettre a jour votre mot de passe "),
                                     value: checkedValue,
                                     onChanged: (checkedValue) {
@@ -396,7 +396,26 @@ class _ProfileEditState extends State<ProfileEdit> {
                                       });
                                     },
                                     controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+                                  ),*/
+                                  SizedBox(height: 2),
+
+                                  TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        if(visibl==false){
+                                          this.visibl = true;
+                                        }
+                                        else
+                                          this.visibl = false;
+                                        print('visible est ');
+                                        print(visibl);
+
+                                      });
+                                    },
+                                    child: Text('Cliquer ici pour changer votre Mot de passe    \u{1F511} ',style:TextStyle(fontSize:17),),
                                   ),
+
+
                                   SizedBox(height: 2),
 
                                   Visibility(
@@ -411,8 +430,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                                        child: confirmpasswordField
                                   ),
 
-                                  SizedBox(height: 20),
-                                  savedUpButton
+                                  SizedBox(height: 10),
+                                  MyButton(color: Colors.blue[300]!, title: 'Mettre a jour ',
+                                    onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      updateusers(myNumTel!, uiduser!,mypass!);
+                                    }    }, ),
+
+                                  //savedUpButton
                                 ]))))));
   }
 }

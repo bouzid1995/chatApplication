@@ -1,5 +1,6 @@
 
 import 'package:chatapplication/screens/groupescreen.dart';
+import 'package:chatapplication/widgets/my_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +140,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                       padding: const EdgeInsets.all(20.0),
                       child: SingleChildScrollView(
                           child: Column(children: <Widget>[
-                            Image.asset('images/add_group.png',width: 150,height: 150,),
+                            Image.asset('images/edit.png',width: 150,height: 150,),
                             SizedBox(height: 20,),
                         TextFormField(
                           controller: TextEditingController(text: Nom),
@@ -264,7 +265,22 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                         ),
 
 
-                            Material(
+
+                            MyButton(color:Colors.blue[300],onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                //_saveForm;
+                                UpdateGroupe(Nom, Description, GroupList);
+                                Fluttertoast.showToast(
+                                  msg: 'Groupe modifier avec succceé ',
+                                  backgroundColor: Colors.green,
+                                  timeInSecForIosWeb: 1,
+                                );
+
+                                Navigator.pop(context);
+                              }}, title: 'Modifier groupe',
+                            ),
+
+                            /*Material(
                               elevation: 5,
                               borderRadius: BorderRadius.circular(30),
                               color: Colors.blue[300],
@@ -292,7 +308,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                            ),
+                            ),*/
 
 
 
@@ -312,9 +328,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                     controller: TextEditingController(text:widget.Name),
                     //controller: widget.Description,
                     onChanged: (value) {
-
                       this.widget.Name =value;
-
                     },
 
                     decoration: const InputDecoration(

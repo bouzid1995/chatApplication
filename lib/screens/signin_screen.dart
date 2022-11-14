@@ -31,9 +31,7 @@ class _SignInScreenState extends State<SignInScreen> {
   String name = '';
   late DateTime currentBackPressTime;
 
-  bool wrongEmail=false; // to check if email entered exists
-  bool wrongPassword=false; // to check if password entered is correct
-  bool emailDisabled=false;
+
 
 
   fetch(dynamic user) async {

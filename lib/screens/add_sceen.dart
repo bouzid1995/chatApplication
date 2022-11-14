@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:chatapplication/screens/WelcomeScreen.dart';
 import 'package:chatapplication/screens/get_demande.dart';
 import 'package:chatapplication/screens/signin_screen.dart';
+import 'package:chatapplication/widgets/my_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -154,12 +155,10 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
-
           if (_formKey.currentState!.validate()) {
             CreateDemande();
             Fluttertoast.showToast(msg: 'Suggestion ajouteé avec  succees ');
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => WelcomeScreen(MyIndex: 0,)));
-
 
     }
         },
@@ -182,7 +181,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.blue,
-        title: Text('Ajouter une Nouvelle Suggestion '),
+        title: Text('Nouvelle Suggestion '),
         automaticallyImplyLeading: false,
       ),
 
@@ -196,7 +195,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
                   //mainAxisAlignment: MainAxisAlignment.center,
                   //crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                      Image.asset('images/sug.png',width: 150,height: 150,),
+                      Image.asset('images/suggestion.png',width: 150,height: 150,),
                     const SizedBox(height: 25),
                     DescriptionField,
                     const SizedBox(height: 20),
@@ -205,7 +204,17 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
                     SituationApresField,
                     const SizedBox(height: 20),
                     // Button d'ahjout
-                    addButton,
+                    MyButton(color: Colors.blue[300], title: 'Ajouter',
+                      onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        CreateDemande();
+                        Fluttertoast.showToast(msg: 'Suggestion ajouteé avec  succees ');
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => WelcomeScreen(MyIndex: 0,)));
+
+                      }
+                    },)
+
+                    //addButton,
                     //SizedBox(height: 15)
 
                   ],

@@ -114,7 +114,6 @@ class _GroupeScreenState extends State<GroupeScreen> {
 
   CreateGroupe() async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    final user = FirebaseAuth.instance.currentUser!;
 
 
     Map<String, dynamic> data = {

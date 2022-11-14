@@ -11,6 +11,8 @@ import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 
+import '../widgets/my_button.dart';
+
 class AddGroup extends StatefulWidget {
 
 
@@ -165,7 +167,7 @@ class _AddGroupState extends State<AddGroup> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Ajouter Groupe'),
-          centerTitle: true,
+          //centerTitle: true,
         ),
         body: Form(
             key: formKey,
@@ -339,7 +341,41 @@ class _AddGroupState extends State<AddGroup> {
                             const SizedBox(
                               height: 30,
                             ),
-                            Material(
+
+
+
+                            MyButton(color: Colors.blue[300], title: 'Ajouter Groupe',  onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                if(visibl== false){
+                                  UsersName1.clear();
+                                  print('users');
+                                  print(users);
+
+                                  CreateGroupe(users);
+
+                                }
+                                else{
+                                  setState(() {
+                                    print('users avant cheked');
+                                    print(this.UsersName1);
+                                    UsersName1.add(UserList[0]['firstName']);
+                                    print('users apres cheked');
+                                    print(UsersName1);
+                                  });
+                                  CreateGroupe(UsersName1);
+                                }
+                                Fluttertoast.showToast(
+                                  msg: 'Groupe ajouté avec succceé',
+                                  backgroundColor: Colors.green,
+                                  timeInSecForIosWeb: 1,
+                                );
+
+                                Navigator.pop(context);
+                              }
+                            },
+                            ),
+
+                           /* Material(
                               elevation: 5,
                               borderRadius: BorderRadius.circular(30),
                               color: Colors.blue[300],
@@ -385,7 +421,7 @@ class _AddGroupState extends State<AddGroup> {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                            ),
+                            ),*/
                           ]))
     )
         ),

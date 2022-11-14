@@ -90,7 +90,7 @@ String email ='';
         setState(() {
           this.StreamGroupe = FirebaseFirestore.instance
               .collection('basket_items')
-              .where("Etat", isEqualTo: "Approuved")
+              .where("Etat", isEqualTo: "Approuver")
               .snapshots();
         });
       }
@@ -219,7 +219,7 @@ String email ='';
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search, color: Colors.white),
                         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                        hintText: "Recherhcer....... ",
+                        hintText: "Recherhcer... ",
                         labelText: 'Rechercher ',
                         hintStyle: TextStyle(color: Colors.white),
                         border: OutlineInputBorder(
@@ -234,26 +234,16 @@ String email ='';
                   } else {
                     this.actionButton = new Icon(Icons.search);
                     this.appBarTitle = new Text('Liste des suggestions');
+                    this.text = '';
                   }
                 });
               },
             )
           ],
           bottom: const TabBar(
-            tabs: [Text('Tous les suggestion'), Text('Mes suggestions')],
+            tabs: [Text('Tous les suggestions',style: TextStyle(fontSize:18 ),), Text('Mes suggestions',style: TextStyle(fontSize:18 ),)],
           ),
 
-          /* actions: [
-              IconButton(
-                  onPressed: () {
-                    _auth.signOut();
-                    Navigator.pushNamed(context, SignInScreen.screenRoute);
-
-                    //_auth.signOut();
-                    // Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.close))
-            ],*/
         ),
         body:
           TabBarView(
@@ -291,8 +281,8 @@ String email ='';
                                     .substring(
                                         0,
                                         data['Description'].toString().length -
-                                            4)),
-                                   subtitle: Text(data['Etat'].toString()),
+                                            4),style: TextStyle(fontSize: 15),),
+                                   subtitle: Text(data['Etat'].toString(),style: TextStyle(fontSize: 13)),
                                 trailing: Text(data['DateProp'].toString()),
                                 onTap: () async {
                                   await Navigator.push(
@@ -345,11 +335,9 @@ String email ='';
                                     .substring(
                                         0,
                                         data['Description'].toString().length -
-                                            4)),
-                                subtitle: data['Etat'] == 'En attente'
-                                    ? Text('Pas Approuver')
-                                    : Text('Approuver'),
-                                trailing: Text(data['DateProp'].toString()),
+                                            4),style: TextStyle(fontSize: 15)),
+                                subtitle: Text(data['Etat'],style: TextStyle(fontSize: 13)) ,
+                                trailing: Text(data['DateProp'].toString(),style: TextStyle(fontSize: 15)),
                                 onTap: () async {
                                   await Navigator.push(
                                     context,
@@ -401,7 +389,11 @@ String email ='';
                           itemBuilder: (context, index) {
                             var data = snapshots.data!.docs[index].data()
                                 as Map<String, dynamic>;
-                            if (text.isEmpty && data['Description'] !='Approuved' ) {
+                            if (text.isEmpty  ) {
+                              if(data['Description'] !='Approuver')
+                                {
+                                  mycolor = Colors.orange;
+                                }
                               if(data['Etat'] == 'En attente') {
                                 mycolor = Colors.orange;
                               } else if (data['Etat'] == 'Rejeté')
@@ -423,8 +415,8 @@ String email ='';
                                   ),
                                   tileColor: Colors.white,
                                   title: Text(data['Description']
-                                      .toString()),
-                                  subtitle: Text(data['Etat'].toString()) ,
+                                      .toString(),style: TextStyle(fontSize: 15),),
+                                  subtitle: Text(data['Etat'].toString(),style: TextStyle(fontSize: 13)) ,
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
@@ -528,7 +520,8 @@ String email ='';
                             if (data['Description']
                                 .toString()
                                 .toLowerCase()
-                                .startsWith(text.toLowerCase()) && data['Description'] !='Approuved') {
+                                .startsWith(text.toLowerCase())) {
+
                               if(data['Etat'] == 'En attente') {
                                 mycolor = Colors.orange;
                               } else if (data['Etat'] == 'Rejeté')
