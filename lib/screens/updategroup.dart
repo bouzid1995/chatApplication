@@ -40,7 +40,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
   List<dynamic> dataList1 = [
     {"uid": "", "secondName": "", "email": "", "firstName": ""}
   ];
-
+  List UidList2 = [];
   //List users = [];
   List<String> selected = [];
   final String value = '';
@@ -78,6 +78,46 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
         .then((_) => print('Success'))
         .catchError((error) => print('Failed: $error'));
   }
+
+
+
+
+
+  getUserUid(List Nom) async {
+    List data = [];
+    List UidList = [];
+    List ListUserNom = [];
+    final firestoreInstance = FirebaseFirestore.instance;
+    final value = await firestoreInstance.collection('users').get();
+    value.docs.forEach((doc) {
+      ListUserNom.add(doc.data());
+    });
+    setState(() {
+      dataList1 = ListUserNom;
+    });
+
+    for (var j = 0; j < Nom.length; j++) {
+      data = data +
+          dataList1
+              .where((row) => (row["firstName"].contains(Nom[j])))
+              .toList();
+
+      if (j == Nom.length - 1) {
+        for (var e = 0; e < data.length; e++) {
+          UidList.add(data[e]['uid']);
+        }
+      }
+    }
+    setState(() {
+      UidList2 = UidList;
+    });
+    print('from function');
+    print(UidList2);
+    return UidList2;
+  }
+
+
+
 
   @override
   void initState() {
@@ -220,13 +260,13 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
 
                               return MultiSelectFormField(
                                 autovalidate: AutovalidateMode.disabled,
-                                chipBackGroundColor: Colors.blue[900],
+                                chipBackGroundColor: Colors.blue,
                                 chipLabelStyle: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                                 dialogTextStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                                checkBoxActiveColor: Colors.blue[900],
+                                   /* fontWeight: FontWeight.bold*/ ),
+                                checkBoxActiveColor: Colors.blue,
                                 checkBoxCheckColor: Colors.white,
                                 dialogShapeBorder: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
@@ -251,20 +291,23 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                                 hintWidget:
                                     Text('Selectionner un ou plusieurs Membre'),
                                 initialValue: GroupList,
-                                onSaved: (value) {
+                                onSaved: (value) async {
                                   if (value == null) return;
 
-                                  //value.add(UserList[0]['firstName']);
-
                                   GroupList = value;
+                                  var  myuser =  await getUserUid(users);
+                                  //getUserUid(users);
+                                  print('from dropdown');
+                                  print(myuser);
+                                  print(UidList2);
+
+                                  
                                 },
                               );
                             }),
                         const SizedBox(
-                          height: 30,
+                          height: 20,
                         ),
-
-
 
                             MyButton(color:Colors.blue[300],onPressed: () {
                               if (formKey.currentState!.validate()) {
@@ -280,207 +323,12 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                               }}, title: 'Modifier groupe',
                             ),
 
-                            /*Material(
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(30),
-                              color: Colors.blue[300],
-                              child: MaterialButton(
-                                padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                                //minWidth: MediaQuery.of(context).size.width,
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    //_saveForm;
-                                    UpdateGroupe(Nom, Description, GroupList);
-                                    Fluttertoast.showToast(
-                                      msg: 'Groupe modifier avec succceé ',
-                                      backgroundColor: Colors.green,
-                                      timeInSecForIosWeb: 1,
-                                    );
-
-                                    Navigator.pop(context);
-                                  }},
-                                child: const Text(
-                                  "Modifier groupe ",
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),*/
-
-
-
-
-
-
+                            const SizedBox(
+                              height: 20,
+                            ),
 
                       ])));
                 })));
 
-    /*Container(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-              child: SingleChildScrollView(
-                child: Column(children: <Widget>[
-                  TextFormField(
-                    controller: TextEditingController(text:widget.Name),
-                    //controller: widget.Description,
-                    onChanged: (value) {
-                      this.widget.Name =value;
-                    },
-
-                    decoration: const InputDecoration(
-                      labelText: 'Nom de Groupe',
-                      icon: Icon(Icons.account_box),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 50.0,
-                  ),
-                  TextFormField(
-                    controller: TextEditingController(text:widget.Description),
-
-//onChanged:(name)=>name=controller.text
-                    onChanged: (value) {
-
-                      this.widget.Description = value;
-
-                    },
-                    decoration: const InputDecoration(
-                      labelText: 'Description ',
-                      icon: Icon(Icons.description),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 50.0,
-                  ),
-                  /*StreamBuilder(
-                      stream: symptomsStream,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData || (snapshot.hasError)) {
-                          print("probleme here");
-                          return const Center(
-
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-
-                        final List groupssList = [];
-                        //fill up the list Group
-                        snapshot.data!.docs
-                            .map((DocumentSnapshot document) {
-                          Map a = document.data() as Map<String, dynamic>;
-                          groupssList.add(a['firstName']);
-                          a['id'] = document.id;
-                        }).toList();
-
-
-                        return MultiSelectFormField(
-                          autovalidate: AutovalidateMode.disabled,
-                          chipBackGroundColor: Colors.blue[900],
-                          chipLabelStyle: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                          dialogTextStyle:
-                          const TextStyle(fontWeight: FontWeight.bold),
-                          checkBoxActiveColor: Colors.blue[900],
-                          checkBoxCheckColor: Colors.white,
-                          dialogShapeBorder:
-                          const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(12.0))),
-                          title: const Text(
-                            "Membres ",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.length == 0) {
-                              return 'Selectionner un ou plus Membre ';
-                            }
-                            return null;
-                          },
-                          dataSource: [
-                            for (dynamic i in groupssList) {'value': i},
-                          ],
-                          textField: 'value',
-                          valueField: 'value',
-                          okButtonLabel: 'Valider',
-                          cancelButtonLabel: 'Annuler',
-                          hintWidget:
-                          Text('Selectionner un ou plus Membre'),
-                          initialValue: ['ala','hahah','test']  ,
-
-
-                          onSaved: (value) {
-                            if (value == null) return;
-                            setState(() {
-                              //value.addAll(GroupList);
-                              GroupList = value;
-                            });
-                          },
-                        );
-                      }),*/
-
-
-
-
-
-
-
-                  SizedBox(height: 30,),
-
-                  Material(
-                    elevation: 5,
-                    borderRadius: BorderRadius.circular(30),
-                    color: Colors.blue[300],
-                    child: MaterialButton(
-                      padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                      //minWidth: MediaQuery.of(context).size.width,
-                      onPressed: () {
-                        UpdateGroupe(this.widget.Name,this.widget.Description,users);
-                        if (formKey != false) {
-                          Fluttertoast.showToast(
-                            msg: 'Groupe mise a jour avec succceé ',
-                            backgroundColor:Colors.red,
-                            timeInSecForIosWeb:1,
-                          );
-
-                          Navigator.pop(context);
-                        }
-                        print(this.widget.Name);
-                        print(this.widget.Description);
-
-                        // Navigator.pop(context);
-                        users.clear();
-                        // NameEditingController.clear();
-                        // DescriptionEditingController.clear();
-                        /*Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const GroupeScreen()),
-                    );*/
-
-
-                      },
-                      child: const Text(
-                        "Update Groupe",
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-
-
-
-
-                ]),
-              )),
-        ));
-  }*/
   }
 }

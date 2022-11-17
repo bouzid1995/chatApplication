@@ -2,6 +2,7 @@ import 'package:chatapplication/screens/signin_screen.dart';
 import 'package:chatapplication/widgets/my_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -101,6 +102,7 @@ class _LoginState extends State<Login> {
   String? selectedFunction ;
   String etat ="";
 
+
   fetchstate() async {
     final firebaseUser = await FirebaseAuth.instance.currentUser!;
     if (firebaseUser != null)
@@ -139,6 +141,15 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     fetch();
+    FirebaseMessaging.instance.getToken().then((token) {
+        setState(() {
+          print('test');
+          print(mtoken);
+        });
+
+      });
+
+
   }
   @override
   Widget build(BuildContext context) {
@@ -518,6 +529,9 @@ class _LoginState extends State<Login> {
     );
 
   }
+  String? mtoken = " ";
+
+
 
   void signUp(String email, String password) async {
  // if (_formKey.currentUser!.validate()) {
@@ -575,7 +589,7 @@ class _LoginState extends State<Login> {
     userModel.NumTel = numtelEditingController.text;
     userModel.Role = role_id;
     userModel.etat =useretat;
-
+    userModel.token=mtoken;
 
     await firebaseFirestore
         .collection("users")

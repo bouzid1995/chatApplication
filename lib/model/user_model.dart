@@ -9,9 +9,10 @@ class UserModel{
   String? Fonction;
   String? NumTel;
   String? etat;
+  String? token;
 
 
-  UserModel({this.uid,this.email,this.firstName,this.secondName,this.Role,this.Groupe,this.Fonction,this.NumTel,this.etat});
+  UserModel({this.uid,this.email,this.firstName,this.secondName,this.Role,this.Groupe,this.Fonction,this.NumTel,this.etat,this.token});
 
 
   factory UserModel.fromMap(map)
@@ -27,6 +28,7 @@ class UserModel{
       Fonction: map['Fonction'],
       NumTel: map['NumTel'],
       etat: map['etat'],
+      token: map['token'],
 
     );
   }
@@ -43,6 +45,7 @@ class UserModel{
       'Fonction':Fonction,
       'NumTel':NumTel,
       'etat':etat,
+      'token':token,
 
     };
   }

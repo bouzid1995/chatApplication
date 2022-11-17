@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:multiselect_formfield/multiselect_formfield.dart';
+
 
 import 'chat_screen.dart';
 import 'main_drawer.dart';
@@ -141,17 +141,13 @@ class _GroupeScreenState extends State<GroupeScreen> {
         drawer:MainDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.blue,
-          title: Row(
-        children:  const [ SizedBox(width: 20),
-      Text('Liste des Groupes   ')
-      ],
-    ),
+          title: Text('Liste des Groupes'),
           centerTitle: true,
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('group')
-              .where("UserID", arrayContains: UserList[0]['firstName'])
+              .where("UserID", arrayContains: FirebaseAuth.instance.currentUser?.uid)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting ) {

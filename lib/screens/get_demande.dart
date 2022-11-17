@@ -241,7 +241,7 @@ String email ='';
             )
           ],
           bottom: const TabBar(
-            tabs: [Text('Tous les suggestions',style: TextStyle(fontSize:18 ),), Text('Mes suggestions',style: TextStyle(fontSize:18 ),)],
+            tabs: [Text('Tous ',style: TextStyle(fontSize:18 ),), Text('Mes suggestions',style: TextStyle(fontSize:18 ),)],
           ),
 
         ),

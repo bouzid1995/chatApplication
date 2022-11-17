@@ -217,7 +217,9 @@ class _SignInScreenState extends State<SignInScreen> {
                           if (_loginFormKey.currentState!.validate()) {
 
                              signIn(email,password).then((onSuccess) async {
+
                                 SharedPreferences prefs = await SharedPreferences.getInstance();
+                                SharedPreferences.setMockInitialValues({});
 
                               if(await prefs.setString("email", email.toString()))  {
 

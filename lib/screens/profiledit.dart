@@ -378,26 +378,10 @@ class _ProfileEditState extends State<ProfileEdit> {
                                   fonctionField,
                                   SizedBox(height: 30),
                                   GroupeField,
-                                  SizedBox(height: 20),
+                                  SizedBox(height: 30),
                                   NumtelField,
-                                  SizedBox(height: 10),
+                                  SizedBox(height: 15),
 
-                                /*  CheckboxListTile(
-                                    title: Text("Cliquer pour mettre a jour votre mot de passe "),
-                                    value: checkedValue,
-                                    onChanged: (checkedValue) {
-                                      setState(() {
-                                        this.checkedValue = checkedValue!;
-                                          this.visibl = checkedValue;
-                                        print('visible est ');
-                                        print(visibl);
-                                        print('checkbox');
-                                        print(checkedValue);
-                                      });
-                                    },
-                                    controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
-                                  ),*/
-                                  SizedBox(height: 2),
 
                                   TextButton(
                                     onPressed: () {
@@ -423,19 +407,20 @@ class _ProfileEditState extends State<ProfileEdit> {
                                     child: passwordField,
                                   ),
 
-                                  SizedBox(height: 10),
+                                  SizedBox(height: 30),
 
                                   Visibility(
                                        visible: visibl!,
                                        child: confirmpasswordField
                                   ),
 
-                                  SizedBox(height: 10),
+                                  SizedBox(height: 20),
                                   MyButton(color: Colors.blue[300]!, title: 'Mettre a jour ',
                                     onPressed: () async {
                                     if (_formKey.currentState!.validate()) {
                                       updateusers(myNumTel!, uiduser!,mypass!);
                                     }    }, ),
+                                  SizedBox(height: 30),
 
                                   //savedUpButton
                                 ]))))));

@@ -4,6 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 
+import '../widgets/my_button.dart';
+
 class UpdateSuggestion extends StatefulWidget {
   var Idgsugg;
   var SituationAvant, SituationApres, Description;
@@ -63,12 +65,13 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
           //centerTitle: true,
         ),
         body: Container(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(5.0),
           child: Form(
               key: formKey,
               child: SingleChildScrollView(
 
-                child: Column(children: <Widget>[
+                child: Column(
+                    children: <Widget>[
                   Image.asset('images/discussion.png',width: 250,height: 250,),
 
                   TextFormField(
@@ -100,7 +103,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                     ),
                   ),
                   const SizedBox(
-                    height: 50.0,
+                    height: 25.0,
                   ),
                   TextFormField(
                     autofocus: false,
@@ -131,7 +134,7 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                     ),
                   ),
                   const SizedBox(
-                    height: 50.0,
+                    height: 25.0,
                   ),
                   TextFormField(
                     autofocus: false,
@@ -163,41 +166,27 @@ class _UpdateSuggestionState extends State<UpdateSuggestion> {
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 25,
                   ),
-                  Material(
-                    elevation: 5,
-                    borderRadius: BorderRadius.circular(30),
-                    color: Colors.blue[300],
-                    child: MaterialButton(
-                      padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                      //minWidth: MediaQuery.of(context).size.width,
-                      onPressed: () {
-                        if(formKey.currentState!.validate()){
-                        UpdateSuggestion(
-                            widget.Description,
-                            widget.SituationAvant,
-                            widget.SituationApres,
-                            Date());
+                  MyButton(color: Colors.blue[300]!, title: 'Modifier suggestion ',
+                        onPressed: () {
+                          if(formKey.currentState!.validate()){
+                            UpdateSuggestion(
+                                widget.Description,
+                                widget.SituationAvant,
+                                widget.SituationApres,
+                                Date());
 
-                        Fluttertoast.showToast(
-                          msg: 'suggestion modifier avec succceé ',
-                          backgroundColor: Colors.green,
-                          timeInSecForIosWeb: 2,
-                        );
+                            Fluttertoast.showToast(
+                              msg: 'suggestion modifier avec succceé ',
+                              backgroundColor: Colors.green,
+                              timeInSecForIosWeb: 2,
+                            );
 
-                        Navigator.pop(context);
-                      }},
-                      child: const Text(
-                        "Modifier suggestion ",
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
+                            Navigator.pop(context);
+                          }}, ),
+
+
                 ]),
               )),
         ));
