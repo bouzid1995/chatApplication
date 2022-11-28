@@ -39,10 +39,10 @@ class _AddGroupState extends State<AddGroup> {
   final String value = '';
   final NameEditingController = TextEditingController(text: '');
   final Stream<QuerySnapshot> symptomsStream =
-      FirebaseFirestore.instance.collection('users').snapshots();
+  FirebaseFirestore.instance.collection('users').snapshots();
 
   Future<QuerySnapshot<Map<String, dynamic>>> usersStream =
-      FirebaseFirestore.instance.collection('users').get();
+  FirebaseFirestore.instance.collection('users').get();
 
   final usersRef = FirebaseFirestore.instance.collection('users');
 
@@ -104,10 +104,10 @@ class _AddGroupState extends State<AddGroup> {
           .where("uid", isEqualTo: FirebaseAuth.instance.currentUser?.uid)
           .get()
           .then((QuerySnapshot querySnapshot) => {
-                querySnapshot.docs.forEach((doc) {
-                  ListUserNom.add(doc.data());
-                }),
-              });
+        querySnapshot.docs.forEach((doc) {
+          ListUserNom.add(doc.data());
+        }),
+      });
       setState(() {
         UserList = ListUserNom;
       });
@@ -137,10 +137,10 @@ class _AddGroupState extends State<AddGroup> {
           .where('uid', isEqualTo: username)
           .get()
           .then((QuerySnapshot querySnapshot) => {
-                querySnapshot.docs.forEach((doc) {
-                  dataList.add(doc.data());
-                }),
-              });
+        querySnapshot.docs.forEach((doc) {
+          dataList.add(doc.data());
+        }),
+      });
 
       setState(() {
         this.RoleList = dataList;
@@ -200,7 +200,7 @@ class _AddGroupState extends State<AddGroup> {
         .get();
     final List<DocumentSnapshot> documents = result.docs;
     documents.forEach(
-      (data) => UsersName.add(data['uid']),
+          (data) => UsersName.add(data['uid']),
     );
     print('UsersName');
     print(UsersName);
@@ -223,230 +223,230 @@ class _AddGroupState extends State<AddGroup> {
               padding: const EdgeInsets.all(20.0),
               child: SingleChildScrollView(
                   child: Column(children: <Widget>[
-                Image.asset(
-                  'images/group2.png',
-                  width: 130,
-                  height: 130,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: NameEditingController,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return (" choisir  Le nom de groupe");
-                    }
-                    return null;
-                  },
-                  //controller: widget.Description,
-                  onSaved: (value) {
-                    NameEditingController.text = value!;
-                  },
-
-                  decoration: const InputDecoration(
-                    labelText: 'Nom de Groupe',
-                    icon: Icon(Icons.account_box),
-                  ),
-                ),
-                const SizedBox(
-                  height: 25.0,
-                ),
-                TextFormField(
-                  controller: DescriptionEditingController,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return ("Déscription ne peut pas etre vide");
-                    }
-
-                    return null;
-                  },
-                  //controller: widget.Description,
-                  onSaved: (value) {
-                    DescriptionEditingController.text = value!;
-                  },
-
-                  decoration: const InputDecoration(
-                    labelText: ' Déscription  de Groupe',
-                    icon: Icon(Icons.account_box),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-
-                //16px "Segoe UI", Arial, sans-serif
-                CheckboxListTile(
-                  title: Text("Cliquer pour ajouter groupe par service ",
-                      style: TextStyle(
-                          fontFamily: "Segoe UI",
-                          color: Colors.grey,
-                          fontSize: 16)),
-                  value: checkedValue,
-                  onChanged: (checkedValue) {
-                    setState(() {
-                      this.checkedValue = checkedValue!;
-                      this.visibl = checkedValue;
-                      print('visible est ');
-                      print(visibl);
-                      print('checkbox');
-                      print(checkedValue);
-                    });
-                  },
-                  controlAffinity:
-                      ListTileControlAffinity.leading, //  <-- leading Checkbox
-                ),
-
-                const SizedBox(
-                  height: 15,
-                ),
-
-                Visibility(
-                  visible: visibl!,
-                  child: DropdownButtonFormField(
-                    value: groupes,
-                    hint: const Text('Sélectionner un rôle'),
-                    items: groups.map((e) {
-                      return DropdownMenuItem(
-                        child: Text(e),
-                        value: e,
-                      );
-                    }).toList(),
-                    onChanged: (val) {
-                      setState(() {
-                        groupes = val as String;
-                        getNameselected();
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.arrow_drop_down_circle,
-                      color: Colors.blueAccent,
+                    Image.asset(
+                      'images/group2.png',
+                      width: 130,
+                      height: 130,
                     ),
-                    decoration: const InputDecoration(
-                      labelText: 'Groupe ',
-                      prefixIcon: Icon(
-                        Icons.groups,
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: NameEditingController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return (" choisir  Le nom de groupe");
+                        }
+                        return null;
+                      },
+                      //controller: widget.Description,
+                      onSaved: (value) {
+                        NameEditingController.text = value!;
+                      },
+
+                      decoration: const InputDecoration(
+                        labelText: 'Nom de Groupe',
+                        icon: Icon(Icons.account_box),
                       ),
-                      border: OutlineInputBorder(),
                     ),
-                  ),
-                ),
+                    const SizedBox(
+                      height: 25.0,
+                    ),
+                    TextFormField(
+                      controller: DescriptionEditingController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return ("Déscription ne peut pas etre vide");
+                        }
 
-                const SizedBox(
-                  height: 15,
-                ),
+                        return null;
+                      },
+                      //controller: widget.Description,
+                      onSaved: (value) {
+                        DescriptionEditingController.text = value!;
+                      },
 
-                StreamBuilder(
-                    stream: symptomsStream,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        print('Something went wrong');
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      final List usersList = [];
-                      final List listed = [];
+                      decoration: const InputDecoration(
+                        labelText: ' Déscription  de Groupe',
+                        icon: Icon(Icons.account_box),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
 
-                      //fill up the list symptoms
-                      snapshot.data!.docs.map((DocumentSnapshot document) {
-                        Map a = document.data() as Map<String, dynamic>;
-                        usersList.add(a['firstName']);
-                        a['id'] = document.id;
-                        listed.add(a['id']);
-                      }).toList();
-                      return Visibility(
-                        visible: !visibl!,
-                        child: MultiSelectFormField(
-                          autovalidate: AutovalidateMode.disabled,
-                          chipBackGroundColor: Colors.blue,
-                          chipLabelStyle: const TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                          dialogTextStyle: const TextStyle(),
-                          checkBoxActiveColor: Colors.blue,
-                          checkBoxCheckColor: Colors.white,
-                          dialogShapeBorder: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12.0))),
-                          title: const Text(
-                            "Membres de groupe ",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.length == 0) {
-                              return 'Sélectionner un ou plusieurs Membre';
-                            }
-                            return null;
-                          },
-                          dataSource: [
-                            for (String i in usersList) {'value': i},
-                          ],
-                          textField: 'value',
-                          valueField: 'value',
-                          okButtonLabel: 'Valider',
-                          cancelButtonLabel: 'Annuler',
-                          hintWidget:
-                              Text('Sélectionner un ou plusieurs Membre'),
-                          initialValue: users,
-                          onSaved: (value) async {
-                            if (value == null) return;
-                            value.add(UserList[0]['firstName']);
-                            users = value;
-                            print('useres est ${users}');
-                            print(' length useres est ${users.length}');
-                             var  myuser =  await getUserUid(users);
-                              //getUserUid(users);
-                              print('from dropdown');
-                              print(myuser);
-                              print(UidList2);
-
-                          },
-                        ),
-                      );
-                    }),
-                const SizedBox(
-                  height: 20,
-                ),
-
-                MyButton(
-                  color: Colors.blue[300],
-                  title: 'Ajouter Groupe',
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      if (visibl == false) {
-                        UsersName1.clear();
-                        print('users');
-                        print(users);
-
-                       CreateGroupe(UidList2);
-
-                      } else {
+                    //16px "Segoe UI", Arial, sans-serif
+                    CheckboxListTile(
+                      title: Text("Cliquer pour ajouter groupe par service ",
+                          style: TextStyle(
+                              fontFamily: "Segoe UI",
+                              color: Colors.grey,
+                              fontSize: 16)),
+                      value: checkedValue,
+                      onChanged: (checkedValue) {
                         setState(() {
-                          print('users avant cheked');
-                          print(this.UsersName1);
-                          UsersName1.add(UserList[0]['uid']);
-                          print('users apres cheked');
-                          print(UsersName1);
+                          this.checkedValue = checkedValue!;
+                          this.visibl = checkedValue;
+                          print('visible est ');
+                          print(visibl);
+                          print('checkbox');
+                          print(checkedValue);
                         });
-                        CreateGroupe(UsersName1);
-                      }
-                      Fluttertoast.showToast(
-                        msg: 'Groupe ajouté avec succceé',
-                        backgroundColor: Colors.green,
-                        timeInSecForIosWeb: 1,
-                      );
+                      },
+                      controlAffinity:
+                      ListTileControlAffinity.leading, //  <-- leading Checkbox
+                    ),
 
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ])))),
+                    const SizedBox(
+                      height: 15,
+                    ),
+
+                    Visibility(
+                      visible: visibl!,
+                      child: DropdownButtonFormField(
+                        value: groupes,
+                        hint: const Text('Sélectionner un rôle'),
+                        items: groups.map((e) {
+                          return DropdownMenuItem(
+                            child: Text(e),
+                            value: e,
+                          );
+                        }).toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            groupes = val as String;
+                            getNameselected();
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.arrow_drop_down_circle,
+                          color: Colors.blueAccent,
+                        ),
+                        decoration: const InputDecoration(
+                          labelText: 'Groupe ',
+                          prefixIcon: Icon(
+                            Icons.groups,
+                          ),
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height: 15,
+                    ),
+
+                    StreamBuilder(
+                        stream: symptomsStream,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            print('Something went wrong');
+                          }
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          final List usersList = [];
+                          final List listed = [];
+
+                          //fill up the list symptoms
+                          snapshot.data!.docs.map((DocumentSnapshot document) {
+                            Map a = document.data() as Map<String, dynamic>;
+                            usersList.add(a['firstName']);
+                            a['id'] = document.id;
+                            listed.add(a['id']);
+                          }).toList();
+                          return Visibility(
+                            visible: !visibl!,
+                            child: MultiSelectFormField(
+                              autovalidate: AutovalidateMode.disabled,
+                              chipBackGroundColor: Colors.blue,
+                              chipLabelStyle: const TextStyle(
+                                  fontWeight: FontWeight.bold, color: Colors.white),
+                              dialogTextStyle: const TextStyle(),
+                              checkBoxActiveColor: Colors.blue,
+                              checkBoxCheckColor: Colors.white,
+                              dialogShapeBorder: const RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(12.0))),
+                              title: const Text(
+                                "Membres de groupe ",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.length == 0) {
+                                  return 'Sélectionner un ou plusieurs Membre';
+                                }
+                                return null;
+                              },
+                              dataSource: [
+                                for (String i in usersList) {'value': i},
+                              ],
+                              textField: 'value',
+                              valueField: 'value',
+                              okButtonLabel: 'Valider',
+                              cancelButtonLabel: 'Annuler',
+                              hintWidget:
+                              Text('Sélectionner un ou plusieurs Membre'),
+                              initialValue: users,
+                              onSaved: (value) async {
+                                if (value == null) return;
+                                value.add(UserList[0]['firstName']);
+                                users = value;
+                                print('useres est ${users}');
+                                print(' length useres est ${users.length}');
+                                var  myuser =  await getUserUid(users);
+                                //getUserUid(users);
+                                print('from dropdown');
+                                print(myuser);
+                                print(UidList2);
+
+                              },
+                            ),
+                          );
+                        }),
+                    const SizedBox(
+                      height: 20,
+                    ),
+
+                    MyButton(
+                      color: Colors.blue[300],
+                      title: 'Ajouter Groupe',
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          if (visibl == false) {
+                            UsersName1.clear();
+                            print('users');
+                            print(users);
+
+                            CreateGroupe(UidList2);
+
+                          } else {
+                            setState(() {
+                              print('users avant cheked');
+                              print(this.UsersName1);
+                              UsersName1.add(UserList[0]['uid']);
+                              print('users apres cheked');
+                              print(UsersName1);
+                            });
+                            CreateGroupe(UsersName1);
+                          }
+                          Fluttertoast.showToast(
+                            msg: 'Groupe ajouté avec succceé',
+                            backgroundColor: Colors.green,
+                            timeInSecForIosWeb: 1,
+                          );
+
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ])))),
     );
   }
 }

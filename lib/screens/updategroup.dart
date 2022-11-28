@@ -37,10 +37,12 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
 
   final formKey = new GlobalKey<FormState>();
   List GroupList = [];
+  bool testuid = false;
   List<dynamic> dataList1 = [
     {"uid": "", "secondName": "", "email": "", "firstName": ""}
   ];
   List UidList2 = [];
+  List NomList2 = [];
   //List users = [];
   List<String> selected = [];
   final String value = '';
@@ -53,18 +55,91 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
 
   final usersRef = FirebaseFirestore.instance.collection('users');
 
-  List _myActivities = [];
-  var _myActivitiesResult = '';
+List test = ['pWB4Gs8o0BYuLWANt9PMBtqJdhD2','rTQfV6lTGuPxvrAMoDxDuMCAsz42','rTQfV6lTGuPxvrAMoDxDuMCAsz42'];
 
-  _saveForm() {
-    var form = formKey.currentState!;
-    if (form.validate()) {
-      form.save();
-      setState(() {
-        _myActivitiesResult = _myActivities.toString();
-      });
+  getUserListNom(List olduidList) async {
+    List data = [];
+    List NomList = [];
+    List ListUserNom = [];
+    final firestoreInstance = FirebaseFirestore.instance;
+    final value = await firestoreInstance.collection('users').get();
+    value.docs.forEach((doc) {
+      ListUserNom.add(doc.data());
+    });
+    setState(() {
+      dataList1 = ListUserNom;
+    });
+
+    for (var j = 0; j < olduidList.length; j++) {
+      data = data +
+          dataList1
+              .where((row) => (row["uid"].contains(olduidList[j])))
+              .toList();
+
+      if (j == olduidList.length - 1) {
+        for (var e = 0; e < data.length; e++) {
+          NomList.add(data[e]['firstName']);
+        }
+      }
     }
+    setState(() {
+      NomList2 = NomList;
+    });
+    print('from function Name testing ');
+    print(NomList2);
+    return NomList2;
   }
+
+
+  getgroupeDetail() async {
+    List ListGrouoDet = [];
+    List data = [];
+    List NomList = [];
+    List ListUserNom = [];
+    await FirebaseFirestore.instance
+        .collection('group')
+        .where(FieldPath.documentId, isEqualTo: widget.Idgroupe)
+        .get()
+        .then((QuerySnapshot querySnapshot) => {
+      querySnapshot.docs.forEach((doc) {
+        ListGrouoDet.add(doc.data());
+      }),
+    });
+    setState(() {
+      this.GroupList = ListGrouoDet[0]['UserID'];
+    });
+    print("GroupList");
+    print(GroupList);
+
+    final firestoreInstance = FirebaseFirestore.instance;
+    final value = await firestoreInstance.collection('users').get();
+    value.docs.forEach((doc) {
+      ListUserNom.add(doc.data());
+    });
+    setState(() {
+      dataList1 = ListUserNom;
+    });
+
+    for (var j = 0; j < GroupList.length; j++) {
+      data = data +
+          dataList1
+              .where((row) => (row["uid"].contains(GroupList[j])))
+              .toList();
+
+      if (j == GroupList.length - 1) {
+        for (var e = 0; e < data.length; e++) {
+          NomList.add(data[e]['firstName']);
+        }
+      }
+    }
+    setState(() {
+      NomList2 = NomList;
+    });
+    print('from function Name testing ');
+    print(NomList2);
+    return NomList2;
+  }
+
 
   UpdateGroupe(String Name, String Description, List UserID) async {
     var collection = FirebaseFirestore.instance.collection('group');
@@ -95,7 +170,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
     setState(() {
       dataList1 = ListUserNom;
     });
-
+    testuid = true;
     for (var j = 0; j < Nom.length; j++) {
       data = data +
           dataList1
@@ -116,42 +191,18 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
     return UidList2;
   }
 
-
-
-
   @override
-  void initState() {
+  void initState()  {
     this.getgroupeDetail();
     super.initState();
-  }
-
-  getgroupeDetail() async {
-    List ListGrouoDet = [];
-    try {
-      await FirebaseFirestore.instance
-          .collection('group')
-          .where(FieldPath.documentId, isEqualTo: widget.Idgroupe)
-          .get()
-          .then((QuerySnapshot querySnapshot) => {
-                querySnapshot.docs.forEach((doc) {
-                  ListGrouoDet.add(doc.data());
-                }),
-              });
-      setState(() {
-        this.GroupList = ListGrouoDet[0]['UserID'];
-      });
-      return GroupList;
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
+    //getUserListNom(GroupList);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Update Groupe'),
+          title: Text('Modifier Groupe'),
           centerTitle: true,
         ),
         body: Form(
@@ -180,7 +231,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                       padding: const EdgeInsets.all(20.0),
                       child: SingleChildScrollView(
                           child: Column(children: <Widget>[
-                            Image.asset('images/edit.png',width: 150,height: 150,),
+                           // Image.asset('images/edit.png',width: 150,height: 150,),
                             SizedBox(height: 20,),
                         TextFormField(
                           controller: TextEditingController(text: Nom),
@@ -259,6 +310,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                               }).toList();
 
                               return MultiSelectFormField(
+
                                 autovalidate: AutovalidateMode.disabled,
                                 chipBackGroundColor: Colors.blue,
                                 chipLabelStyle: const TextStyle(
@@ -277,7 +329,9 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                                 ),
                                 validator: (value) {
                                   if (value == null || value.length == 0) {
+
                                     return 'Selectionner un ou plusieurs  Membre ';
+
                                   }
                                   return null;
                                 },
@@ -290,18 +344,21 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                                 cancelButtonLabel: 'Annuler',
                                 hintWidget:
                                     Text('Selectionner un ou plusieurs Membre'),
-                                initialValue: GroupList,
+                                //GroupList
+
+                                initialValue:  NomList2,
                                 onSaved: (value) async {
                                   if (value == null) return;
-
-                                  GroupList = value;
-                                  var  myuser =  await getUserUid(users);
+                                 // value.add(UserList[0]['firstName']);
+                                  NomList2 = value;
+                                  print('useres est ${NomList2}');
+                                  print(' length useres est ${NomList2.length}');
+                                  var  myuser =  await getUserUid(NomList2);
                                   //getUserUid(users);
                                   print('from dropdown');
                                   print(myuser);
-                                  print(UidList2);
+                                  print(this.UidList2);
 
-                                  
                                 },
                               );
                             }),
@@ -312,7 +369,7 @@ class _UpdateGroupeState extends State<UpdateGroupe> {
                             MyButton(color:Colors.blue[300],onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 //_saveForm;
-                                UpdateGroupe(Nom, Description, GroupList);
+                                UpdateGroupe(Nom, Description, this.UidList2);
                                 Fluttertoast.showToast(
                                   msg: 'Groupe modifier avec succceé ',
                                   backgroundColor: Colors.green,
