@@ -126,7 +126,7 @@ class _AddGroupState extends State<AddGroup> {
     getUserNom();
     getMy(FirebaseAuth.instance.currentUser?.uid);
     super.initState();
-    getNameselected();
+   // getNameselected();
   }
 
   Future getMy(dynamic username) async {
@@ -192,7 +192,7 @@ class _AddGroupState extends State<AddGroup> {
     return UidList2;
   }
 
-  getNameselected() async {
+ /* getNameselected() async {
     List<String> UsersName = [];
     final QuerySnapshot result = await FirebaseFirestore.instance
         .collection('users')
@@ -208,7 +208,7 @@ class _AddGroupState extends State<AddGroup> {
       UsersName1 = UsersName;
     });
     return UsersName1;
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
