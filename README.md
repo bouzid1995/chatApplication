@@ -1,6 +1,6 @@
 # chatapplication
 
-application destiné pour le chat
+application destiné pour le chat entre plusieurs membre et plusieurs groupe contient une partie administratif 
 
 ## Getting Started
 
